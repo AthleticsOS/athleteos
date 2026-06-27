@@ -10,160 +10,112 @@ export default async function Stats() {
 
   const totalIngresos = payments?.filter(p => p.status === 'paid').reduce((sum, p) => sum + p.amount_cents, 0) || 0
   const totalPendiente = payments?.filter(p => p.status === 'pending').reduce((sum, p) => sum + p.amount_cents, 0) || 0
-  const totalSesiones = sessions?.length || 0
-  const totalCompeticiones = competitions?.length || 0
-  const totalDeportistas = athletes?.length || 0
-  const totalRecords = records?.length || 0
-  const totalResultados = results?.length || 0
   const podios = results?.filter(r => r.position <= 3).length || 0
   const oros = results?.filter(r => r.position === 1).length || 0
 
   const deporteCount: Record<string, number> = {}
-  athletes?.forEach(a => {
-    deporteCount[a.sport] = (deporteCount[a.sport] || 0) + 1
-  })
+  athletes?.forEach(a => { deporteCount[a.sport] = (deporteCount[a.sport] || 0) + 1 })
   const deportes = Object.entries(deporteCount).sort((a, b) => b[1] - a[1])
 
   const categoriaCount: Record<string, number> = {}
-  athletes?.forEach(a => {
-    categoriaCount[a.category] = (categoriaCount[a.category] || 0) + 1
-  })
+  athletes?.forEach(a => { categoriaCount[a.category] = (categoriaCount[a.category] || 0) + 1 })
   const categorias = Object.entries(categoriaCount).sort((a, b) => b[1] - a[1])
 
+  const totalDeportistas = athletes?.length || 0
+  const totalResultados = results?.length || 0
+
   return (
-    <main className="min-h-screen bg-[#0A0A0A] p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-2xl font-medium text-white">Estadísticas</h1>
-          <p className="text-[#555] text-sm mt-1">WeAthletics · Temporada 2024–2025</p>
+    <main style={{minHeight:'100vh', backgroundColor:'#080808', padding:'32px 36px'}}>
+      <div style={{maxWidth:'1000px', margin:'0 auto'}}>
+
+        <div style={{marginBottom:'32px'}}>
+          <h1 style={{fontSize:'24px', fontWeight:'700', color:'#F0F0F0', letterSpacing:'-0.02em', margin:0}}>Estadísticas</h1>
+          <p style={{color:'#333', fontSize:'13px', marginTop:'6px'}}>WeAthletics · Temporada 2024–2025</p>
         </div>
 
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl p-5">
-            <p className="text-[#444] text-xs uppercase tracking-widest mb-3">Ingresos cobrados</p>
-            <p className="text-green-400 text-3xl font-medium">€{(totalIngresos / 100).toFixed(2)}</p>
-            {totalPendiente > 0 && <p className="text-red-400 text-xs mt-2">€{(totalPendiente / 100).toFixed(2)} pendientes</p>}
-          </div>
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl p-5">
-            <p className="text-[#444] text-xs uppercase tracking-widest mb-3">Podios conseguidos</p>
-            <p className="text-yellow-400 text-3xl font-medium">{podios}</p>
-            <p className="text-[#444] text-xs mt-2">{oros} oros esta temporada</p>
-          </div>
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl p-5">
-            <p className="text-[#444] text-xs uppercase tracking-widest mb-3">Récords personales</p>
-            <p className="text-blue-400 text-3xl font-medium">{totalRecords}</p>
-            <p className="text-[#444] text-xs mt-2">En {totalResultados} resultados registrados</p>
-          </div>
+        <div style={{display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'12px', marginBottom:'16px'}}>
+          {[
+            { label:'Ingresos cobrados', value:`€${(totalIngresos/100).toFixed(2)}`, sub: totalPendiente > 0 ? `€${(totalPendiente/100).toFixed(2)} pendientes` : 'Todo cobrado', color:'#10B981' },
+            { label:'Podios conseguidos', value:String(podios), sub:`${oros} oros esta temporada`, color:'#EAB308' },
+            { label:'Récords personales', value:String(records?.length || 0), sub:`En ${totalResultados} resultados`, color:'#6366F1' },
+          ].map(stat => (
+            <div key={stat.label} style={{
+              backgroundColor:'#0E0E0E', border:'1px solid rgba(255,255,255,0.06)',
+              borderRadius:'14px', padding:'20px',
+            }}>
+              <div style={{color:'#333', fontSize:'11px', fontWeight:'600', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'12px'}}>{stat.label}</div>
+              <div style={{fontSize:'28px', fontWeight:'700', color:stat.color, letterSpacing:'-0.02em'}}>{stat.value}</div>
+              <div style={{color:'#444', fontSize:'12px', marginTop:'6px'}}>{stat.sub}</div>
+            </div>
+          ))}
         </div>
 
-        <div className="grid grid-cols-4 gap-3 mb-6">
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl p-5 text-center">
-            <p className="text-white text-3xl font-medium">{totalDeportistas}</p>
-            <p className="text-[#444] text-xs mt-2">Deportistas</p>
-          </div>
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl p-5 text-center">
-            <p className="text-white text-3xl font-medium">{totalCompeticiones}</p>
-            <p className="text-[#444] text-xs mt-2">Competiciones</p>
-          </div>
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl p-5 text-center">
-            <p className="text-white text-3xl font-medium">{totalSesiones}</p>
-            <p className="text-[#444] text-xs mt-2">Sesiones</p>
-          </div>
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl p-5 text-center">
-            <p className="text-white text-3xl font-medium">{totalResultados}</p>
-            <p className="text-[#444] text-xs mt-2">Resultados</p>
-          </div>
+        <div style={{display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:'12px', marginBottom:'16px'}}>
+          {[
+            { label:'Deportistas', value:totalDeportistas },
+            { label:'Competiciones', value:competitions?.length || 0 },
+            { label:'Sesiones', value:sessions?.length || 0 },
+            { label:'Resultados', value:totalResultados },
+          ].map(stat => (
+            <div key={stat.label} style={{
+              backgroundColor:'#0E0E0E', border:'1px solid rgba(255,255,255,0.06)',
+              borderRadius:'14px', padding:'18px', textAlign:'center',
+            }}>
+              <div style={{fontSize:'28px', fontWeight:'700', color:'#E0E0E0', letterSpacing:'-0.02em'}}>{stat.value}</div>
+              <div style={{color:'#333', fontSize:'12px', marginTop:'6px'}}>{stat.label}</div>
+            </div>
+          ))}
         </div>
 
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl p-5">
-            <p className="text-white text-sm font-medium mb-4">Deportistas por deporte</p>
-            {deportes.length > 0 ? (
-              <div className="flex flex-col gap-3">
-                {deportes.map(([deporte, count]) => (
-                  <div key={deporte}>
-                    <div className="flex justify-between text-xs mb-1">
-                      <span className="text-[#CCC]">{deporte}</span>
-                      <span className="text-[#555]">{count} deportistas</span>
+        <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'12px', marginBottom:'16px'}}>
+          {[
+            { title:'Deportistas por deporte', data:deportes, color:'#6366F1' },
+            { title:'Deportistas por categoría', data:categorias, color:'#8B5CF6' },
+          ].map(section => (
+            <div key={section.title} style={{backgroundColor:'#0E0E0E', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'14px', padding:'20px'}}>
+              <p style={{color:'#888', fontSize:'13px', fontWeight:'500', margin:'0 0 16px'}}>{section.title}</p>
+              <div style={{display:'flex', flexDirection:'column', gap:'10px'}}>
+                {section.data.map(([name, count]) => (
+                  <div key={name}>
+                    <div style={{display:'flex', justifyContent:'space-between', marginBottom:'5px'}}>
+                      <span style={{color:'#888', fontSize:'12px'}}>{name}</span>
+                      <span style={{color:'#444', fontSize:'12px'}}>{count}</span>
                     </div>
-                    <div className="h-1.5 bg-[#1A1A1A] rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-blue-600 rounded-full"
-                        style={{width: `${(count / totalDeportistas) * 100}%`}}
-                      />
+                    <div style={{height:'4px', backgroundColor:'rgba(255,255,255,0.04)', borderRadius:'2px', overflow:'hidden'}}>
+                      <div style={{
+                        height:'100%', borderRadius:'2px',
+                        background:`linear-gradient(90deg, ${section.color}, ${section.color}88)`,
+                        width:`${(count/totalDeportistas)*100}%`,
+                      }}/>
                     </div>
                   </div>
                 ))}
               </div>
-            ) : (
-              <p className="text-[#444] text-sm">Sin datos todavía</p>
-            )}
-          </div>
-
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl p-5">
-            <p className="text-white text-sm font-medium mb-4">Deportistas por categoría</p>
-            {categorias.length > 0 ? (
-              <div className="flex flex-col gap-3">
-                {categorias.map(([categoria, count]) => (
-                  <div key={categoria}>
-                    <div className="flex justify-between text-xs mb-1">
-                      <span className="text-[#CCC]">{categoria}</span>
-                      <span className="text-[#555]">{count} deportistas</span>
-                    </div>
-                    <div className="h-1.5 bg-[#1A1A1A] rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-purple-600 rounded-full"
-                        style={{width: `${(count / totalDeportistas) * 100}%`}}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-[#444] text-sm">Sin datos todavía</p>
-            )}
-          </div>
+            </div>
+          ))}
         </div>
 
-        <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl p-5">
-          <p className="text-white text-sm font-medium mb-4">Resumen de la temporada</p>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-3">
-              <div className="flex justify-between py-2 border-b border-[#161616] text-sm">
-                <span className="text-[#555]">Ratio podios / competiciones</span>
-                <span className="text-white font-medium">
-                  {totalResultados > 0 ? `${Math.round((podios / totalResultados) * 100)}%` : '—'}
-                </span>
+        <div style={{backgroundColor:'#0E0E0E', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'14px', padding:'20px'}}>
+          <p style={{color:'#888', fontSize:'13px', fontWeight:'500', margin:'0 0 16px'}}>Resumen de la temporada</p>
+          <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0'}}>
+            {[
+              { label:'Ratio podios / competiciones', value: totalResultados > 0 ? `${Math.round((podios/totalResultados)*100)}%` : '—' },
+              { label:'Competiciones próximas', value: competitions?.filter(c => c.status === 'upcoming').length || 0 },
+              { label:'Media ingresos por deportista', value: totalDeportistas > 0 ? `€${((totalIngresos/100)/totalDeportistas).toFixed(0)}` : '—' },
+              { label:'Competiciones finalizadas', value: competitions?.filter(c => c.status === 'finished').length || 0 },
+              { label:'Sesiones por deportista', value: totalDeportistas > 0 ? ((sessions?.length || 0)/totalDeportistas).toFixed(1) : '—' },
+              { label:'Estado de pagos', value: totalPendiente > 0 ? '⚠ Pendientes' : '✓ Al día' },
+            ].map((item, i) => (
+              <div key={item.label} style={{
+                display:'flex', justifyContent:'space-between', alignItems:'center',
+                padding:'12px 0',
+                borderBottom: i < 4 ? '1px solid rgba(255,255,255,0.03)' : 'none',
+                marginRight: i % 2 === 0 ? '24px' : '0',
+              }}>
+                <span style={{color:'#444', fontSize:'13px'}}>{item.label}</span>
+                <span style={{color:'#888', fontSize:'13px', fontWeight:'600'}}>{item.value}</span>
               </div>
-              <div className="flex justify-between py-2 border-b border-[#161616] text-sm">
-                <span className="text-[#555]">Media ingresos por deportista</span>
-                <span className="text-white font-medium">
-                  {totalDeportistas > 0 ? `€${((totalIngresos / 100) / totalDeportistas).toFixed(0)}` : '—'}
-                </span>
-              </div>
-              <div className="flex justify-between py-2 text-sm">
-                <span className="text-[#555]">Sesiones por deportista</span>
-                <span className="text-white font-medium">
-                  {totalDeportistas > 0 ? (totalSesiones / totalDeportistas).toFixed(1) : '—'}
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-col gap-3">
-              <div className="flex justify-between py-2 border-b border-[#161616] text-sm">
-                <span className="text-[#555]">Competiciones próximas</span>
-                <span className="text-white font-medium">{competitions?.filter(c => c.status === 'upcoming').length || 0}</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-[#161616] text-sm">
-                <span className="text-[#555]">Competiciones finalizadas</span>
-                <span className="text-white font-medium">{competitions?.filter(c => c.status === 'finished').length || 0}</span>
-              </div>
-              <div className="flex justify-between py-2 text-sm">
-                <span className="text-[#555]">Pagos al día</span>
-                <span className={`font-medium ${totalPendiente > 0 ? 'text-red-400' : 'text-green-400'}`}>
-                  {totalPendiente > 0 ? 'Pendientes' : '✓ Al día'}
-                </span>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 

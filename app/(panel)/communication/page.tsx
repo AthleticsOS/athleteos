@@ -6,52 +6,67 @@ export default async function Communication() {
     .select('*')
     .order('created_at', { ascending: false })
 
-  const typeConfig: Record<string, { color: string, label: string }> = {
-    info: { color: 'bg-blue-500/10 text-blue-400', label: 'Aviso' },
-    success: { color: 'bg-green-500/10 text-green-400', label: 'Buenas noticias' },
-    warning: { color: 'bg-amber-500/10 text-amber-400', label: 'Atención' },
-    urgent: { color: 'bg-red-500/10 text-red-400', label: 'Urgente' },
+  const typeConfig: Record<string, { color: string, bg: string, border: string, label: string }> = {
+    info: { color: '#818CF8', bg: 'rgba(99,102,241,0.08)', border: 'rgba(99,102,241,0.2)', label: 'Aviso' },
+    success: { color: '#10B981', bg: 'rgba(16,185,129,0.08)', border: 'rgba(16,185,129,0.2)', label: 'Buenas noticias' },
+    warning: { color: '#F59E0B', bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.2)', label: 'Atención' },
+    urgent: { color: '#EF4444', bg: 'rgba(239,68,68,0.08)', border: 'rgba(239,68,68,0.2)', label: 'Urgente' },
   }
 
   return (
-    <main className="min-h-screen bg-[#0A0A0A] p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+    <main style={{minHeight:'100vh', backgroundColor:'#080808', padding:'32px 36px'}}>
+      <div style={{maxWidth:'900px', margin:'0 auto'}}>
+
+        <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'32px'}}>
           <div>
-            <h1 className="text-2xl font-medium text-white">Comunicación</h1>
-            <p className="text-[#555] text-sm mt-1">Avisos y anuncios del club</p>
+            <h1 style={{fontSize:'24px', fontWeight:'700', color:'#F0F0F0', letterSpacing:'-0.02em', margin:0}}>Comunicación</h1>
+            <p style={{color:'#333', fontSize:'13px', marginTop:'6px'}}>Avisos y anuncios del club</p>
           </div>
-          <a href="/communication/nuevo"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
+          <a href="/communication/nuevo" style={{
+            padding:'9px 16px', borderRadius:'9px',
+            background:'linear-gradient(135deg, #6366F1, #8B5CF6)',
+            color:'white', fontSize:'13px', fontWeight:'600',
+            boxShadow:'0 0 20px rgba(99,102,241,0.3)',
+          }}>
             + Nuevo aviso
           </a>
         </div>
+
         {announcements && announcements.length > 0 ? (
-          <div className="flex flex-col gap-3">
-            {announcements.map((ann) => (
-              <div key={ann.id} className={`bg-[#111] border rounded-xl p-5 ${ann.pinned ? 'border-blue-500/20' : 'border-[#1A1A1A]'}`}>
-                <div className="flex items-center justify-between gap-4 mb-3">
-                  <div className="flex items-center gap-2">
-                    {ann.pinned && <span className="text-xs text-blue-400 font-medium">📌 Fijado</span>}
-                    <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${typeConfig[ann.type]?.color || 'bg-[#1A1A1A] text-[#555]'}`}>
-                      {typeConfig[ann.type]?.label || ann.type}
+          <div style={{display:'flex', flexDirection:'column', gap:'10px'}}>
+            {announcements.map((ann) => {
+              const config = typeConfig[ann.type] || typeConfig.info
+              return (
+                <div key={ann.id} style={{
+                  backgroundColor:'#0E0E0E',
+                  border:`1px solid ${ann.pinned ? config.border : 'rgba(255,255,255,0.06)'}`,
+                  borderRadius:'14px', padding:'20px',
+                  borderLeft: `3px solid ${config.color}`,
+                }}>
+                  <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'10px'}}>
+                    <div style={{display:'flex', alignItems:'center', gap:'8px'}}>
+                      {ann.pinned && <span style={{color:'#6366F1', fontSize:'11px', fontWeight:'600'}}>📌 Fijado</span>}
+                      <span style={{
+                        padding:'3px 10px', borderRadius:'20px', fontSize:'11px', fontWeight:'600',
+                        backgroundColor: config.bg, color: config.color, border: `1px solid ${config.border}`,
+                      }}>
+                        {config.label}
+                      </span>
+                    </div>
+                    <span style={{color:'#2A2A2A', fontSize:'11px'}}>
+                      {new Date(ann.created_at).toLocaleDateString('es-ES', { day:'numeric', month:'long' })}
                     </span>
                   </div>
-                  <span className="text-[#444] text-xs">
-                    {new Date(ann.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}
-                  </span>
+                  <h3 style={{color:'#E0E0E0', fontSize:'15px', fontWeight:'600', margin:'0 0 8px'}}>{ann.title}</h3>
+                  <p style={{color:'#555', fontSize:'13px', lineHeight:'1.6', margin:0}}>{ann.content}</p>
                 </div>
-                <h3 className="text-white font-medium mb-2">{ann.title}</h3>
-                <p className="text-[#666] text-sm leading-relaxed">{ann.content}</p>
-              </div>
-            ))}
+              )
+            })}
           </div>
         ) : (
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-16 text-center">
-            <p className="text-[#555] mb-4">No hay avisos publicados todavía</p>
-            <a href="/communication/nuevo" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-              Crear el primero
-            </a>
+          <div style={{backgroundColor:'#0E0E0E', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'14px', padding:'60px 20px', textAlign:'center'}}>
+            <p style={{color:'#333', marginBottom:'16px'}}>No hay avisos publicados todavía</p>
+            <a href="/communication/nuevo" style={{color:'#6366F1', fontSize:'13px'}}>Crear el primero →</a>
           </div>
         )}
       </div>
