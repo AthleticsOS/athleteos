@@ -36,10 +36,7 @@ export default function ProgressChart({ data, unit, lowerIsBetter = true }: Prop
         />
         <YAxis
           hide
-          domain={lowerIsBetter
-            ? [(min: number) => min * 0.998, (max: number) => max * 1.002]
-            : [(min: number) => min * 0.998, (max: number) => max * 1.002]
-          }
+          domain={['auto', 'auto']}
         />
         <Tooltip
           contentStyle={{
@@ -49,8 +46,8 @@ export default function ProgressChart({ data, unit, lowerIsBetter = true }: Prop
             color: '#fff',
             fontSize: '12px'
           }}
-          formatter={(value: number) => [`${value}${unit}`, 'Marca']}
-          labelFormatter={(label: string) => label}
+          formatter={(value: unknown) => [`${value}${unit}`, 'Marca']}
+          labelFormatter={(label: unknown) => String(label)}
         />
         <ReferenceLine
           y={best}
