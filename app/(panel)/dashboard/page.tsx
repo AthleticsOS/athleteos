@@ -1,5 +1,6 @@
 import { supabase } from '@/app/lib/supabase'
-import RevenueChart from '../../components/RevenueChart'
+import RevenueChart from '@/app/components/RevenueChart'
+
 export default async function Dashboard() {
   const { data: athletes } = await supabase.from('athletes').select('*')
   const { data: competitions } = await supabase.from('competitions').select('*')
@@ -27,9 +28,7 @@ export default async function Dashboard() {
           <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl p-5 hover:border-[#252525] transition-colors">
             <p className="text-[#444] text-xs uppercase tracking-widest mb-4">Deportistas</p>
             <p className="text-white text-4xl font-medium tracking-tight">{athletes?.length || 0}</p>
-            <p className="text-green-500 text-xs mt-3 flex items-center gap-1">
-              <span>↑</span> Activos en el club
-            </p>
+            <p className="text-green-500 text-xs mt-3">Activos en el club</p>
           </div>
           <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl p-5 hover:border-[#252525] transition-colors">
             <p className="text-[#444] text-xs uppercase tracking-widest mb-4">Competiciones</p>
@@ -66,6 +65,7 @@ export default async function Dashboard() {
                 { href: '/competitions/nueva', label: '+ Nueva competición' },
                 { href: '/training/nuevo', label: '+ Nueva sesión' },
                 { href: '/finances/nuevo', label: '+ Nuevo pago' },
+                { href: '/calendar', label: '📅 Ver calendario' },
                 { href: '/ai', label: '🧠 Asistente IA' },
               ].map((item) => (
                 <a key={item.href} href={item.href}
@@ -75,6 +75,33 @@ export default async function Dashboard() {
               ))}
             </div>
           </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          <a href="/athletes" className="bg-[#111] border border-[#1A1A1A] hover:border-[#333] rounded-2xl p-5 transition-colors group">
+            <div className="text-2xl mb-3">👥</div>
+            <div className="text-white font-medium mb-1">Deportistas</div>
+            <div className="text-[#555] text-sm">Ver y gestionar deportistas</div>
+            <div className="text-blue-400 text-xs mt-3 group-hover:translate-x-1 transition-transform">Ver todos →</div>
+          </a>
+          <a href="/competitions" className="bg-[#111] border border-[#1A1A1A] hover:border-[#333] rounded-2xl p-5 transition-colors group">
+            <div className="text-2xl mb-3">🏆</div>
+            <div className="text-white font-medium mb-1">Competiciones</div>
+            <div className="text-[#555] text-sm">Calendario y resultados</div>
+            <div className="text-blue-400 text-xs mt-3 group-hover:translate-x-1 transition-transform">Ver todas →</div>
+          </a>
+          <a href="/training" className="bg-[#111] border border-[#1A1A1A] hover:border-[#333] rounded-2xl p-5 transition-colors group">
+            <div className="text-2xl mb-3">🏃</div>
+            <div className="text-white font-medium mb-1">Entrenamientos</div>
+            <div className="text-[#555] text-sm">Sesiones y planificación</div>
+            <div className="text-blue-400 text-xs mt-3 group-hover:translate-x-1 transition-transform">Ver todos →</div>
+          </a>
+          <a href="/finances" className="bg-[#111] border border-[#1A1A1A] hover:border-[#333] rounded-2xl p-5 transition-colors group">
+            <div className="text-2xl mb-3">💶</div>
+            <div className="text-white font-medium mb-1">Finanzas</div>
+            <div className="text-[#555] text-sm">Pagos y cuotas</div>
+            <div className="text-blue-400 text-xs mt-3 group-hover:translate-x-1 transition-transform">Ver todo →</div>
+          </a>
         </div>
 
         <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl overflow-hidden">
