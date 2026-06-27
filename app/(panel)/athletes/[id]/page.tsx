@@ -8,27 +8,13 @@ type Props = {
 export default async function AthleteProfile({ params }: Props) {
   const { id } = await params
 
-  const { data: athlete } = await supabase
-    .from('athletes')
-    .select('*')
-    .eq('id', id)
-    .single()
-
-  const { data: records } = await supabase
-    .from('personal_records')
-    .select('*')
-    .eq('athlete_id', id)
-    .order('date', { ascending: false })
-
-  const { data: results } = await supabase
-    .from('competition_results')
-    .select('*, competitions(name, date, location)')
-    .eq('athlete_id', id)
-    .order('created_at', { ascending: false })
+  const { data: athlete } = await supabase.from('athletes').select('*').eq('id', id).single()
+  const { data: records } = await supabase.from('personal_records').select('*').eq('athlete_id', id).order('date', { ascending: false })
+  const { data: results } = await supabase.from('competition_results').select('*, competitions(name, date, location)').eq('athlete_id', id).order('created_at', { ascending: false })
 
   if (!athlete) return (
-    <main className="min-h-screen bg-[#0A0A0A] p-8">
-      <p className="text-white">Deportista no encontrado</p>
+    <main style={{minHeight:'100vh', backgroundColor:'#080808', padding:'32px 36px'}}>
+      <p style={{color:'#555'}}>Deportista no encontrado</p>
     </main>
   )
 
@@ -42,9 +28,7 @@ export default async function AthleteProfile({ params }: Props) {
     if (!result.mark || !result.competitions?.date) return
     const numericMark = parseFloat(result.mark.replace(/[^0-9.]/g, ''))
     if (isNaN(numericMark)) return
-    if (!chartDataByDiscipline[result.discipline]) {
-      chartDataByDiscipline[result.discipline] = []
-    }
+    if (!chartDataByDiscipline[result.discipline]) chartDataByDiscipline[result.discipline] = []
     chartDataByDiscipline[result.discipline].push({
       fecha: new Date(result.competitions.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
       marca: numericMark,
@@ -55,154 +39,159 @@ export default async function AthleteProfile({ params }: Props) {
   const mainDiscipline = Object.keys(chartDataByDiscipline)[0]
 
   return (
-    <main className="min-h-screen bg-[#0A0A0A] p-8">
-      <div className="max-w-4xl mx-auto">
+    <main style={{minHeight:'100vh', backgroundColor:'#080808', padding:'32px 36px'}}>
+      <div style={{maxWidth:'1000px', margin:'0 auto'}}>
 
-        <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl p-6 mb-4">
-          <div className="flex items-start gap-5">
-            <div className="w-16 h-16 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center text-xl font-medium flex-shrink-0 border border-blue-500/20">
+        <div style={{
+          backgroundColor:'#0E0E0E',
+          border:'1px solid rgba(255,255,255,0.06)',
+          borderRadius:'16px', padding:'24px', marginBottom:'12px',
+          position:'relative', overflow:'hidden',
+        }}>
+          <div style={{
+            position:'absolute', top:0, left:0, right:0, height:'1px',
+            background:'linear-gradient(90deg,transparent,rgba(99,102,241,0.4),transparent)',
+          }}/>
+          <div style={{display:'flex', alignItems:'flex-start', gap:'18px'}}>
+            <div style={{
+              width:'64px', height:'64px', borderRadius:'50%', flexShrink:0,
+              background:'linear-gradient(135deg, rgba(99,102,241,0.3), rgba(139,92,246,0.3))',
+              border:'1px solid rgba(99,102,241,0.3)',
+              display:'flex', alignItems:'center', justifyContent:'center',
+              fontSize:'22px', fontWeight:'700', color:'#A5B4FC',
+            }}>
               {initials}
             </div>
-            <div className="flex-1">
-              <h1 className="text-2xl font-medium text-white tracking-tight">
+            <div style={{flex:1}}>
+              <h1 style={{fontSize:'22px', fontWeight:'700', color:'#F0F0F0', letterSpacing:'-0.02em', margin:0}}>
                 {athlete.first_name} {athlete.last_name}
               </h1>
-              <div className="flex gap-4 mt-2 flex-wrap">
-                {athlete.sport && <span className="text-[#555] text-sm">{athlete.sport}</span>}
-                {athlete.category && <><span className="text-[#2A2A2A]">·</span><span className="text-[#555] text-sm">{athlete.category}</span></>}
-                {age && <><span className="text-[#2A2A2A]">·</span><span className="text-[#555] text-sm">{age} años</span></>}
+              <div style={{display:'flex', gap:'12px', marginTop:'6px', flexWrap:'wrap'}}>
+                {athlete.sport && <span style={{color:'#444', fontSize:'13px'}}>{athlete.sport}</span>}
+                {athlete.category && <><span style={{color:'#222'}}>·</span><span style={{color:'#444', fontSize:'13px'}}>{athlete.category}</span></>}
+                {age && <><span style={{color:'#222'}}>·</span><span style={{color:'#444', fontSize:'13px'}}>{age} años</span></>}
               </div>
-              <div className="mt-3 flex gap-2 flex-wrap">
-                <span className="bg-green-500/10 text-green-500 text-xs px-3 py-1 rounded-full font-medium">Activo</span>
+              <div style={{display:'flex', gap:'8px', marginTop:'10px', flexWrap:'wrap'}}>
+                <span style={{padding:'3px 10px', borderRadius:'20px', fontSize:'11px', fontWeight:'600', backgroundColor:'rgba(16,185,129,0.1)', color:'#10B981', border:'1px solid rgba(16,185,129,0.2)'}}>
+                  ● Activo
+                </span>
                 {records && records.length > 0 && (
-                  <span className="bg-blue-500/10 text-blue-400 text-xs px-3 py-1 rounded-full font-medium">
+                  <span style={{padding:'3px 10px', borderRadius:'20px', fontSize:'11px', fontWeight:'600', backgroundColor:'rgba(99,102,241,0.1)', color:'#A5B4FC', border:'1px solid rgba(99,102,241,0.2)'}}>
                     {records.length} marca{records.length > 1 ? 's' : ''} personal{records.length > 1 ? 'es' : ''}
                   </span>
                 )}
                 {results && results.length > 0 && (
-                  <span className="bg-amber-500/10 text-amber-400 text-xs px-3 py-1 rounded-full font-medium">
+                  <span style={{padding:'3px 10px', borderRadius:'20px', fontSize:'11px', fontWeight:'600', backgroundColor:'rgba(245,158,11,0.1)', color:'#F59E0B', border:'1px solid rgba(245,158,11,0.2)'}}>
                     {results.length} competicion{results.length > 1 ? 'es' : ''}
                   </span>
                 )}
               </div>
             </div>
-            <a href={`/athletes/${id}/edit`}
-              className="text-[#555] hover:text-white text-sm px-4 py-2 rounded-lg border border-[#1A1A1A] hover:border-[#333] transition-colors flex-shrink-0">
+            <a href={`/athletes/${id}/edit`} style={{
+              padding:'8px 16px', borderRadius:'9px',
+              backgroundColor:'rgba(255,255,255,0.05)',
+              border:'1px solid rgba(255,255,255,0.08)',
+              color:'#888', fontSize:'13px', fontWeight:'500',
+              flexShrink:0,
+            }}>
               Editar
             </a>
           </div>
         </div>
 
         {mainDiscipline && chartDataByDiscipline[mainDiscipline].length >= 2 && (
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl p-5 mb-4">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-white text-sm font-medium">Progresión — {mainDiscipline}</p>
-              <span className="text-[#444] text-xs">{chartDataByDiscipline[mainDiscipline].length} competiciones</span>
+          <div style={{backgroundColor:'#0E0E0E', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'16px', padding:'20px', marginBottom:'12px'}}>
+            <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'12px'}}>
+              <p style={{color:'#888', fontSize:'13px', fontWeight:'500', margin:0}}>Progresión — {mainDiscipline}</p>
+              <span style={{color:'#333', fontSize:'11px'}}>{chartDataByDiscipline[mainDiscipline].length} competiciones</span>
             </div>
-            <ProgressChart
-              data={chartDataByDiscipline[mainDiscipline]}
-              unit="s"
-              lowerIsBetter={true}
-            />
-            <p className="text-[#333] text-xs mt-2">— línea dorada = mejor marca</p>
+            <ProgressChart data={chartDataByDiscipline[mainDiscipline]} unit="s" lowerIsBetter={true} />
+            <p style={{color:'#222', fontSize:'11px', marginTop:'8px', margin:'8px 0 0'}}>— línea dorada = mejor marca</p>
           </div>
         )}
 
-        <div className="grid grid-cols-3 gap-3 mb-4">
-          <div className="col-span-2 bg-[#111] border border-[#1A1A1A] rounded-2xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-[#1A1A1A] flex items-center justify-between">
-              <p className="text-white text-sm font-medium">Marcas personales</p><a href={`/athletes/${id}/marca`} className="text-blue-400 text-xs">+ Añadir →</a>
+        <div style={{display:'grid', gridTemplateColumns:'1fr 260px', gap:'12px', marginBottom:'12px'}}>
+          <div style={{backgroundColor:'#0E0E0E', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'16px', overflow:'hidden'}}>
+            <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', padding:'14px 18px', borderBottom:'1px solid rgba(255,255,255,0.04)'}}>
+              <p style={{color:'#888', fontSize:'13px', fontWeight:'500', margin:0}}>Marcas personales</p>
+              <a href={`/athletes/${id}/marca`} style={{color:'#6366F1', fontSize:'12px', fontWeight:'500'}}>+ Añadir →</a>
             </div>
             {records && records.length > 0 ? (
-              <div className="flex flex-col">
-                {records.map((record, index) => (
-                  <div key={record.id}
-                    className={`flex items-center gap-4 px-5 py-3.5 ${index < records.length - 1 ? 'border-b border-[#161616]' : ''}`}>
-                    <div className="flex-1">
-                      <div className="text-white text-sm font-medium">{record.discipline}</div>
-                      <div className="text-[#444] text-xs mt-0.5">
-                        {record.competition} · {record.date ? new Date(record.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
-                      </div>
+              records.map((record, index) => (
+                <div key={record.id} style={{
+                  display:'flex', alignItems:'center', gap:'12px',
+                  padding:'14px 18px',
+                  borderBottom: index < records.length - 1 ? '1px solid rgba(255,255,255,0.03)' : 'none',
+                }}>
+                  <div style={{flex:1}}>
+                    <div style={{color:'#CCC', fontSize:'14px', fontWeight:'500'}}>{record.discipline}</div>
+                    <div style={{color:'#333', fontSize:'11px', marginTop:'2px'}}>
+                      {record.competition} · {record.date ? new Date(record.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
                     </div>
-                    <div className="text-blue-400 text-base font-medium font-mono">{record.mark}</div>
-                    <div className="w-2 h-2 rounded-full bg-yellow-500 flex-shrink-0"></div>
                   </div>
-                ))}
-              </div>
+                  <div style={{color:'#A5B4FC', fontSize:'15px', fontWeight:'700', fontFamily:'monospace'}}>{record.mark}</div>
+                  <div style={{width:'6px', height:'6px', borderRadius:'50%', backgroundColor:'#F59E0B', flexShrink:0}}/>
+                </div>
+              ))
             ) : (
-              <div className="px-5 py-10 text-center text-[#444] text-sm">
-                No hay marcas registradas todavía
+              <div style={{padding:'40px 18px', textAlign:'center'}}>
+                <p style={{color:'#333', fontSize:'13px', marginBottom:'12px'}}>Sin marcas todavía</p>
+                <a href={`/athletes/${id}/marca`} style={{color:'#6366F1', fontSize:'12px'}}>+ Añadir primera marca →</a>
               </div>
             )}
           </div>
 
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-[#1A1A1A] flex items-center justify-between">
-              <p className="text-white text-sm font-medium">Información</p>
+          <div style={{backgroundColor:'#0E0E0E', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'16px', overflow:'hidden'}}>
+            <div style={{padding:'14px 18px', borderBottom:'1px solid rgba(255,255,255,0.04)'}}>
+              <p style={{color:'#888', fontSize:'13px', fontWeight:'500', margin:0}}>Información</p>
             </div>
-            <div className="p-4 flex flex-col gap-3">
-              {athlete.email && (
-                <div>
-                  <div className="text-[#444] text-xs mb-1">Email</div>
-                  <div className="text-[#CCC] text-sm truncate">{athlete.email}</div>
+            <div style={{padding:'16px 18px', display:'flex', flexDirection:'column', gap:'14px'}}>
+              {[
+                { label: 'Email', value: athlete.email },
+                { label: 'Teléfono', value: athlete.phone },
+                { label: 'Nacimiento', value: athlete.birth_date ? new Date(athlete.birth_date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : null },
+                { label: 'Deporte', value: athlete.sport },
+                { label: 'Categoría', value: athlete.category },
+              ].filter(item => item.value).map(item => (
+                <div key={item.label}>
+                  <div style={{color:'#2A2A2A', fontSize:'10px', fontWeight:'600', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'3px'}}>{item.label}</div>
+                  <div style={{color:'#888', fontSize:'13px'}}>{item.value}</div>
                 </div>
-              )}
-              {athlete.phone && (
-                <div>
-                  <div className="text-[#444] text-xs mb-1">Teléfono</div>
-                  <div className="text-[#CCC] text-sm">{athlete.phone}</div>
-                </div>
-              )}
-              {athlete.birth_date && (
-                <div>
-                  <div className="text-[#444] text-xs mb-1">Nacimiento</div>
-                  <div className="text-[#CCC] text-sm">{new Date(athlete.birth_date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
-                </div>
-              )}
-              {athlete.sport && (
-                <div>
-                  <div className="text-[#444] text-xs mb-1">Deporte</div>
-                  <div className="text-[#CCC] text-sm">{athlete.sport}</div>
-                </div>
-              )}
-              {athlete.category && (
-                <div>
-                  <div className="text-[#444] text-xs mb-1">Categoría</div>
-                  <div className="text-[#CCC] text-sm">{athlete.category}</div>
-                </div>
-              )}
+              ))}
             </div>
           </div>
         </div>
 
         {results && results.length > 0 && (
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-[#1A1A1A] flex items-center justify-between">
-              <p className="text-white text-sm font-medium">Historial de competiciones</p>
+          <div style={{backgroundColor:'#0E0E0E', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'16px', overflow:'hidden'}}>
+            <div style={{padding:'14px 18px', borderBottom:'1px solid rgba(255,255,255,0.04)'}}>
+              <p style={{color:'#888', fontSize:'13px', fontWeight:'500', margin:0}}>Historial de competiciones</p>
             </div>
-            <div className="flex flex-col">
-              {results.map((result, index) => (
-                <div key={result.id}
-                  className={`flex items-center gap-4 px-5 py-3.5 ${index < results.length - 1 ? 'border-b border-[#161616]' : ''}`}>
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
-                    result.position === 1 ? 'bg-yellow-500 text-black' :
-                    result.position === 2 ? 'bg-gray-400 text-black' :
-                    result.position === 3 ? 'bg-amber-600 text-black' :
-                    'bg-[#222] text-[#888]'
-                  }`}>
-                    {result.position}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-white text-sm font-medium">{result.competitions?.name}</div>
-                    <div className="text-[#444] text-xs mt-0.5">
-                      {result.discipline} · {result.competitions?.location}
-                      {result.competitions?.date && ` · ${new Date(result.competitions.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}`}
-                    </div>
-                  </div>
-                  <div className="text-blue-400 text-sm font-medium font-mono">{result.mark}</div>
+            {results.map((result, index) => (
+              <div key={result.id} style={{
+                display:'flex', alignItems:'center', gap:'14px',
+                padding:'14px 18px',
+                borderBottom: index < results.length - 1 ? '1px solid rgba(255,255,255,0.03)' : 'none',
+              }}>
+                <div style={{
+                  width:'28px', height:'28px', borderRadius:'50%', flexShrink:0,
+                  display:'flex', alignItems:'center', justifyContent:'center',
+                  fontSize:'11px', fontWeight:'700',
+                  backgroundColor: result.position === 1 ? 'rgba(234,179,8,0.2)' : result.position === 2 ? 'rgba(156,163,175,0.2)' : result.position === 3 ? 'rgba(180,83,9,0.2)' : 'rgba(255,255,255,0.05)',
+                  color: result.position === 1 ? '#EAB308' : result.position === 2 ? '#9CA3AF' : result.position === 3 ? '#B45309' : '#444',
+                }}>
+                  {result.position}
                 </div>
-              ))}
-            </div>
+                <div style={{flex:1, minWidth:0}}>
+                  <div style={{color:'#CCC', fontSize:'13px', fontWeight:'500'}}>{result.competitions?.name}</div>
+                  <div style={{color:'#333', fontSize:'11px', marginTop:'2px'}}>
+                    {result.discipline} · {result.competitions?.location}
+                    {result.competitions?.date && ` · ${new Date(result.competitions.date).toLocaleDateString('es-ES', { day:'numeric', month:'short', year:'numeric' })}`}
+                  </div>
+                </div>
+                <div style={{color:'#A5B4FC', fontSize:'14px', fontWeight:'700', fontFamily:'monospace'}}>{result.mark}</div>
+              </div>
+            ))}
           </div>
         )}
 
