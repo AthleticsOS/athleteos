@@ -4,64 +4,82 @@ export default async function Training() {
   const { data: sessions } = await supabase
     .from('training_sessions')
     .select('*')
-    .order('date', { ascending: true })
+    .order('date', { ascending: false })
 
-  const typeColors: Record<string, string> = {
-    'Velocidad': 'bg-red-500/10 text-red-400',
-    'Resistencia': 'bg-blue-500/10 text-blue-400',
-    'Fuerza': 'bg-amber-500/10 text-amber-400',
-    'Técnica': 'bg-purple-500/10 text-purple-400',
-    'Recuperación': 'bg-green-500/10 text-green-400',
+  const typeConfig: Record<string, { color: string, bg: string }> = {
+    'Velocidad': { color: '#EF4444', bg: 'rgba(239,68,68,0.1)' },
+    'Resistencia': { color: '#3B82F6', bg: 'rgba(59,130,246,0.1)' },
+    'Fuerza': { color: '#F59E0B', bg: 'rgba(245,158,11,0.1)' },
+    'Técnica': { color: '#8B5CF6', bg: 'rgba(139,92,246,0.1)' },
+    'Recuperación': { color: '#10B981', bg: 'rgba(16,185,129,0.1)' },
   }
 
   return (
-    <main className="min-h-screen bg-[#0A0A0A] p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+    <main style={{minHeight:'100vh', backgroundColor:'#080808', padding:'32px 36px'}}>
+      <div style={{maxWidth:'1000px', margin:'0 auto'}}>
+
+        <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'32px'}}>
           <div>
-            <h1 className="text-2xl font-medium text-white">Entrenamientos</h1>
-            <p className="text-[#555] text-sm mt-1">{sessions?.length || 0} sesiones esta temporada</p>
+            <h1 style={{fontSize:'24px', fontWeight:'700', color:'#F0F0F0', letterSpacing:'-0.02em', margin:0}}>Entrenamientos</h1>
+            <p style={{color:'#333', fontSize:'13px', marginTop:'6px'}}>{sessions?.length || 0} sesiones esta temporada</p>
           </div>
-          <a href="/training/nuevo"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
+          <a href="/training/nuevo" style={{
+            padding:'9px 16px', borderRadius:'9px',
+            background:'linear-gradient(135deg, #6366F1, #8B5CF6)',
+            color:'white', fontSize:'13px', fontWeight:'600',
+            boxShadow:'0 0 20px rgba(99,102,241,0.3)',
+          }}>
             + Nueva sesión
           </a>
         </div>
-        <div className="bg-[#111] border border-[#1A1A1A] rounded-xl overflow-hidden">
+
+        <div style={{display:'flex', flexDirection:'column', gap:'8px'}}>
           {sessions && sessions.length > 0 ? (
-            sessions.map((session, index) => (
-              <div key={session.id}
-                className={`flex items-center gap-5 px-6 py-4 ${
-                  index < sessions.length - 1 ? 'border-b border-[#161616]' : ''
-                }`}>
-                <div className="text-center w-12 flex-shrink-0">
-                  <div className="text-xl font-medium text-white leading-none">
-                    {new Date(session.date).getDate()}
+            sessions.map((session) => {
+              const config = typeConfig[session.type] || { color: '#555', bg: 'rgba(255,255,255,0.04)' }
+              return (
+                <div key={session.id} style={{
+                  display:'flex', alignItems:'center', gap:'16px',
+                  backgroundColor:'#0E0E0E',
+                  border:'1px solid rgba(255,255,255,0.06)',
+                  borderRadius:'14px', padding:'16px 20px',
+                  borderLeft: `2px solid ${config.color}`,
+                }}>
+                  <div style={{
+                    width:'48px', textAlign:'center', flexShrink:0,
+                    backgroundColor:'rgba(255,255,255,0.03)',
+                    borderRadius:'10px', padding:'8px 4px',
+                  }}>
+                    <div style={{fontSize:'20px', fontWeight:'700', color:'#E0E0E0', lineHeight:1}}>
+                      {new Date(session.date + 'T00:00:00').getDate()}
+                    </div>
+                    <div style={{color:'#333', fontSize:'10px', textTransform:'uppercase', marginTop:'2px'}}>
+                      {new Date(session.date + 'T00:00:00').toLocaleDateString('es-ES', { month: 'short' })}
+                    </div>
                   </div>
-                  <div className="text-[#444] text-xs uppercase mt-1">
-                    {new Date(session.date).toLocaleDateString('es-ES', { month: 'short' })}
+                  <div style={{flex:1, minWidth:0}}>
+                    <div style={{color:'#E0E0E0', fontSize:'14px', fontWeight:'600'}}>{session.title}</div>
+                    <div style={{color:'#333', fontSize:'12px', marginTop:'3px', display:'flex', gap:'10px'}}>
+                      {session.time && <span>{session.time}</span>}
+                      {session.duration_min && <span>{session.duration_min} min</span>}
+                      {session.location && <span>{session.location}</span>}
+                    </div>
                   </div>
+                  <span style={{
+                    padding:'4px 10px', borderRadius:'20px', fontSize:'11px', fontWeight:'600',
+                    backgroundColor: config.bg, color: config.color,
+                    border: `1px solid ${config.color}30`,
+                    flexShrink:0,
+                  }}>
+                    {session.type}
+                  </span>
                 </div>
-                <div className="w-px h-8 bg-[#1E1E1E] flex-shrink-0"></div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-white text-sm font-medium">{session.title}</div>
-                  <div className="text-[#555] text-xs mt-0.5 flex gap-3">
-                    {session.time && <span>{session.time}</span>}
-                    {session.duration_min && <span>{session.duration_min} min</span>}
-                    {session.location && <span>{session.location}</span>}
-                  </div>
-                </div>
-                <span className={`text-xs px-2.5 py-1 rounded-full font-medium whitespace-nowrap ${typeColors[session.type] || 'bg-[#1A1A1A] text-[#555]'}`}>
-                  {session.type}
-                </span>
-              </div>
-            ))
+              )
+            })
           ) : (
-            <div className="px-6 py-16 text-center">
-              <p className="text-[#555] mb-4">No hay sesiones programadas</p>
-              <a href="/training/nuevo" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                Crear la primera
-              </a>
+            <div style={{backgroundColor:'#0E0E0E', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'14px', padding:'60px 20px', textAlign:'center'}}>
+              <p style={{color:'#333', marginBottom:'16px'}}>No hay sesiones programadas</p>
+              <a href="/training/nuevo" style={{color:'#6366F1', fontSize:'13px'}}>Crear la primera →</a>
             </div>
           )}
         </div>

@@ -11,62 +11,81 @@ export default async function Finances() {
   const pending = payments?.filter(p => p.status === 'pending').reduce((sum, p) => sum + (p.amount_cents || 0), 0) || 0
 
   return (
-    <main className="min-h-screen bg-[#0A0A0A] p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+    <main style={{minHeight:'100vh', backgroundColor:'#080808', padding:'32px 36px'}}>
+      <div style={{maxWidth:'1000px', margin:'0 auto'}}>
+
+        <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'32px'}}>
           <div>
-            <h1 className="text-2xl font-medium text-white">Finanzas</h1>
-            <p className="text-[#555] text-sm mt-1">Este mes · WeAthletics</p>
+            <h1 style={{fontSize:'24px', fontWeight:'700', color:'#F0F0F0', letterSpacing:'-0.02em', margin:0}}>Finanzas</h1>
+            <p style={{color:'#333', fontSize:'13px', marginTop:'6px'}}>Este mes · WeAthletics</p>
           </div>
-          <a href="/finances/nuevo"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
+          <a href="/finances/nuevo" style={{
+            padding:'9px 16px', borderRadius:'9px',
+            background:'linear-gradient(135deg, #6366F1, #8B5CF6)',
+            color:'white', fontSize:'13px', fontWeight:'600',
+            boxShadow:'0 0 20px rgba(99,102,241,0.3)',
+          }}>
             + Nuevo pago
           </a>
         </div>
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-5">
-            <p className="text-[#444] text-xs uppercase tracking-widest mb-3">Total facturado</p>
-            <p className="text-white text-2xl font-medium">€{(total / 100).toFixed(2)}</p>
-          </div>
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-5">
-            <p className="text-[#444] text-xs uppercase tracking-widest mb-3">Cobrado</p>
-            <p className="text-green-400 text-2xl font-medium">€{(paid / 100).toFixed(2)}</p>
-          </div>
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-5">
-            <p className="text-[#444] text-xs uppercase tracking-widest mb-3">Pendiente</p>
-            <p className="text-red-400 text-2xl font-medium">€{(pending / 100).toFixed(2)}</p>
-          </div>
+
+        <div style={{display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'12px', marginBottom:'16px'}}>
+          {[
+            { label:'Total facturado', value:`€${(total/100).toFixed(2)}`, color:'#888' },
+            { label:'Cobrado', value:`€${(paid/100).toFixed(2)}`, color:'#10B981' },
+            { label:'Pendiente', value:`€${(pending/100).toFixed(2)}`, color: pending > 0 ? '#EF4444' : '#333' },
+          ].map(stat => (
+            <div key={stat.label} style={{
+              backgroundColor:'#0E0E0E',
+              border:'1px solid rgba(255,255,255,0.06)',
+              borderRadius:'14px', padding:'20px',
+            }}>
+              <div style={{color:'#333', fontSize:'11px', fontWeight:'600', textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:'10px'}}>{stat.label}</div>
+              <div style={{fontSize:'26px', fontWeight:'700', color:stat.color, letterSpacing:'-0.02em'}}>{stat.value}</div>
+            </div>
+          ))}
         </div>
-        <div className="bg-[#111] border border-[#1A1A1A] rounded-xl overflow-hidden">
+
+        <div style={{backgroundColor:'#0E0E0E', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'16px', overflow:'hidden'}}>
+          <div style={{padding:'14px 20px', borderBottom:'1px solid rgba(255,255,255,0.04)'}}>
+            <p style={{color:'#888', fontSize:'13px', fontWeight:'500', margin:0}}>Historial de pagos</p>
+          </div>
           {payments && payments.length > 0 ? (
             payments.map((payment, index) => (
-              <div key={payment.id}
-                className={`flex items-center gap-4 px-6 py-4 ${
-                  index < payments.length - 1 ? 'border-b border-[#161616]' : ''
-                }`}>
-                <div className="w-9 h-9 rounded-full bg-blue-600/15 text-blue-400 flex items-center justify-center text-xs font-medium flex-shrink-0">
+              <div key={payment.id} style={{
+                display:'flex', alignItems:'center', gap:'14px',
+                padding:'14px 20px',
+                borderBottom: index < payments.length - 1 ? '1px solid rgba(255,255,255,0.03)' : 'none',
+              }}>
+                <div style={{
+                  width:'36px', height:'36px', borderRadius:'50%', flexShrink:0,
+                  background:'linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.25))',
+                  display:'flex', alignItems:'center', justifyContent:'center',
+                  fontSize:'12px', fontWeight:'600', color:'#A5B4FC',
+                }}>
                   {payment.athletes?.first_name?.[0]}{payment.athletes?.last_name?.[0]}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-white text-sm font-medium">
+                <div style={{flex:1, minWidth:0}}>
+                  <div style={{color:'#CCC', fontSize:'13px', fontWeight:'500'}}>
                     {payment.athletes?.first_name} {payment.athletes?.last_name}
                   </div>
-                  <div className="text-[#555] text-xs mt-0.5">{payment.concept}</div>
+                  <div style={{color:'#333', fontSize:'11px', marginTop:'2px'}}>{payment.concept}</div>
                 </div>
-                <div className="text-white text-sm font-medium font-mono">
-                  €{(payment.amount_cents / 100).toFixed(2)}
+                <div style={{color:'#E0E0E0', fontSize:'14px', fontWeight:'700', fontFamily:'monospace'}}>
+                  €{(payment.amount_cents/100).toFixed(2)}
                 </div>
-                <span className={`text-xs px-2.5 py-1 rounded-full font-medium whitespace-nowrap ${
-                  payment.status === 'paid' ? 'bg-green-500/10 text-green-500' :
-                  payment.status === 'overdue' ? 'bg-red-500/10 text-red-400' :
-                  'bg-amber-500/10 text-amber-400'
-                }`}>
-                  {payment.status === 'paid' ? 'Pagado' : payment.status === 'overdue' ? 'Vencido' : 'Pendiente'}
+                <span style={{
+                  padding:'3px 10px', borderRadius:'20px', fontSize:'11px', fontWeight:'600', flexShrink:0,
+                  backgroundColor: payment.status === 'paid' ? 'rgba(16,185,129,0.1)' : payment.status === 'overdue' ? 'rgba(239,68,68,0.1)' : 'rgba(245,158,11,0.1)',
+                  color: payment.status === 'paid' ? '#10B981' : payment.status === 'overdue' ? '#EF4444' : '#F59E0B',
+                  border: `1px solid ${payment.status === 'paid' ? 'rgba(16,185,129,0.2)' : payment.status === 'overdue' ? 'rgba(239,68,68,0.2)' : 'rgba(245,158,11,0.2)'}`,
+                }}>
+                  {payment.status === 'paid' ? '● Pagado' : payment.status === 'overdue' ? '● Vencido' : '● Pendiente'}
                 </span>
               </div>
             ))
           ) : (
-            <div className="px-6 py-16 text-center text-[#555]">
+            <div style={{padding:'60px 20px', textAlign:'center', color:'#333', fontSize:'13px'}}>
               No hay pagos registrados todavía
             </div>
           )}
