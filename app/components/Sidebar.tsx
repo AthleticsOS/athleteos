@@ -12,6 +12,7 @@ const navItems = [
   { href: '/communication', icon: '📢', label: 'Comunicación' },
   { href: '/ranking', icon: '📊', label: 'Ranking' },
   { href: '/calendar', icon: '📅', label: 'Calendario' },
+  { href: '/stats', icon: '📈', label: 'Estadísticas' },
   { href: '/ai', icon: '🧠', label: 'Asistente IA' },
 ]
 
