@@ -19,9 +19,7 @@ export default function RootLayout({
     <html lang="es">
       <body className={`${inter.className} bg-[#0A0A0A]`}>
         <Sidebar />
-        <div id="main-content">
-          {children}
-        </div>
+        {children}
       </body>
     </html>
   )
