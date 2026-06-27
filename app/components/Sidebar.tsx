@@ -11,6 +11,7 @@ const navItems = [
   { href: '/finances', icon: '💶', label: 'Finanzas' },
   { href: '/communication', icon: '📢', label: 'Comunicación' },
   { href: '/ranking', icon: '📊', label: 'Ranking' },
+  { href: '/calendar', icon: '📅', label: 'Calendario' },
   { href: '/ai', icon: '🧠', label: 'Asistente IA' },
 ]
 
