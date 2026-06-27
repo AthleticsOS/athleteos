@@ -1,4 +1,5 @@
 import { supabase } from '@/app/lib/supabase'
+import ProgressChart from '@/app/components/ProgressChart'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -36,6 +37,23 @@ export default async function AthleteProfile({ params }: Props) {
     ? Math.floor((new Date().getTime() - new Date(athlete.birth_date).getTime()) / (365.25 * 24 * 60 * 60 * 1000))
     : null
 
+  const chartDataByDiscipline: Record<string, { fecha: string, marca: number, competicion: string }[]> = {}
+  results?.forEach((result) => {
+    if (!result.mark || !result.competitions?.date) return
+    const numericMark = parseFloat(result.mark.replace(/[^0-9.]/g, ''))
+    if (isNaN(numericMark)) return
+    if (!chartDataByDiscipline[result.discipline]) {
+      chartDataByDiscipline[result.discipline] = []
+    }
+    chartDataByDiscipline[result.discipline].push({
+      fecha: new Date(result.competitions.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }),
+      marca: numericMark,
+      competicion: result.competitions.name
+    })
+  })
+
+  const mainDiscipline = Object.keys(chartDataByDiscipline)[0]
+
   return (
     <main className="min-h-screen bg-[#0A0A0A] p-8">
       <div className="max-w-4xl mx-auto">
@@ -53,7 +71,6 @@ export default async function AthleteProfile({ params }: Props) {
                 {athlete.sport && <span className="text-[#555] text-sm">{athlete.sport}</span>}
                 {athlete.category && <><span className="text-[#2A2A2A]">·</span><span className="text-[#555] text-sm">{athlete.category}</span></>}
                 {age && <><span className="text-[#2A2A2A]">·</span><span className="text-[#555] text-sm">{age} años</span></>}
-                {athlete.gender && <><span className="text-[#2A2A2A]">·</span><span className="text-[#555] text-sm">{athlete.gender === 'male' ? 'Masculino' : 'Femenino'}</span></>}
               </div>
               <div className="mt-3 flex gap-2 flex-wrap">
                 <span className="bg-green-500/10 text-green-500 text-xs px-3 py-1 rounded-full font-medium">Activo</span>
@@ -62,10 +79,30 @@ export default async function AthleteProfile({ params }: Props) {
                     {records.length} marca{records.length > 1 ? 's' : ''} personal{records.length > 1 ? 'es' : ''}
                   </span>
                 )}
+                {results && results.length > 0 && (
+                  <span className="bg-amber-500/10 text-amber-400 text-xs px-3 py-1 rounded-full font-medium">
+                    {results.length} competicion{results.length > 1 ? 'es' : ''}
+                  </span>
+                )}
               </div>
             </div>
           </div>
         </div>
+
+        {mainDiscipline && chartDataByDiscipline[mainDiscipline].length >= 2 && (
+          <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl p-5 mb-4">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-white text-sm font-medium">Progresión — {mainDiscipline}</p>
+              <span className="text-[#444] text-xs">{chartDataByDiscipline[mainDiscipline].length} competiciones</span>
+            </div>
+            <ProgressChart
+              data={chartDataByDiscipline[mainDiscipline]}
+              unit="s"
+              lowerIsBetter={true}
+            />
+            <p className="text-[#333] text-xs mt-2">— línea dorada = mejor marca</p>
+          </div>
+        )}
 
         <div className="grid grid-cols-3 gap-3 mb-4">
           <div className="col-span-2 bg-[#111] border border-[#1A1A1A] rounded-2xl overflow-hidden">
