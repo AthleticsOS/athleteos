@@ -4,9 +4,11 @@ export default async function Dashboard() {
   const { data: athletes } = await supabase.from('athletes').select('*')
   const { data: competitions } = await supabase.from('competitions').select('*')
   const { data: sessions } = await supabase.from('training_sessions').select('*')
+  const { data: payments } = await supabase.from('payments').select('*')
 
   const upcoming = competitions?.filter(c => c.status === 'upcoming').length || 0
-  const finished = competitions?.filter(c => c.status === 'finished').length || 0
+  const pending = payments?.filter(p => p.status === 'pending').length || 0
+  const totalPaid = payments?.filter(p => p.status === 'paid').reduce((sum, p) => sum + p.amount_cents, 0) || 0
 
   return (
     <main className="min-h-screen bg-[#0A0A0A] p-8">
@@ -34,21 +36,23 @@ export default async function Dashboard() {
           <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-5">
             <p className="text-[#555] text-xs uppercase tracking-widest mb-3">Competiciones</p>
             <p className="text-blue-400 text-3xl font-medium">{competitions?.length || 0}</p>
-            <p className="text-[#555] text-xs mt-2">{upcoming} próximas · {finished} finalizadas</p>
+            <p className="text-[#555] text-xs mt-2">{upcoming} próximas</p>
+          </div>
+          <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-5">
+            <p className="text-[#555] text-xs uppercase tracking-widest mb-3">Ingresos</p>
+            <p className="text-white text-3xl font-medium">€{(totalPaid / 100).toFixed(0)}</p>
+            <p className={`text-xs mt-2 ${pending > 0 ? 'text-red-400' : 'text-[#555]'}`}>
+              {pending > 0 ? `${pending} pagos pendientes` : 'Todo al día'}
+            </p>
           </div>
           <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-5">
             <p className="text-[#555] text-xs uppercase tracking-widest mb-3">Sesiones</p>
             <p className="text-white text-3xl font-medium">{sessions?.length || 0}</p>
             <p className="text-[#555] text-xs mt-2">Esta temporada</p>
           </div>
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-5">
-            <p className="text-[#555] text-xs uppercase tracking-widest mb-3">Ingresos</p>
-            <p className="text-white text-3xl font-medium">€0</p>
-            <p className="text-[#555] text-xs mt-2">Este mes</p>
-          </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-3 gap-4 mb-4">
           <a href="/athletes" className="bg-[#111] border border-[#1A1A1A] hover:border-[#333] rounded-xl p-6 transition-colors group">
             <div className="text-2xl mb-3">👥</div>
             <div className="text-white font-medium mb-1">Deportistas</div>
@@ -69,17 +73,38 @@ export default async function Dashboard() {
           </a>
         </div>
 
+        <div className="grid grid-cols-3 gap-4 mb-8">
+          <a href="/finances" className="bg-[#111] border border-[#1A1A1A] hover:border-[#333] rounded-xl p-6 transition-colors group">
+            <div className="text-2xl mb-3">💶</div>
+            <div className="text-white font-medium mb-1">Finanzas</div>
+            <div className="text-[#555] text-sm">Pagos y cuotas</div>
+            <div className="text-blue-400 text-xs mt-3 group-hover:translate-x-1 transition-transform">Ver todo →</div>
+          </a>
+          <a href="/communication" className="bg-[#111] border border-[#1A1A1A] hover:border-[#333] rounded-xl p-6 transition-colors group">
+            <div className="text-2xl mb-3">📢</div>
+            <div className="text-white font-medium mb-1">Comunicación</div>
+            <div className="text-[#555] text-sm">Avisos y anuncios</div>
+            <div className="text-blue-400 text-xs mt-3 group-hover:translate-x-1 transition-transform">Ver todos →</div>
+          </a>
+          <a href="/athletes/nuevo" className="bg-[#111] border border-[#1A1A1A] hover:border-[#333] rounded-xl p-6 transition-colors group">
+            <div className="text-2xl mb-3">➕</div>
+            <div className="text-white font-medium mb-1">Nuevo deportista</div>
+            <div className="text-[#555] text-sm">Añadir al club</div>
+            <div className="text-blue-400 text-xs mt-3 group-hover:translate-x-1 transition-transform">Añadir →</div>
+          </a>
+        </div>
+
         <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-6">
-          <h3 className="text-white font-medium mb-4">Deportistas recientes</h3>
+          <h3 className="text-white font-medium mb-4">Deportistas del club</h3>
           <div className="flex flex-col gap-0">
-            {athletes?.slice(0, 5).map((athlete) => (
+            {athletes?.map((athlete) => (
               <a href={`/athletes/${athlete.id}`} key={athlete.id}
                 className="flex items-center gap-3 py-3 border-b border-[#1A1A1A] last:border-0 hover:opacity-70 transition-opacity">
                 <div className="w-8 h-8 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center text-xs font-medium">
                   {athlete.first_name[0]}{athlete.last_name[0]}
                 </div>
                 <span className="text-[#AAA] text-sm flex-1">{athlete.first_name} {athlete.last_name}</span>
-                <span className="text-[#555] text-xs">{athlete.sport}</span>
+                <span className="text-[#555] text-xs">{athlete.sport} · {athlete.category}</span>
               </a>
             ))}
           </div>
