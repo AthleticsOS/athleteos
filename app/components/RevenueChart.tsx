@@ -25,7 +25,7 @@ export default function RevenueChart() {
         <YAxis hide />
         <Tooltip
           contentStyle={{ background: '#111', border: '1px solid #222', borderRadius: '8px', color: '#fff', fontSize: '12px' }}
-          formatter={(value: number) => [`€${value}`, 'Ingresos']}
+          formatter={(value: unknown) => [`€${value}`, 'Ingresos']}
         />
         <Area type="monotone" dataKey="ingresos" stroke="#2563EB" strokeWidth={2} fill="url(#colorIngresos)" />
       </AreaChart>
