@@ -110,8 +110,8 @@ export default async function AthleteProfile({ params }: Props) {
 
         <div className="grid grid-cols-3 gap-3 mb-4">
           <div className="col-span-2 bg-[#111] border border-[#1A1A1A] rounded-2xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-[#1A1A1A]">
-              <p className="text-white text-sm font-medium">Marcas personales</p>
+            <div className="px-5 py-4 border-b border-[#1A1A1A] flex items-center justify-between">
+              <p className="text-white text-sm font-medium">Marcas personales</p><a href={`/athletes/${id}/marca`} className="text-blue-400 text-xs">+ Añadir →</a>
             </div>
             {records && records.length > 0 ? (
               <div className="flex flex-col">
@@ -137,7 +137,7 @@ export default async function AthleteProfile({ params }: Props) {
           </div>
 
           <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-[#1A1A1A]">
+            <div className="px-5 py-4 border-b border-[#1A1A1A] flex items-center justify-between">
               <p className="text-white text-sm font-medium">Información</p>
             </div>
             <div className="p-4 flex flex-col gap-3">
@@ -177,7 +177,7 @@ export default async function AthleteProfile({ params }: Props) {
 
         {results && results.length > 0 && (
           <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-[#1A1A1A]">
+            <div className="px-5 py-4 border-b border-[#1A1A1A] flex items-center justify-between">
               <p className="text-white text-sm font-medium">Historial de competiciones</p>
             </div>
             <div className="flex flex-col">
