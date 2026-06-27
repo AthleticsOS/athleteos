@@ -1,15 +1,43 @@
 @import "tailwindcss";
 
-* { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: border-box; }
 
-html { -webkit-font-smoothing: antialiased; }
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
 
-body { background-color: #0A0A0A; color: #F0F0F0; }
+body {
+  background-color: #080808;
+  color: #E8E8E8;
+  font-family: -apple-system, 'Inter', sans-serif;
+}
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #0A0A0A; }
-::-webkit-scrollbar-thumb { background: #222; border-radius: 3px; }
+::selection {
+  background: rgba(99,102,241,0.3);
+  color: white;
+}
 
-::selection { background: rgba(37,99,235,0.3); color: white; }
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #333; }
 
-input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.5); }
+input, select, textarea { outline: none; font-family: inherit; }
+input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.4); }
+a { text-decoration: none; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+.animate-in {
+  animation: fadeInUp 0.2s ease-out forwards;
+}
