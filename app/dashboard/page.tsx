@@ -86,11 +86,11 @@ export default async function Dashboard() {
             <div className="text-[#555] text-sm">Avisos y anuncios</div>
             <div className="text-blue-400 text-xs mt-3 group-hover:translate-x-1 transition-transform">Ver todos →</div>
           </a>
-          <a href="/athletes/nuevo" className="bg-[#111] border border-[#1A1A1A] hover:border-[#333] rounded-xl p-6 transition-colors group">
-            <div className="text-2xl mb-3">➕</div>
-            <div className="text-white font-medium mb-1">Nuevo deportista</div>
-            <div className="text-[#555] text-sm">Añadir al club</div>
-            <div className="text-blue-400 text-xs mt-3 group-hover:translate-x-1 transition-transform">Añadir →</div>
+          <a href="/ai" className="bg-[#111] border border-purple-500/20 hover:border-purple-500/40 rounded-xl p-6 transition-colors group">
+            <div className="text-2xl mb-3">🧠</div>
+            <div className="text-white font-medium mb-1">Asistente IA</div>
+            <div className="text-[#555] text-sm">Genera entrenamientos y avisos</div>
+            <div className="text-purple-400 text-xs mt-3 group-hover:translate-x-1 transition-transform">Abrir →</div>
           </a>
         </div>
 
