@@ -1,7 +1,6 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
 
 const navItems = [
   { href: '/dashboard', icon: '⊞', label: 'Dashboard' },
@@ -14,17 +13,8 @@ const navItems = [
   { href: '/ai', icon: '🧠', label: 'Asistente IA' },
 ]
 
-const PUBLIC_PATHS = ['/', '/login']
-
 export default function Sidebar() {
   const pathname = usePathname()
-  const [show, setShow] = useState(false)
-
-  useEffect(() => {
-    setShow(!PUBLIC_PATHS.includes(pathname))
-  }, [pathname])
-
-  if (!show) return <div style={{display:'none'}}></div>
 
   return (
     <aside style={{position:'fixed', left:0, top:0, height:'100vh', width:'224px', backgroundColor:'#0D0D0D', borderRight:'1px solid #1A1A1A', display:'flex', flexDirection:'column', zIndex:50}}>

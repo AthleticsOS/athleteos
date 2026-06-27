@@ -1,6 +1,5 @@
-import { supabase } from '../lib/supabase'
-import RevenueChart from '../components/RevenueChart'
-
+import { supabase } from '../../lib/supabase'
+import RevenueChart from '../../components/RevenueChart'
 export default async function Dashboard() {
   const { data: athletes } = await supabase.from('athletes').select('*')
   const { data: competitions } = await supabase.from('competitions').select('*')
