@@ -1,6 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
+import { createBrowserClient } from '@supabase/ssr'
 
 const navItems = [
   { href: '/dashboard', icon: '⊞', label: 'Dashboard' },
@@ -15,6 +16,16 @@ const navItems = [
 
 export default function Sidebar() {
   const pathname = usePathname()
+
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+
+  async function handleLogout() {
+    await supabase.auth.signOut()
+    window.location.href = '/login'
+  }
 
   return (
     <aside style={{position:'fixed', left:0, top:0, height:'100vh', width:'224px', backgroundColor:'#0D0D0D', borderRight:'1px solid #1A1A1A', display:'flex', flexDirection:'column', zIndex:50}}>
@@ -50,7 +61,7 @@ export default function Sidebar() {
         </div>
       </nav>
       <div style={{padding:'12px', borderTop:'1px solid #1A1A1A'}}>
-        <div style={{display:'flex', alignItems:'center', gap:'10px', padding:'8px 12px'}}>
+        <div style={{display:'flex', alignItems:'center', gap:'10px', padding:'8px 12px', marginBottom:'4px'}}>
           <div style={{width:'28px', height:'28px', borderRadius:'50%', backgroundColor:'rgba(37,99,235,0.2)', color:'#60A5FA', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'11px', fontWeight:'600'}}>
             AC
           </div>
@@ -59,6 +70,17 @@ export default function Sidebar() {
             <div style={{color:'#444', fontSize:'11px'}}>Director</div>
           </div>
         </div>
+        <button onClick={handleLogout} style={{
+          width:'100%', padding:'8px 12px', borderRadius:'8px',
+          background:'transparent', border:'none', cursor:'pointer',
+          color:'#444', fontSize:'12px', textAlign:'left',
+          transition:'all 150ms',
+        }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = '#FF4D4D')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = '#444')}
+        >
+          Cerrar sesión
+        </button>
       </div>
     </aside>
   )

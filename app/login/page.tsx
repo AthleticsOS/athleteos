@@ -1,13 +1,18 @@
 'use client'
 
 import { useState } from 'react'
-import { supabase } from '../lib/supabase'
+import { createBrowserClient } from '@supabase/ssr'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
 
   async function handleLogin() {
     if (!email || !password) {
@@ -28,7 +33,6 @@ export default function Login() {
   return (
     <main className="min-h-screen bg-[#0A0A0A] flex items-center justify-center p-6">
       <div className="w-full max-w-sm">
-
         <div className="text-center mb-10">
           <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-5">
             <span className="text-white text-xl font-bold">A</span>
