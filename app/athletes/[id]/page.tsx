@@ -13,6 +13,12 @@ export default async function AthleteProfile({ params }: Props) {
     .eq('id', id)
     .single()
 
+  const { data: records } = await supabase
+    .from('personal_records')
+    .select('*')
+    .eq('athlete_id', id)
+    .order('date', { ascending: false })
+
   if (!athlete) return (
     <main className="min-h-screen bg-[#0A0A0A] p-8">
       <p className="text-white">Deportista no encontrado</p>
@@ -60,6 +66,37 @@ export default async function AthleteProfile({ params }: Props) {
               {athlete.gender === 'male' ? 'Masculino' : 'Femenino'}
             </p>
           </div>
+        </div>
+
+        <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-6 mb-6">
+          <h2 className="text-white font-medium mb-4">Marcas personales</h2>
+          {records && records.length > 0 ? (
+            <div className="flex flex-col gap-0">
+              <div className="grid grid-cols-4 pb-2 mb-2 border-b border-[#1A1A1A]">
+                <span className="text-[#444] text-xs uppercase tracking-widest">Prueba</span>
+                <span className="text-[#444] text-xs uppercase tracking-widest">Marca</span>
+                <span className="text-[#444] text-xs uppercase tracking-widest">Competición</span>
+                <span className="text-[#444] text-xs uppercase tracking-widest">Fecha</span>
+              </div>
+              {records.map((record) => (
+                <div key={record.id} className="grid grid-cols-4 py-3 border-b border-[#1A1A1A] last:border-0">
+                  <span className="text-white text-sm font-medium">{record.discipline}</span>
+                  <span className="text-blue-400 text-sm font-medium font-mono">{record.mark}</span>
+                  <span className="text-[#888] text-sm">{record.competition}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[#888] text-sm">
+                      {new Date(record.date).toLocaleDateString('es-ES')}
+                    </span>
+                    {record.wind && (
+                      <span className="text-[#444] text-xs">{record.wind}m/s</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-[#555] text-sm">No hay marcas registradas todavía</p>
+          )}
         </div>
 
         <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-6">
