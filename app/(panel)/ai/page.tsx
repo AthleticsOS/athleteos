@@ -22,71 +22,126 @@ export default function AIAssistant() {
       const data = await response.json()
       setMessages(prev => [...prev, { role: 'assistant', content: data.reply }])
     } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Error al conectar con la IA.' }])
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Error al conectar. Inténtalo de nuevo.' }])
     }
     setLoading(false)
   }
 
+  const suggestions = [
+    '¿Cuál es el mejor atleta del club en 100m?',
+    'Genera un entrenamiento de velocidad para mañana',
+    'Escribe un aviso para la convocatoria del campeonato',
+    'Dame un resumen de la temporada actual',
+  ]
+
   return (
-    <main className="min-h-screen bg-[#0A0A0A] p-8">
-      <div className="max-w-3xl mx-auto">
-        <a href="/dashboard" className="text-[#555] text-sm hover:text-white transition-colors">← Dashboard</a>
-        <div className="flex items-center gap-3 mt-4 mb-8">
-          <div className="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-lg">🧠</div>
-          <div>
-            <h1 className="text-2xl font-medium text-white">Asistente IA</h1>
-            <p className="text-[#555] text-sm">Conoce todos los datos de WeAthletics</p>
+    <main style={{minHeight:'100vh', backgroundColor:'#080808', padding:'32px 36px', display:'flex', flexDirection:'column'}}>
+      <div style={{maxWidth:'800px', margin:'0 auto', width:'100%', flex:1, display:'flex', flexDirection:'column'}}>
+
+        <div style={{marginBottom:'28px'}}>
+          <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
+            <div style={{
+              width:'40px', height:'40px', borderRadius:'12px',
+              background:'linear-gradient(135deg, #6366F1, #8B5CF6)',
+              display:'flex', alignItems:'center', justifyContent:'center',
+              fontSize:'18px', boxShadow:'0 0 20px rgba(99,102,241,0.3)',
+            }}>🧠</div>
+            <div>
+              <h1 style={{fontSize:'22px', fontWeight:'700', color:'#F0F0F0', letterSpacing:'-0.02em', margin:0}}>Asistente IA</h1>
+              <p style={{color:'#333', fontSize:'13px', margin:'3px 0 0'}}>Conoce todos los datos de WeAthletics en tiempo real</p>
+            </div>
           </div>
         </div>
 
-        <div className="bg-[#111] border border-[#1A1A1A] rounded-xl overflow-hidden mb-4">
-          <div className="p-6 min-h-96 flex flex-col gap-4">
+        <div style={{
+          flex:1, backgroundColor:'#0E0E0E',
+          border:'1px solid rgba(255,255,255,0.06)',
+          borderRadius:'16px', overflow:'hidden',
+          display:'flex', flexDirection:'column',
+          minHeight:'500px',
+        }}>
+          <div style={{flex:1, padding:'20px', overflowY:'auto', display:'flex', flexDirection:'column', gap:'16px'}}>
             {messages.length === 0 && (
-              <div className="flex flex-col gap-3 mt-4">
-                <p className="text-[#444] text-sm text-center mb-4">Puedes preguntarme cualquier cosa sobre el club</p>
-                {[
-                  'Genera un entrenamiento de velocidad para mañana',
-                  'Escribe un aviso para la convocatoria del campeonato',
-                  'Dame consejos para mejorar el tiempo en 100m',
-                  'Crea un plan de entrenamiento para esta semana'
-                ].map((suggestion) => (
-                  <button key={suggestion} onClick={() => setInput(suggestion)}
-                    className="text-left bg-[#0A0A0A] border border-[#1A1A1A] hover:border-[#333] rounded-lg px-4 py-3 text-[#666] text-sm transition-colors hover:text-white">
-                    {suggestion}
-                  </button>
-                ))}
+              <div style={{margin:'auto 0'}}>
+                <p style={{color:'#2A2A2A', fontSize:'13px', textAlign:'center', marginBottom:'20px'}}>Pregúntame cualquier cosa sobre el club</p>
+                <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'8px'}}>
+                  {suggestions.map((s) => (
+                    <button key={s} onClick={() => setInput(s)} style={{
+                      padding:'12px 14px', borderRadius:'10px', textAlign:'left',
+                      backgroundColor:'rgba(255,255,255,0.03)',
+                      border:'1px solid rgba(255,255,255,0.06)',
+                      color:'#555', fontSize:'13px', cursor:'pointer',
+                      transition:'all 150ms',
+                    }}
+                      onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(99,102,241,0.08)'; e.currentTarget.style.color = '#818CF8'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.2)' }}
+                      onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.03)'; e.currentTarget.style.color = '#555'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)' }}>
+                      {s}
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
             {messages.map((msg, i) => (
-              <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 ${msg.role === 'user' ? 'bg-blue-600/20 text-blue-400' : 'bg-purple-600/20 text-purple-400'}`}>
+              <div key={i} style={{display:'flex', gap:'12px', flexDirection: msg.role === 'user' ? 'row-reverse' : 'row'}}>
+                <div style={{
+                  width:'32px', height:'32px', borderRadius:'50%', flexShrink:0,
+                  display:'flex', alignItems:'center', justifyContent:'center',
+                  fontSize:'13px', fontWeight:'700',
+                  background: msg.role === 'user'
+                    ? 'linear-gradient(135deg, rgba(99,102,241,0.3), rgba(139,92,246,0.3))'
+                    : 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+                  color: msg.role === 'user' ? '#A5B4FC' : 'white',
+                }}>
                   {msg.role === 'user' ? 'AC' : '🧠'}
                 </div>
-                <div className={`rounded-xl px-4 py-3 text-sm leading-relaxed max-w-lg whitespace-pre-wrap ${msg.role === 'user' ? 'bg-blue-600/10 text-white border border-blue-500/20' : 'bg-[#1A1A1A] text-white border border-[#333]'}`}>
+                <div style={{
+                  maxWidth:'75%', padding:'12px 16px', borderRadius:'14px',
+                  fontSize:'13px', lineHeight:'1.6', whiteSpace:'pre-wrap',
+                  backgroundColor: msg.role === 'user' ? 'rgba(99,102,241,0.12)' : 'rgba(255,255,255,0.04)',
+                  border: msg.role === 'user' ? '1px solid rgba(99,102,241,0.2)' : '1px solid rgba(255,255,255,0.06)',
+                  color: msg.role === 'user' ? '#C7D2FE' : '#CCC',
+                }}>
                   {msg.content}
                 </div>
               </div>
             ))}
             {loading && (
-              <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-purple-600/20 text-purple-400 flex items-center justify-center text-xs">🧠</div>
-                <div className="bg-[#1A1A1A] border border-[#222] rounded-xl px-4 py-3 text-[#555] text-sm">
+              <div style={{display:'flex', gap:'12px'}}>
+                <div style={{
+                  width:'32px', height:'32px', borderRadius:'50%',
+                  background:'linear-gradient(135deg, #6366F1, #8B5CF6)',
+                  display:'flex', alignItems:'center', justifyContent:'center', fontSize:'13px',
+                }}>🧠</div>
+                <div style={{
+                  padding:'12px 16px', borderRadius:'14px', fontSize:'13px',
+                  backgroundColor:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.06)',
+                  color:'#333',
+                }}>
                   Pensando...
                 </div>
               </div>
             )}
           </div>
 
-          <div className="border-t border-[#1A1A1A] p-4 flex gap-3">
+          <div style={{padding:'16px', borderTop:'1px solid rgba(255,255,255,0.04)', display:'flex', gap:'10px'}}>
             <input
               value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && sendMessage()}
               placeholder="Escribe tu pregunta..."
-              className="flex-1 bg-[#0A0A0A] border border-[#222] rounded-lg px-4 py-3 text-white text-sm outline-none focus:border-purple-500 transition-colors"
+              style={{
+                flex:1, backgroundColor:'rgba(255,255,255,0.04)',
+                border:'1px solid rgba(255,255,255,0.08)',
+                borderRadius:'10px', padding:'11px 14px',
+                color:'white', fontSize:'13px', outline:'none',
+              }}
             />
-            <button onClick={sendMessage} disabled={loading}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-3 rounded-lg text-sm font-medium transition-colors disabled:opacity-50">
+            <button onClick={sendMessage} disabled={loading} style={{
+              padding:'11px 20px', borderRadius:'10px', fontSize:'13px', fontWeight:'600',
+              background: loading ? 'rgba(99,102,241,0.3)' : 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+              color:'white', border:'none', cursor: loading ? 'not-allowed' : 'pointer',
+              boxShadow: loading ? 'none' : '0 0 16px rgba(99,102,241,0.3)',
+            }}>
               Enviar
             </button>
           </div>
