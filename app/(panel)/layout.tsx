@@ -1,7 +1,8 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import Sidebar from '../components/Sidebar'
+import Sidebar from '@/app/components/Sidebar'
+import SearchModal from '@/app/components/SearchModal'
 
 export default async function PanelLayout({
   children,
@@ -31,6 +32,7 @@ export default async function PanelLayout({
   return (
     <div style={{display:'flex'}}>
       <Sidebar />
+      <SearchModal />
       <main style={{marginLeft:'224px', flex:1, minHeight:'100vh'}}>
         {children}
       </main>
