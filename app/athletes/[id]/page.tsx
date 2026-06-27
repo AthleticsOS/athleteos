@@ -1,4 +1,4 @@
-import { supabase } from '../../lib/supabase'
+import { supabase } from '../../../app/lib/supabase'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -19,6 +19,12 @@ export default async function AthleteProfile({ params }: Props) {
     .eq('athlete_id', id)
     .order('date', { ascending: false })
 
+  const { data: results } = await supabase
+    .from('competition_results')
+    .select('*, competitions(name, date, location)')
+    .eq('athlete_id', id)
+    .order('created_at', { ascending: false })
+
   if (!athlete) return (
     <main className="min-h-screen bg-[#0A0A0A] p-8">
       <p className="text-white">Deportista no encontrado</p>
@@ -26,102 +32,138 @@ export default async function AthleteProfile({ params }: Props) {
   )
 
   const initials = `${athlete.first_name[0]}${athlete.last_name[0]}`
+  const age = athlete.birth_date
+    ? Math.floor((new Date().getTime() - new Date(athlete.birth_date).getTime()) / (365.25 * 24 * 60 * 60 * 1000))
+    : null
 
   return (
     <main className="min-h-screen bg-[#0A0A0A] p-8">
       <div className="max-w-4xl mx-auto">
-        <a href="/athletes" className="text-[#555] text-sm hover:text-white transition-colors">← Deportistas</a>
 
-        <div className="flex items-start gap-6 mt-6 mb-10">
-          <div className="w-20 h-20 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center text-2xl font-medium flex-shrink-0">
-            {initials}
-          </div>
-          <div>
-            <h1 className="text-3xl font-medium text-white">{athlete.first_name} {athlete.last_name}</h1>
-            <div className="flex gap-4 mt-2 flex-wrap">
-              <span className="text-[#555] text-sm">{athlete.sport}</span>
-              <span className="text-[#333]">·</span>
-              <span className="text-[#555] text-sm">{athlete.category}</span>
+        <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl p-6 mb-4">
+          <div className="flex items-start gap-5">
+            <div className="w-16 h-16 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center text-xl font-medium flex-shrink-0 border border-blue-500/20">
+              {initials}
             </div>
-            <div className="mt-3">
-              <span className="bg-green-500/10 text-green-400 text-xs px-3 py-1 rounded-full">
-                {athlete.status}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-3 gap-4 mb-8">
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-5">
-            <p className="text-[#555] text-xs uppercase tracking-widest mb-3">Deporte</p>
-            <p className="text-white text-lg font-medium">{athlete.sport}</p>
-          </div>
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-5">
-            <p className="text-[#555] text-xs uppercase tracking-widest mb-3">Categoría</p>
-            <p className="text-white text-lg font-medium">{athlete.category}</p>
-          </div>
-          <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-5">
-            <p className="text-[#555] text-xs uppercase tracking-widest mb-3">Género</p>
-            <p className="text-white text-lg font-medium">
-              {athlete.gender === 'male' ? 'Masculino' : 'Femenino'}
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-6 mb-6">
-          <h2 className="text-white font-medium mb-4">Marcas personales</h2>
-          {records && records.length > 0 ? (
-            <div className="flex flex-col gap-0">
-              <div className="grid grid-cols-4 pb-2 mb-2 border-b border-[#1A1A1A]">
-                <span className="text-[#444] text-xs uppercase tracking-widest">Prueba</span>
-                <span className="text-[#444] text-xs uppercase tracking-widest">Marca</span>
-                <span className="text-[#444] text-xs uppercase tracking-widest">Competición</span>
-                <span className="text-[#444] text-xs uppercase tracking-widest">Fecha</span>
+            <div className="flex-1">
+              <h1 className="text-2xl font-medium text-white tracking-tight">
+                {athlete.first_name} {athlete.last_name}
+              </h1>
+              <div className="flex gap-4 mt-2 flex-wrap">
+                {athlete.sport && <span className="text-[#555] text-sm">{athlete.sport}</span>}
+                {athlete.category && <><span className="text-[#2A2A2A]">·</span><span className="text-[#555] text-sm">{athlete.category}</span></>}
+                {age && <><span className="text-[#2A2A2A]">·</span><span className="text-[#555] text-sm">{age} años</span></>}
+                {athlete.gender && <><span className="text-[#2A2A2A]">·</span><span className="text-[#555] text-sm">{athlete.gender === 'male' ? 'Masculino' : 'Femenino'}</span></>}
               </div>
-              {records.map((record) => (
-                <div key={record.id} className="grid grid-cols-4 py-3 border-b border-[#1A1A1A] last:border-0">
-                  <span className="text-white text-sm font-medium">{record.discipline}</span>
-                  <span className="text-blue-400 text-sm font-medium font-mono">{record.mark}</span>
-                  <span className="text-[#888] text-sm">{record.competition}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[#888] text-sm">
-                      {new Date(record.date).toLocaleDateString('es-ES')}
-                    </span>
-                    {record.wind && (
-                      <span className="text-[#444] text-xs">{record.wind}m/s</span>
-                    )}
+              <div className="mt-3 flex gap-2 flex-wrap">
+                <span className="bg-green-500/10 text-green-500 text-xs px-3 py-1 rounded-full font-medium">Activo</span>
+                {records && records.length > 0 && (
+                  <span className="bg-blue-500/10 text-blue-400 text-xs px-3 py-1 rounded-full font-medium">
+                    {records.length} marca{records.length > 1 ? 's' : ''} personal{records.length > 1 ? 'es' : ''}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-3 mb-4">
+          <div className="col-span-2 bg-[#111] border border-[#1A1A1A] rounded-2xl overflow-hidden">
+            <div className="px-5 py-4 border-b border-[#1A1A1A]">
+              <p className="text-white text-sm font-medium">Marcas personales</p>
+            </div>
+            {records && records.length > 0 ? (
+              <div className="flex flex-col">
+                {records.map((record, index) => (
+                  <div key={record.id}
+                    className={`flex items-center gap-4 px-5 py-3.5 ${index < records.length - 1 ? 'border-b border-[#161616]' : ''}`}>
+                    <div className="flex-1">
+                      <div className="text-white text-sm font-medium">{record.discipline}</div>
+                      <div className="text-[#444] text-xs mt-0.5">
+                        {record.competition} · {record.date ? new Date(record.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
+                      </div>
+                    </div>
+                    <div className="text-blue-400 text-base font-medium font-mono">{record.mark}</div>
+                    <div className="w-2 h-2 rounded-full bg-yellow-500 flex-shrink-0"></div>
                   </div>
+                ))}
+              </div>
+            ) : (
+              <div className="px-5 py-10 text-center text-[#444] text-sm">
+                No hay marcas registradas todavía
+              </div>
+            )}
+          </div>
+
+          <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl overflow-hidden">
+            <div className="px-5 py-4 border-b border-[#1A1A1A]">
+              <p className="text-white text-sm font-medium">Información</p>
+            </div>
+            <div className="p-4 flex flex-col gap-3">
+              {athlete.email && (
+                <div>
+                  <div className="text-[#444] text-xs mb-1">Email</div>
+                  <div className="text-[#CCC] text-sm truncate">{athlete.email}</div>
+                </div>
+              )}
+              {athlete.phone && (
+                <div>
+                  <div className="text-[#444] text-xs mb-1">Teléfono</div>
+                  <div className="text-[#CCC] text-sm">{athlete.phone}</div>
+                </div>
+              )}
+              {athlete.birth_date && (
+                <div>
+                  <div className="text-[#444] text-xs mb-1">Nacimiento</div>
+                  <div className="text-[#CCC] text-sm">{new Date(athlete.birth_date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+                </div>
+              )}
+              {athlete.sport && (
+                <div>
+                  <div className="text-[#444] text-xs mb-1">Deporte</div>
+                  <div className="text-[#CCC] text-sm">{athlete.sport}</div>
+                </div>
+              )}
+              {athlete.category && (
+                <div>
+                  <div className="text-[#444] text-xs mb-1">Categoría</div>
+                  <div className="text-[#CCC] text-sm">{athlete.category}</div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {results && results.length > 0 && (
+          <div className="bg-[#111] border border-[#1A1A1A] rounded-2xl overflow-hidden">
+            <div className="px-5 py-4 border-b border-[#1A1A1A]">
+              <p className="text-white text-sm font-medium">Historial de competiciones</p>
+            </div>
+            <div className="flex flex-col">
+              {results.map((result, index) => (
+                <div key={result.id}
+                  className={`flex items-center gap-4 px-5 py-3.5 ${index < results.length - 1 ? 'border-b border-[#161616]' : ''}`}>
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
+                    result.position === 1 ? 'bg-yellow-500 text-black' :
+                    result.position === 2 ? 'bg-gray-400 text-black' :
+                    result.position === 3 ? 'bg-amber-600 text-black' :
+                    'bg-[#222] text-[#888]'
+                  }`}>
+                    {result.position}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-white text-sm font-medium">{result.competitions?.name}</div>
+                    <div className="text-[#444] text-xs mt-0.5">
+                      {result.discipline} · {result.competitions?.location}
+                      {result.competitions?.date && ` · ${new Date(result.competitions.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}`}
+                    </div>
+                  </div>
+                  <div className="text-blue-400 text-sm font-medium font-mono">{result.mark}</div>
                 </div>
               ))}
             </div>
-          ) : (
-            <p className="text-[#555] text-sm">No hay marcas registradas todavía</p>
-          )}
-        </div>
-
-        <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-6">
-          <h2 className="text-white font-medium mb-4">Información de contacto</h2>
-          <div className="flex flex-col gap-3">
-            {athlete.email && (
-              <div className="flex items-center gap-3 py-2 border-b border-[#1A1A1A]">
-                <span className="text-[#555] text-sm w-24">Email</span>
-                <span className="text-[#AAA] text-sm">{athlete.email}</span>
-              </div>
-            )}
-            {athlete.phone && (
-              <div className="flex items-center gap-3 py-2 border-b border-[#1A1A1A]">
-                <span className="text-[#555] text-sm w-24">Teléfono</span>
-                <span className="text-[#AAA] text-sm">{athlete.phone}</span>
-              </div>
-            )}
-            {athlete.birth_date && (
-              <div className="flex items-center gap-3 py-2">
-                <span className="text-[#555] text-sm w-24">Nacimiento</span>
-                <span className="text-[#AAA] text-sm">{new Date(athlete.birth_date).toLocaleDateString('es-ES')}</span>
-              </div>
-            )}
           </div>
-        </div>
+        )}
 
       </div>
     </main>
