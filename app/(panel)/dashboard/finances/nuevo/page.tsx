@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { supabase } from '../../lib/supabase'
+import { supabase } from '@/app/lib/supabase'
 
 export default function NuevoPago() {
   const [athletes, setAthletes] = useState<any[]>([])

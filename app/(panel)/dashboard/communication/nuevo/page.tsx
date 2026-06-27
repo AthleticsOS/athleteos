@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { supabase } from '../../../../lib/supabase'
+import { supabase } from '@/app/lib/supabase'
 
 export default function NuevoAviso() {
   const [form, setForm] = useState({

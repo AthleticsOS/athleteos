@@ -1,4 +1,4 @@
-import { supabase } from '../../lib/supabase'
+import { supabase } from '@/app/lib/supabase'
 import RevenueChart from '../../components/RevenueChart'
 export default async function Dashboard() {
   const { data: athletes } = await supabase.from('athletes').select('*')
