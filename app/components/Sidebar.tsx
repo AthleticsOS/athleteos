@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import { createBrowserClient } from '@supabase/ssr'
+import { useEffect, useState } from 'react'
 
 const navItems = [
   { href: '/dashboard', icon: '⊞', label: 'Dashboard' },
@@ -13,16 +14,26 @@ const navItems = [
   { href: '/ranking', icon: '📊', label: 'Ranking' },
   { href: '/calendar', icon: '📅', label: 'Calendario' },
   { href: '/stats', icon: '📈', label: 'Estadísticas' },
+  { href: '/notifications', icon: '🔔', label: 'Notificaciones' },
   { href: '/ai', icon: '🧠', label: 'Asistente IA' },
 ]
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const [unread, setUnread] = useState(0)
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
+
+  useEffect(() => {
+    supabase
+      .from('notifications')
+      .select('id', { count: 'exact' })
+      .eq('read', false)
+      .then(({ count }) => setUnread(count || 0))
+  }, [])
 
   async function handleLogout() {
     await supabase.auth.signOut()
@@ -46,6 +57,7 @@ export default function Sidebar() {
         <div style={{display:'flex', flexDirection:'column', gap:'2px'}}>
           {navItems.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+            const isNotif = item.href === '/notifications'
             return (
               <a key={item.href} href={item.href} style={{
                 display:'flex', alignItems:'center', gap:'10px',
@@ -54,9 +66,19 @@ export default function Sidebar() {
                 backgroundColor: isActive ? 'rgba(37,99,235,0.15)' : 'transparent',
                 color: isActive ? '#60A5FA' : '#555',
                 fontWeight: isActive ? '500' : '400',
+                position: 'relative',
               }}>
                 <span style={{fontSize:'15px'}}>{item.icon}</span>
                 {item.label}
+                {isNotif && unread > 0 && (
+                  <span style={{
+                    marginLeft:'auto', backgroundColor:'#EF4444', color:'white',
+                    fontSize:'10px', fontWeight:'600', padding:'1px 6px',
+                    borderRadius:'10px', minWidth:'18px', textAlign:'center'
+                  }}>
+                    {unread}
+                  </span>
+                )}
               </a>
             )
           })}
