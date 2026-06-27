@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase'
 export default async function Dashboard() {
   const { data: athletes } = await supabase.from('athletes').select('*')
   const { data: competitions } = await supabase.from('competitions').select('*')
+  const { data: sessions } = await supabase.from('training_sessions').select('*')
 
   const upcoming = competitions?.filter(c => c.status === 'upcoming').length || 0
   const finished = competitions?.filter(c => c.status === 'finished').length || 0
@@ -37,8 +38,8 @@ export default async function Dashboard() {
           </div>
           <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-5">
             <p className="text-[#555] text-xs uppercase tracking-widest mb-3">Sesiones</p>
-            <p className="text-white text-3xl font-medium">0</p>
-            <p className="text-[#555] text-xs mt-2">Esta semana</p>
+            <p className="text-white text-3xl font-medium">{sessions?.length || 0}</p>
+            <p className="text-[#555] text-xs mt-2">Esta temporada</p>
           </div>
           <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-5">
             <p className="text-[#555] text-xs uppercase tracking-widest mb-3">Ingresos</p>
@@ -57,14 +58,14 @@ export default async function Dashboard() {
           <a href="/competitions" className="bg-[#111] border border-[#1A1A1A] hover:border-[#333] rounded-xl p-6 transition-colors group">
             <div className="text-2xl mb-3">🏆</div>
             <div className="text-white font-medium mb-1">Competiciones</div>
-            <div class="text-[#555] text-sm">Calendario y resultados</div>
+            <div className="text-[#555] text-sm">Calendario y resultados</div>
             <div className="text-blue-400 text-xs mt-3 group-hover:translate-x-1 transition-transform">Ver todas →</div>
           </a>
-          <a href="/athletes/nuevo" className="bg-[#111] border border-[#1A1A1A] hover:border-[#333] rounded-xl p-6 transition-colors group">
-            <div className="text-2xl mb-3">➕</div>
-            <div className="text-white font-medium mb-1">Nuevo deportista</div>
-            <div className="text-[#555] text-sm">Añadir al club</div>
-            <div className="text-blue-400 text-xs mt-3 group-hover:translate-x-1 transition-transform">Añadir →</div>
+          <a href="/training" className="bg-[#111] border border-[#1A1A1A] hover:border-[#333] rounded-xl p-6 transition-colors group">
+            <div className="text-2xl mb-3">🏃</div>
+            <div className="text-white font-medium mb-1">Entrenamientos</div>
+            <div className="text-[#555] text-sm">Sesiones y planificación</div>
+            <div className="text-blue-400 text-xs mt-3 group-hover:translate-x-1 transition-transform">Ver todos →</div>
           </a>
         </div>
 
