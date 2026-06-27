@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase'
+import { supabase } from '../../lib/supabase'
 
 export default async function Athletes() {
   const { data: athletes } = await supabase.from('athletes').select('*')
