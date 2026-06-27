@@ -86,6 +86,10 @@ export default async function AthleteProfile({ params }: Props) {
                 )}
               </div>
             </div>
+            <a href={`/athletes/${id}/edit`}
+              className="text-[#555] hover:text-white text-sm px-4 py-2 rounded-lg border border-[#1A1A1A] hover:border-[#333] transition-colors flex-shrink-0">
+              Editar
+            </a>
           </div>
         </div>
 
