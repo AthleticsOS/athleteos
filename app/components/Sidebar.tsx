@@ -13,12 +13,12 @@ const navItems = [
   { href: '/ai', icon: '🧠', label: 'Asistente IA' },
 ]
 
-const hiddenPaths = ['/', '/login']
-
 export default function Sidebar() {
   const pathname = usePathname()
 
-  if (hiddenPaths.includes(pathname)) return null
+  if (pathname === '/' || pathname === '/login' || pathname.startsWith('/login')) {
+    return null
+  }
 
   return (
     <aside style={{position:'fixed', left:0, top:0, height:'100vh', width:'224px', backgroundColor:'#0D0D0D', borderRight:'1px solid #1A1A1A', display:'flex', flexDirection:'column', zIndex:50}}>
