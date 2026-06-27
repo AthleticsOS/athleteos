@@ -66,7 +66,6 @@ export default function Sidebar() {
                 backgroundColor: isActive ? 'rgba(37,99,235,0.15)' : 'transparent',
                 color: isActive ? '#60A5FA' : '#555',
                 fontWeight: isActive ? '500' : '400',
-                position: 'relative',
               }}>
                 <span style={{fontSize:'15px'}}>{item.icon}</span>
                 {item.label}
@@ -85,6 +84,16 @@ export default function Sidebar() {
         </div>
       </nav>
       <div style={{padding:'12px', borderTop:'1px solid #1A1A1A'}}>
+        <a href="/settings" style={{
+          display:'flex', alignItems:'center', gap:'10px',
+          padding:'8px 12px', borderRadius:'8px', fontSize:'13px',
+          textDecoration:'none', color: pathname === '/settings' ? '#60A5FA' : '#555',
+          backgroundColor: pathname === '/settings' ? 'rgba(37,99,235,0.15)' : 'transparent',
+          marginBottom:'4px',
+        }}>
+          <span style={{fontSize:'15px'}}>⚙️</span>
+          Configuración
+        </a>
         <div style={{display:'flex', alignItems:'center', gap:'10px', padding:'8px 12px', marginBottom:'4px'}}>
           <div style={{width:'28px', height:'28px', borderRadius:'50%', backgroundColor:'rgba(37,99,235,0.2)', color:'#60A5FA', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'11px', fontWeight:'600'}}>
             AC
