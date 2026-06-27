@@ -12,20 +12,10 @@ export default async function Dashboard() {
 
   return (
     <main className="min-h-screen bg-[#0A0A0A] p-8">
-      <div className="max-w-5xl mx-auto">
-
-        <div className="flex items-center gap-4 mb-10">
-          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
-            <span className="text-white font-bold">A</span>
-          </div>
-          <div>
-            <h1 className="text-white font-medium text-lg">AthleteOS</h1>
-            <p className="text-[#555] text-sm">WeAthletics</p>
-          </div>
-        </div>
+      <div className="max-w-4xl mx-auto">
 
         <h2 className="text-3xl font-medium text-white mb-2">Buenos días, Aaron</h2>
-        <p className="text-[#555] mb-10">Temporada 2024–2025</p>
+        <p className="text-[#555] mb-10">Temporada 2024–2025 · WeAthletics</p>
 
         <div className="grid grid-cols-4 gap-4 mb-8">
           <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-5">
