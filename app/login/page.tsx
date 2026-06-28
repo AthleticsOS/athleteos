@@ -25,17 +25,31 @@ export default function Login() {
     if (error) {
       setError('Email o contraseña incorrectos')
     } else {
+      const userId = data.user.id
+
       const { data: athlete } = await supabase
         .from('athletes')
         .select('id')
-        .eq('user_id', data.user.id)
+        .eq('user_id', userId)
         .single()
 
       if (athlete) {
         window.location.href = '/athlete-portal'
-      } else {
-        window.location.href = '/dashboard'
+        return
       }
+
+      const { data: coachRole } = await supabase
+        .from('club_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .single()
+
+      if (coachRole?.role === 'coach') {
+        window.location.href = '/coach-panel'
+        return
+      }
+
+      window.location.href = '/dashboard'
     }
     setLoading(false)
   }
