@@ -76,6 +76,7 @@ export default async function AthleteProfile({ params }: Props) {
             {href:`/athletes/${id}/test`,label:"+ Test fisico",color:"#10B981",bg:"rgba(16,185,129,0.1)",bdr:"rgba(16,185,129,0.25)"},
             {href:`/athletes/${id}/marca`,label:"+ Marca personal",color:"#A5B4FC",bg:"rgba(165,180,252,0.08)",bdr:"rgba(165,180,252,0.2)"},
             {href:`/athletes/${id}/edit`,label:"Editar perfil",color:"#888",bg:"rgba(255,255,255,0.04)",bdr:"rgba(255,255,255,0.08)"},
+            {href:`/athletes/${id}/report`,label:"Exportar PDF",color:"#10B981",bg:"rgba(16,185,129,0.1)",bdr:"rgba(16,185,129,0.25)"},
             {href:"/competitions",label:"Competiciones",color:"#EAB308",bg:"rgba(234,179,8,0.1)",bdr:"rgba(234,179,8,0.25)"},
           ].map(a => <a key={a.href} href={a.href} style={{display:"flex",alignItems:"center",justifyContent:"center",padding:"11px",borderRadius:"10px",fontSize:"13px",fontWeight:"600",backgroundColor:a.bg,color:a.color,border:`1px solid ${a.bdr}`}}>{a.label}</a>)}
         </div>
