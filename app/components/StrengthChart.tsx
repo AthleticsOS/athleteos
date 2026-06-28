@@ -4,7 +4,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } f
 
 type DataPoint = {
   fecha: string
-  [key: string]: string | number
+  [key: string]: string | number | null
 }
 
 type Serie = {
@@ -22,7 +22,7 @@ type Props = {
 export default function StrengthChart({ data, series, unit = 'kg' }: Props) {
   if (!data || data.length < 2) return (
     <div style={{height:'120px', display:'flex', alignItems:'center', justifyContent:'center'}}>
-      <p style={{color:'#333', fontSize:'13px'}}>Necesitas al menos 2 registros para ver la progresión</p>
+      <p style={{color:'#333', fontSize:'13px'}}>Necesitas al menos 2 registros para ver la progresion</p>
     </div>
   )
 
@@ -33,7 +33,7 @@ export default function StrengthChart({ data, series, unit = 'kg' }: Props) {
         <YAxis hide domain={['auto', 'auto']} />
         <Tooltip
           contentStyle={{ background: '#111', border: '1px solid #222', borderRadius: '8px', color: '#fff', fontSize: '12px' }}
-          formatter={(value: unknown, name: string) => [`${value}${unit}`, name]}
+          formatter={(value: unknown) => [`${value}${unit}`]}
           labelFormatter={(label: unknown) => String(label)}
         />
         <Legend
