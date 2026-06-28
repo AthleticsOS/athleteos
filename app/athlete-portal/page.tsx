@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import ProgressChart from '@/app/components/ProgressChart'
 import StrengthChart from '@/app/components/StrengthChart'
+import LogoutButton from '@/app/components/LogoutButton'
 
 export default async function AthletePortal() {
   const cookieStore = await cookies()
@@ -58,6 +59,7 @@ export default async function AthletePortal() {
         <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
           <div style={{width:'30px', height:'30px', borderRadius:'50%', background:'linear-gradient(135deg,rgba(99,102,241,0.3),rgba(139,92,246,0.3))', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'12px', fontWeight:'700', color:'#A5B4FC'}}>{initials}</div>
           <span style={{color:'#555', fontSize:'13px'}}>{athlete.first_name} {athlete.last_name}</span>
+          <LogoutButton />
         </div>
       </nav>
 
