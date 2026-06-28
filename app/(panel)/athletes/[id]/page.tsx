@@ -1,5 +1,6 @@
 import { supabase } from '@/app/lib/supabase'
 import ProgressChart from '@/app/components/ProgressChart'
+import StrengthChart from '@/app/components/StrengthChart'
 
 type Props = { params: Promise<{ id: string }> }
 
@@ -9,19 +10,44 @@ export default async function AthleteProfile({ params }: Props) {
   const { data: records } = await supabase.from('personal_records').select('*').eq('athlete_id', id).order('date', { ascending: false })
   const { data: results } = await supabase.from('competition_results').select('*, competitions(name, date, location)').eq('athlete_id', id).order('created_at', { ascending: false })
   const { data: sessions } = await supabase.from('athlete_sessions').select('*').eq('athlete_id', id).order('date', { ascending: false }).limit(5)
-  const { data: weights } = await supabase.from('athlete_weights').select('*').eq('athlete_id', id).order('date', { ascending: false }).limit(5)
-  const { data: tests } = await supabase.from('athlete_tests').select('*').eq('athlete_id', id).order('date', { ascending: false }).limit(3)
+  const { data: weights } = await supabase.from('athlete_weights').select('*').eq('athlete_id', id).order('date', { ascending: true })
+  const { data: tests } = await supabase.from('athlete_tests').select('*').eq('athlete_id', id).order('date', { ascending: true })
 
   if (!athlete) return <main style={{minHeight:"100vh",backgroundColor:"#080808",padding:"32px"}}><p style={{color:"#555"}}>Deportista no encontrado</p></main>
 
   const initials = athlete.first_name[0] + athlete.last_name[0]
   const age = athlete.birth_date ? Math.floor((new Date().getTime() - new Date(athlete.birth_date).getTime()) / (365.25*24*60*60*1000)) : null
+
   const chartData: {fecha:string,marca:number,competicion:string}[] = []
   results?.forEach(r => {
     if (!r.mark || !r.competitions?.date) return
     const n = parseFloat(r.mark.replace(/[^0-9.]/g,""))
     if (!isNaN(n)) chartData.push({ fecha: new Date(r.competitions.date).toLocaleDateString("es-ES",{day:"numeric",month:"short"}), marca: n, competicion: r.competitions.name })
   })
+
+  const weightChartData = weights?.map(w => ({
+    fecha: new Date(w.date+"T00:00:00").toLocaleDateString("es-ES",{day:"numeric",month:"short"}),
+    sentadilla: w.sentadilla,
+    hip_thrust: w.hip_thrust,
+    peso_muerto: w.peso_muerto,
+    press_banca: w.press_banca,
+    cargada: w.cargada,
+  })) || []
+
+  const sprintChartData = tests?.map(t => ({
+    fecha: new Date(t.date+"T00:00:00").toLocaleDateString("es-ES",{day:"numeric",month:"short"}),
+    sprint_20m: t.sprint_20m,
+    sprint_60m: t.sprint_60m,
+    sprint_100m: t.sprint_100m,
+    sprint_200m: t.sprint_200m,
+  })) || []
+
+  const bodyChartData = tests?.map(t => ({
+    fecha: new Date(t.date+"T00:00:00").toLocaleDateString("es-ES",{day:"numeric",month:"short"}),
+    peso: t.weight_kg,
+    musculo: t.muscle_kg,
+    grasa: t.fat_pct,
+  })) || []
 
   return (
     <main style={{minHeight:"100vh",backgroundColor:"#080808",padding:"32px 36px"}}>
@@ -41,6 +67,7 @@ export default async function AthleteProfile({ params }: Props) {
                 <span style={{padding:"3px 10px",borderRadius:"20px",fontSize:"11px",fontWeight:"600",backgroundColor:"rgba(16,185,129,0.1)",color:"#10B981",border:"1px solid rgba(16,185,129,0.2)"}}>● Activo</span>
                 {records && records.length > 0 && <span style={{padding:"3px 10px",borderRadius:"20px",fontSize:"11px",fontWeight:"600",backgroundColor:"rgba(99,102,241,0.1)",color:"#A5B4FC",border:"1px solid rgba(99,102,241,0.2)"}}>{records.length} marcas</span>}
                 {sessions && sessions.length > 0 && <span style={{padding:"3px 10px",borderRadius:"20px",fontSize:"11px",fontWeight:"600",backgroundColor:"rgba(245,158,11,0.1)",color:"#F59E0B",border:"1px solid rgba(245,158,11,0.2)"}}>{sessions.length} sesiones</span>}
+                {weights && weights.length > 0 && <span style={{padding:"3px 10px",borderRadius:"20px",fontSize:"11px",fontWeight:"600",backgroundColor:"rgba(239,68,68,0.1)",color:"#EF4444",border:"1px solid rgba(239,68,68,0.2)"}}>{weights.length} registros pesas</span>}
               </div>
             </div>
             <a href={`/athletes/${id}/edit`} style={{padding:"8px 16px",borderRadius:"9px",backgroundColor:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.08)",color:"#888",fontSize:"13px",fontWeight:"500",flexShrink:0}}>Editar</a>
@@ -62,6 +89,60 @@ export default async function AthleteProfile({ params }: Props) {
           <div style={{backgroundColor:"#0E0E0E",border:"1px solid rgba(255,255,255,0.06)",borderRadius:"16px",padding:"20px",marginBottom:"12px"}}>
             <p style={{color:"#888",fontSize:"13px",fontWeight:"500",margin:"0 0 12px"}}>Progresion en competicion</p>
             <ProgressChart data={chartData} unit="s" lowerIsBetter={true} />
+          </div>
+        )}
+
+        {weightChartData.length >= 2 && (
+          <div style={{backgroundColor:"#0E0E0E",border:"1px solid rgba(255,255,255,0.06)",borderRadius:"16px",padding:"20px",marginBottom:"12px"}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"12px"}}>
+              <p style={{color:"#888",fontSize:"13px",fontWeight:"500",margin:0}}>Progresion de fuerza</p>
+              <a href={`/athletes/${id}/pesas`} style={{color:"#F59E0B",fontSize:"12px",fontWeight:"500"}}>+ Nuevo →</a>
+            </div>
+            <StrengthChart
+              data={weightChartData}
+              series={[
+                {key:"sentadilla",label:"Sentadilla",color:"#6366F1"},
+                {key:"hip_thrust",label:"Hip Thrust",color:"#F59E0B"},
+                {key:"peso_muerto",label:"Peso Muerto",color:"#EF4444"},
+                {key:"press_banca",label:"Banca",color:"#10B981"},
+                {key:"cargada",label:"Cargada",color:"#8B5CF6"},
+              ]}
+              unit="kg"
+            />
+          </div>
+        )}
+
+        {sprintChartData.length >= 2 && (
+          <div style={{backgroundColor:"#0E0E0E",border:"1px solid rgba(255,255,255,0.06)",borderRadius:"16px",padding:"20px",marginBottom:"12px"}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"12px"}}>
+              <p style={{color:"#888",fontSize:"13px",fontWeight:"500",margin:0}}>Progresion de sprints</p>
+              <a href={`/athletes/${id}/test`} style={{color:"#10B981",fontSize:"12px",fontWeight:"500"}}>+ Nuevo →</a>
+            </div>
+            <StrengthChart
+              data={sprintChartData}
+              series={[
+                {key:"sprint_20m",label:"20m",color:"#6366F1"},
+                {key:"sprint_60m",label:"60m",color:"#F59E0B"},
+                {key:"sprint_100m",label:"100m",color:"#EF4444"},
+                {key:"sprint_200m",label:"200m",color:"#10B981"},
+              ]}
+              unit="s"
+            />
+          </div>
+        )}
+
+        {bodyChartData.length >= 2 && (
+          <div style={{backgroundColor:"#0E0E0E",border:"1px solid rgba(255,255,255,0.06)",borderRadius:"16px",padding:"20px",marginBottom:"12px"}}>
+            <p style={{color:"#888",fontSize:"13px",fontWeight:"500",margin:"0 0 12px"}}>Composicion corporal</p>
+            <StrengthChart
+              data={bodyChartData}
+              series={[
+                {key:"peso",label:"Peso",color:"#888"},
+                {key:"musculo",label:"Musculo",color:"#10B981"},
+                {key:"grasa",label:"Grasa %",color:"#EF4444"},
+              ]}
+              unit=""
+            />
           </div>
         )}
 
@@ -110,43 +191,6 @@ export default async function AthleteProfile({ params }: Props) {
                 </div>
               </div>
             ))}
-          </div>
-        )}
-
-        {weights && weights.length > 0 && (
-          <div style={{backgroundColor:"#0E0E0E",border:"1px solid rgba(255,255,255,0.06)",borderRadius:"16px",overflow:"hidden",marginBottom:"12px"}}>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 18px",borderBottom:"1px solid rgba(255,255,255,0.04)"}}>
-              <p style={{color:"#888",fontSize:"13px",fontWeight:"500",margin:0}}>Pesas</p>
-              <a href={`/athletes/${id}/pesas`} style={{color:"#F59E0B",fontSize:"12px",fontWeight:"500"}}>+ Nuevo</a>
-            </div>
-            {weights.map((w,i)=>(
-              <div key={w.id} style={{display:"flex",alignItems:"center",gap:"12px",padding:"14px 18px",borderBottom:i<weights.length-1?"1px solid rgba(255,255,255,0.03)":"none",flexWrap:"wrap"}}>
-                <div style={{color:"#444",fontSize:"12px",minWidth:"70px"}}>{new Date(w.date+"T00:00:00").toLocaleDateString("es-ES",{day:"numeric",month:"short"})}</div>
-                {[{label:"Sent.",value:w.sentadilla},{label:"Hip",value:w.hip_thrust},{label:"P.Muerto",value:w.peso_muerto},{label:"Banca",value:w.press_banca},{label:"Cargada",value:w.cargada}].filter(f=>f.value).map(f=>(
-                  <div key={f.label} style={{textAlign:"center"}}>
-                    <div style={{color:"#2A2A2A",fontSize:"10px",textTransform:"uppercase"}}>{f.label}</div>
-                    <div style={{color:"#F59E0B",fontSize:"14px",fontWeight:"700",fontFamily:"monospace"}}>{f.value}kg</div>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {tests && tests.length > 0 && (
-          <div style={{backgroundColor:"#0E0E0E",border:"1px solid rgba(255,255,255,0.06)",borderRadius:"16px",overflow:"hidden",marginBottom:"12px"}}>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 18px",borderBottom:"1px solid rgba(255,255,255,0.04)"}}>
-              <p style={{color:"#888",fontSize:"13px",fontWeight:"500",margin:0}}>Ultimo test fisico</p>
-              <a href={`/athletes/${id}/test`} style={{color:"#10B981",fontSize:"12px",fontWeight:"500"}}>+ Nuevo</a>
-            </div>
-            <div style={{padding:"16px 18px",display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(120px,1fr))",gap:"12px"}}>
-              {[{label:"Peso",value:tests[0].weight_kg,unit:"kg",color:"#888"},{label:"Grasa",value:tests[0].fat_pct,unit:"%",color:"#EF4444"},{label:"Musculo",value:tests[0].muscle_kg,unit:"kg",color:"#10B981"},{label:"Salto H.",value:tests[0].jump_horizontal,unit:"m",color:"#6366F1"},{label:"CMJ",value:tests[0].cmj_arms,unit:"cm",color:"#8B5CF6"},{label:"20m",value:tests[0].sprint_20m,unit:"s",color:"#F59E0B"},{label:"60m",value:tests[0].sprint_60m,unit:"s",color:"#F59E0B"},{label:"100m",value:tests[0].sprint_100m,unit:"s",color:"#F59E0B"}].filter(f=>f.value).map(f=>(
-                <div key={f.label} style={{backgroundColor:"rgba(255,255,255,0.03)",borderRadius:"10px",padding:"12px",textAlign:"center"}}>
-                  <div style={{color:"#333",fontSize:"10px",textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:"6px"}}>{f.label}</div>
-                  <div style={{color:f.color,fontSize:"18px",fontWeight:"700",fontFamily:"monospace"}}>{f.value}{f.unit}</div>
-                </div>
-              ))}
-            </div>
           </div>
         )}
 
