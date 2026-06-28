@@ -18,6 +18,7 @@ const navSections = [
     label: 'Club',
     items: [
       { href: '/athletes', icon: '👤', label: 'Deportistas' },
+      { href: '/coach', icon: '👁', label: 'Vista entrenador' },
       { href: '/groups', icon: '👥', label: 'Grupos' },
       { href: '/training', icon: '🏃', label: 'Entrenamientos' },
       { href: '/competitions', icon: '🏆', label: 'Competiciones' },
@@ -70,11 +71,8 @@ export default function Sidebar() {
       display: 'flex', flexDirection: 'column',
       zIndex: 50,
     }}>
-      <div style={{
-        padding: '18px 16px 14px',
-        borderBottom: '1px solid rgba(255,255,255,0.05)',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div style={{padding: '18px 16px 14px', borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
           <div style={{
             width: '30px', height: '30px',
             background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
@@ -82,11 +80,11 @@ export default function Sidebar() {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: '0 0 12px rgba(99,102,241,0.4)',
           }}>
-            <span style={{ color: 'white', fontSize: '13px', fontWeight: '700' }}>A</span>
+            <span style={{color: 'white', fontSize: '13px', fontWeight: '700'}}>A</span>
           </div>
           <div>
-            <div style={{ color: '#F0F0F0', fontSize: '13px', fontWeight: '600', letterSpacing: '-0.01em' }}>AthleteOS</div>
-            <div style={{ color: '#444', fontSize: '11px', marginTop: '1px' }}>WeAthletics</div>
+            <div style={{color: '#F0F0F0', fontSize: '13px', fontWeight: '600', letterSpacing: '-0.01em'}}>AthleteOS</div>
+            <div style={{color: '#444', fontSize: '11px', marginTop: '1px'}}>WeAthletics</div>
           </div>
         </div>
 
@@ -103,8 +101,8 @@ export default function Sidebar() {
             border: '1px solid rgba(255,255,255,0.08)',
             cursor: 'pointer', color: '#555', fontSize: '12px',
           }}>
-          <span style={{ fontSize: '13px' }}>🔍</span>
-          <span style={{ flex: 1, textAlign: 'left' }}>Buscar...</span>
+          <span style={{fontSize: '13px'}}>🔍</span>
+          <span style={{flex: 1, textAlign: 'left'}}>Buscar...</span>
           <kbd style={{
             background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: '4px', padding: '1px 5px', fontSize: '10px', color: '#444',
@@ -112,9 +110,9 @@ export default function Sidebar() {
         </button>
       </div>
 
-      <nav style={{ flex: 1, padding: '8px', overflowY: 'auto' }}>
+      <nav style={{flex: 1, padding: '8px', overflowY: 'auto'}}>
         {navSections.map((section) => (
-          <div key={section.label} style={{ marginBottom: '4px' }}>
+          <div key={section.label} style={{marginBottom: '4px'}}>
             <div style={{
               color: '#2A2A2A', fontSize: '10px', fontWeight: '600',
               textTransform: 'uppercase', letterSpacing: '0.08em',
@@ -135,21 +133,9 @@ export default function Sidebar() {
                   color: isActive ? '#A5B4FC' : '#4A4A4A',
                   fontWeight: isActive ? '500' : '400',
                   borderLeft: isActive ? '2px solid #6366F1' : '2px solid transparent',
-                }}
-                  onMouseEnter={e => {
-                    if (!isActive) {
-                      e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.04)'
-                      e.currentTarget.style.color = '#888'
-                    }
-                  }}
-                  onMouseLeave={e => {
-                    if (!isActive) {
-                      e.currentTarget.style.backgroundColor = 'transparent'
-                      e.currentTarget.style.color = '#4A4A4A'
-                    }
-                  }}>
-                  <span style={{ fontSize: '14px', opacity: isActive ? 1 : 0.6 }}>{item.icon}</span>
-                  <span style={{ flex: 1 }}>{item.label}</span>
+                }}>
+                  <span style={{fontSize: '14px', opacity: isActive ? 1 : 0.6}}>{item.icon}</span>
+                  <span style={{flex: 1}}>{item.label}</span>
                   {item.badge && unread > 0 && (
                     <span style={{
                       backgroundColor: '#EF4444', color: 'white',
@@ -167,10 +153,7 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      <div style={{
-        padding: '8px',
-        borderTop: '1px solid rgba(255,255,255,0.05)',
-      }}>
+      <div style={{padding: '8px', borderTop: '1px solid rgba(255,255,255,0.05)'}}>
         <a href="/settings" style={{
           display: 'flex', alignItems: 'center', gap: '8px',
           padding: '7px 8px', borderRadius: '7px',
@@ -178,29 +161,24 @@ export default function Sidebar() {
           color: pathname === '/settings' ? '#A5B4FC' : '#4A4A4A',
           backgroundColor: pathname === '/settings' ? 'rgba(99,102,241,0.15)' : 'transparent',
           marginBottom: '4px',
-          transition: 'all 120ms',
+          borderLeft: pathname === '/settings' ? '2px solid #6366F1' : '2px solid transparent',
         }}>
-          <span style={{ fontSize: '14px' }}>⚙️</span>
-          <span>Configuración</span>
+          <span style={{fontSize: '14px', opacity: 0.6}}>⚙️</span>
+          Configuración
         </a>
 
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: '8px',
-          padding: '7px 8px', borderRadius: '7px',
-          marginBottom: '4px',
-        }}>
+        <div style={{display: 'flex', alignItems: 'center', gap: '8px', padding: '7px 8px', marginBottom: '4px'}}>
           <div style={{
             width: '26px', height: '26px', borderRadius: '50%',
             background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '10px', fontWeight: '700', color: 'white',
-            flexShrink: 0,
+            fontSize: '10px', fontWeight: '700', color: 'white', flexShrink: 0,
           }}>
             AC
           </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ color: '#CCC', fontSize: '12px', fontWeight: '500' }}>Aaron Cortés</div>
-            <div style={{ color: '#444', fontSize: '10px' }}>Director</div>
+          <div style={{flex: 1, minWidth: 0}}>
+            <div style={{color: '#CCC', fontSize: '12px', fontWeight: '500'}}>Aaron Cortés</div>
+            <div style={{color: '#444', fontSize: '10px'}}>Director</div>
           </div>
         </div>
 
