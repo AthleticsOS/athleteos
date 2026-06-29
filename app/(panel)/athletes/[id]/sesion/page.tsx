@@ -14,6 +14,8 @@ export default function NuevaSesion({ params }: Props) {
     average: '',
     effort: 7,
     notes: '',
+    target_distance: '',
+    target_percentage: '',
   })
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
@@ -39,6 +41,8 @@ export default function NuevaSesion({ params }: Props) {
       ...form,
       athlete_id: athleteId,
       effort: Number(form.effort),
+      target_distance: form.target_distance ? Number(form.target_distance) : null,
+      target_percentage: form.target_percentage ? Number(form.target_percentage) : null,
     }])
     if (error) setMessage('Error al guardar.')
     else window.location.href = `/athletes/${athleteId}`
@@ -99,6 +103,23 @@ export default function NuevaSesion({ params }: Props) {
               placeholder="Observaciones, sensaciones, condiciones..."
               rows={3}
               style={{width:'100%', backgroundColor:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'10px', padding:'10px 14px', color:'white', fontSize:'14px', resize:'none', outline:'none'}} />
+          </div>
+
+          <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'14px'}}>
+            <div>
+              <label style={{color:'#444', fontSize:'11px', fontWeight:'600', textTransform:'uppercase', letterSpacing:'0.08em', display:'block', marginBottom:'8px'}}>Distancia objetivo (m)</label>
+              <input name="target_distance" value={form.target_distance} onChange={handleChange}
+                placeholder="Ej: 200"
+                style={{width:'100%', backgroundColor:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'10px', padding:'10px 14px', color:'white', fontSize:'14px', fontFamily:'monospace', outline:'none'}} />
+              <p style={{color:'#2A2A2A', fontSize:'11px', marginTop:'4px'}}>20, 30, 60, 100, 150, 200...</p>
+            </div>
+            <div>
+              <label style={{color:'#444', fontSize:'11px', fontWeight:'600', textTransform:'uppercase', letterSpacing:'0.08em', display:'block', marginBottom:'8px'}}>Porcentaje (%)</label>
+              <input name="target_percentage" value={form.target_percentage} onChange={handleChange}
+                placeholder="Ej: 85"
+                style={{width:'100%', backgroundColor:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'10px', padding:'10px 14px', color:'white', fontSize:'14px', fontFamily:'monospace', outline:'none'}} />
+              <p style={{color:'#2A2A2A', fontSize:'11px', marginTop:'4px'}}>80%, 85%, 90%, 95%...</p>
+            </div>
           </div>
 
           {message && <p style={{color:'#EF4444', fontSize:'13px'}}>{message}</p>}

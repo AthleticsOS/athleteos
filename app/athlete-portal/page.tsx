@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import ProgressChart from '@/app/components/ProgressChart'
 import StrengthChart from '@/app/components/StrengthChart'
 import LogoutButton from '@/app/components/LogoutButton'
+import PaceCalculator from '@/app/components/PaceCalculator'
 
 export default async function AthletePortal() {
   const cookieStore = await cookies()
@@ -26,6 +27,7 @@ export default async function AthletePortal() {
 
   const { data: records } = await supabase.from('personal_records').select('*').eq('athlete_id', athlete.id).order('date', { ascending: false })
   const { data: sessions } = await supabase.from('athlete_sessions').select('*').eq('athlete_id', athlete.id).order('date', { ascending: false })
+  const lastPaceSession = sessions?.find(s => s.target_distance && s.target_percentage)
   const { data: weights } = await supabase.from('athlete_weights').select('*').eq('athlete_id', athlete.id).order('date', { ascending: true })
   const { data: results } = await supabase.from('competition_results').select('*, competitions(name, date, location)').eq('athlete_id', athlete.id).order('created_at', { ascending: false })
 
@@ -88,6 +90,18 @@ export default async function AthletePortal() {
             + Añadir marca
           </a>
         </div>
+
+        {lastPaceSession && records && (
+          <div style={{marginBottom:'12px'}}>
+            <div style={{color:'#333', fontSize:'11px', fontWeight:'600', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:'8px'}}>Tu ritmo para la proxima sesion</div>
+            <PaceCalculator
+              records={records}
+              distance={lastPaceSession.target_distance}
+              percentage={lastPaceSession.target_percentage}
+            />
+            <div style={{color:'#333', fontSize:'11px', marginTop:'6px'}}>{lastPaceSession.exercise}</div>
+          </div>
+        )}
 
         {effortChartData.length >= 2 && (
           <div style={{backgroundColor:'#0E0E0E', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'16px', padding:'20px', marginBottom:'12px'}}>
