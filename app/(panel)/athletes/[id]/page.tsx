@@ -71,6 +71,7 @@ export default async function AthleteProfile({ params }: Props) {
 
         <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"8px",marginBottom:"12px"}}>
           {[
+            {href:`/athletes/${id}/tiempos`,label:"📋 Ver tiempos",color:"#888",bg:"rgba(255,255,255,0.04)",bdr:"rgba(255,255,255,0.08)"},
             {href:`/athletes/${id}/sesion`,label:"+ Nueva sesion",color:"#6366F1",bg:"rgba(99,102,241,0.12)",bdr:"rgba(99,102,241,0.25)"},
             {href:`/athletes/${id}/pesas`,label:"+ Registro pesas",color:"#F59E0B",bg:"rgba(245,158,11,0.1)",bdr:"rgba(245,158,11,0.25)"},
             {href:`/athletes/${id}/test`,label:"+ Test fisico",color:"#10B981",bg:"rgba(16,185,129,0.1)",bdr:"rgba(16,185,129,0.25)"},
