@@ -61,18 +61,18 @@ export default function Cuestionario({ params }: Props) {
     setTimeout(() => setSaved(false), 3000)
   }
 
-  const sectionStyle = { backgroundColor: '#0E0E0E', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px', marginBottom: '12px' }
-  const labelStyle = { color: '#444', fontSize: '11px', fontWeight: '600' as const, textTransform: 'uppercase' as const, letterSpacing: '0.08em', display: 'block' as const, marginBottom: '8px' }
-  const inputStyle = { width: '100%', backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '10px 14px', color: 'white', fontSize: '14px', outline: 'none', boxSizing: 'border-box' as const }
+  const sectionStyle = { backgroundColor: '#0A0E1A', border: '1px solid rgba(75,163,217,0.12)', borderRadius: '16px', padding: '24px', marginBottom: '12px' }
+  const labelStyle = { color: '#3A4A70', fontSize: '11px', fontWeight: '600' as const, textTransform: 'uppercase' as const, letterSpacing: '0.08em', display: 'block' as const, marginBottom: '8px' }
+  const inputStyle = { width: '100%', backgroundColor: 'rgba(75,163,217,0.05)', border: '1px solid rgba(75,163,217,0.15)', borderRadius: '10px', padding: '10px 14px', color: '#E8EAF0', fontSize: '14px', outline: 'none', boxSizing: 'border-box' as const }
   const selectStyle = { ...inputStyle }
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#080808', padding: '32px 36px' }}>
+    <main style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '32px 36px' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
 
         <div style={{ marginBottom: '28px' }}>
-          <a href={`/athletes/${athleteId}`} style={{ color: '#444', fontSize: '13px' }}>← Perfil</a>
-          <h1 style={{ fontSize: '24px', fontWeight: '700', color: '#F0F0F0', letterSpacing: '-0.02em', margin: '6px 0 4px' }}>
+          <a href={`/athletes/${athleteId}`} style={{ color: '#3A4A70', fontSize: '13px' }}>← Perfil</a>
+          <h1 style={{ fontSize: '24px', fontWeight: '700', color: '#F0F4FF', letterSpacing: '-0.02em', margin: '6px 0 4px' }}>
             Cuestionario inicial
           </h1>
           <p style={{ color: '#333', fontSize: '13px', margin: 0 }}>{athleteName}</p>
@@ -196,7 +196,7 @@ export default function Cuestionario({ params }: Props) {
           <div style={{ marginTop: '14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <input type="checkbox" id="reunion" checked={form.reunion_individual}
               onChange={e => setForm({ ...form, reunion_individual: e.target.checked })}
-              style={{ width: '16px', height: '16px', accentColor: '#6366F1' }} />
+              style={{ width: '16px', height: '16px', accentColor: '#4BA3D9' }} />
             <label htmlFor="reunion" style={{ color: '#888', fontSize: '13px' }}>
               Quiero tener una reunión individual con el entrenador
             </label>
@@ -219,9 +219,9 @@ export default function Cuestionario({ params }: Props) {
 
         <button onClick={handleSubmit} disabled={loading} style={{
           width: '100%', padding: '14px', borderRadius: '12px', fontSize: '14px', fontWeight: '700',
-          background: loading ? 'rgba(99,102,241,0.3)' : 'linear-gradient(135deg,#6366F1,#8B5CF6)',
-          color: 'white', border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
-          boxShadow: loading ? 'none' : '0 0 20px rgba(99,102,241,0.3)',
+          background: loading ? 'rgba(75,163,217,0.3)' : 'linear-gradient(135deg,#4BA3D9,#4BA3D9)',
+          color: '#E8EAF0', border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
+          boxShadow: loading ? 'none' : '0 0 20px rgba(75,163,217,0.3)',
         }}>
           {loading ? 'Guardando...' : 'Guardar cuestionario'}
         </button>

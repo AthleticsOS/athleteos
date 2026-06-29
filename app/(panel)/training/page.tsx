@@ -10,7 +10,7 @@ export default async function Training() {
     'Velocidad': { color: '#EF4444', bg: 'rgba(239,68,68,0.1)' },
     'Resistencia': { color: '#3B82F6', bg: 'rgba(59,130,246,0.1)' },
     'Fuerza': { color: '#F59E0B', bg: 'rgba(245,158,11,0.1)' },
-    'Técnica': { color: '#8B5CF6', bg: 'rgba(139,92,246,0.1)' },
+    'Técnica': { color: '#4BA3D9', bg: 'rgba(75,163,217,0.1)' },
     'Recuperación': { color: '#10B981', bg: 'rgba(16,185,129,0.1)' },
   }
 
@@ -25,9 +25,9 @@ export default async function Training() {
           </div>
           <a href="/training/nuevo" style={{
             padding:'9px 16px', borderRadius:'9px',
-            background:'linear-gradient(135deg, #6366F1, #8B5CF6)',
+            background:'linear-gradient(135deg, #4BA3D9, #4BA3D9)',
             color:'white', fontSize:'13px', fontWeight:'600',
-            boxShadow:'0 0 20px rgba(99,102,241,0.3)',
+            boxShadow:'0 0 20px rgba(75,163,217,0.3)',
           }}>
             + Nueva sesión
           </a>
@@ -79,7 +79,7 @@ export default async function Training() {
           ) : (
             <div style={{backgroundColor:'#0E0E0E', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'14px', padding:'60px 20px', textAlign:'center'}}>
               <p style={{color:'#333', marginBottom:'16px'}}>No hay sesiones programadas</p>
-              <a href="/training/nuevo" style={{color:'#6366F1', fontSize:'13px'}}>Crear la primera →</a>
+              <a href="/training/nuevo" style={{color:'#4BA3D9', fontSize:'13px'}}>Crear la primera →</a>
             </div>
           )}
         </div>

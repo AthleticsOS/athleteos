@@ -10,7 +10,7 @@ export default async function Training() {
     'Velocidad': 'bg-red-500/10 text-red-400',
     'Resistencia': 'bg-blue-500/10 text-blue-400',
     'Fuerza': 'bg-amber-500/10 text-amber-400',
-    'Técnica': 'bg-purple-500/10 text-purple-400',
+    'Técnica': 'bg-[#4BA3D9]/10 text-[#4BA3D9]',
     'Recuperación': 'bg-green-500/10 text-green-400',
   }
 

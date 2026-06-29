@@ -89,7 +89,7 @@ export default async function AthleteCompetitions({ params }: Props) {
 
         <div style={{display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:'10px', marginBottom:'24px'}}>
           {[
-            { label:'Total competiciones', value: String(totalComps), color:'#6366F1' },
+            { label:'Total competiciones', value: String(totalComps), color:'#4BA3D9' },
             { label:'Podios', value: String(podios), color:'#EAB308' },
             { label:'Oros', value: String(oros), color:'#F59E0B' },
             { label:'Pruebas distintas', value: String(disciplines.length), color:'#10B981' },
@@ -125,9 +125,9 @@ export default async function AthleteCompetitions({ params }: Props) {
                       </div>
                     )}
                     {data.mmt !== null && (
-                      <div style={{textAlign:'center', backgroundColor:'rgba(99,102,241,0.1)', border:'1px solid rgba(99,102,241,0.2)', borderRadius:'10px', padding:'8px 16px'}}>
-                        <div style={{color:'#818CF8', fontSize:'10px', fontWeight:'600', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:'4px'}}>MMT</div>
-                        <div style={{color:'#A5B4FC', fontSize:'20px', fontWeight:'800', fontFamily:'monospace'}}>{data.mmt!.toFixed(2)}</div>
+                      <div style={{textAlign:'center', backgroundColor:'rgba(75,163,217,0.1)', border:'1px solid rgba(75,163,217,0.2)', borderRadius:'10px', padding:'8px 16px'}}>
+                        <div style={{color:'#4BA3D9', fontSize:'10px', fontWeight:'600', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:'4px'}}>MMT</div>
+                        <div style={{color:'#4BA3D9', fontSize:'20px', fontWeight:'800', fontFamily:'monospace'}}>{data.mmt!.toFixed(2)}</div>
                       </div>
                     )}
                     {data.avg !== null && (
@@ -145,7 +145,7 @@ export default async function AthleteCompetitions({ params }: Props) {
                   <p style={{color:'#444', fontSize:'11px', fontWeight:'600', textTransform:'uppercase', letterSpacing:'0.06em', margin:'0 0 10px'}}>Progresión</p>
                   <StrengthChart
                     data={chartData}
-                    series={[{key:'marca', label:disc, color:'#6366F1'}]}
+                    series={[{key:'marca', label:disc, color:'#4BA3D9'}]}
                     unit=""
                   />
                 </div>
@@ -177,7 +177,7 @@ export default async function AthleteCompetitions({ params }: Props) {
                       {parseTime(r.mark) === data.mmp && (
                         <span style={{padding:'2px 7px', borderRadius:'4px', fontSize:'10px', fontWeight:'700', backgroundColor:'rgba(234,179,8,0.15)', color:'#EAB308'}}>★ MMP</span>
                       )}
-                      <div style={{color:'#A5B4FC', fontSize:'15px', fontWeight:'700', fontFamily:'monospace'}}>{r.mark}</div>
+                      <div style={{color:'#4BA3D9', fontSize:'15px', fontWeight:'700', fontFamily:'monospace'}}>{r.mark}</div>
                     </div>
                   </div>
                 ))}

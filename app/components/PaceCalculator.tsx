@@ -60,12 +60,12 @@ export default function PaceCalculator({ records, distance, percentage }: Props)
   const target = base / (percentage / 100)
 
   return (
-    <div style={{backgroundColor:"rgba(99,102,241,0.08)",border:"1px solid rgba(99,102,241,0.2)",borderRadius:"12px",padding:"16px"}}>
-      <div style={{color:"#818CF8",fontSize:"12px",fontWeight:"600",textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:"10px"}}>
+    <div style={{backgroundColor:"rgba(75,163,217,0.08)",border:"1px solid rgba(75,163,217,0.2)",borderRadius:"12px",padding:"16px"}}>
+      <div style={{color:"#4BA3D9",fontSize:"12px",fontWeight:"600",textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:"10px"}}>
         Ritmo objetivo — {distance}m al {percentage}%
       </div>
       <div style={{display:"flex",alignItems:"baseline",gap:"12px",marginBottom:"8px"}}>
-        <div style={{fontSize:"36px",fontWeight:"800",color:"#A5B4FC",fontFamily:"monospace",letterSpacing:"-0.02em"}}>{fmt(target)}</div>
+        <div style={{fontSize:"36px",fontWeight:"800",color:"#4BA3D9",fontFamily:"monospace",letterSpacing:"-0.02em"}}>{fmt(target)}</div>
         <div style={{color:"#555",fontSize:"13px"}}>por serie</div>
       </div>
       <div style={{color:"#444",fontSize:"12px"}}>

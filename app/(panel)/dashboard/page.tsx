@@ -30,17 +30,17 @@ export default async function Dashboard() {
 
         <div style={{display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:'12px', marginBottom:'16px'}}>
           {[
-            { label: 'Deportistas', value: String(athletes?.length || 0), sub: 'Activos en el club', color: '#6366F1', glow: true },
+            { label: 'Deportistas', value: String(athletes?.length || 0), sub: 'Activos en el club', color: '#4BA3D9', glow: true },
             { label: 'Competiciones', value: String(competitions?.length || 0), sub: `${upcoming} próximas`, color: '#F59E0B', glow: false },
             { label: 'Ingresos', value: `€${(totalPaid/100).toFixed(0)}`, sub: pending > 0 ? `${pending} pendientes` : 'Todo al día', color: pending > 0 ? '#EF4444' : '#10B981', glow: false },
-            { label: 'Sesiones', value: String(sessions?.length || 0), sub: 'Esta temporada', color: '#8B5CF6', glow: false },
+            { label: 'Sesiones', value: String(sessions?.length || 0), sub: 'Esta temporada', color: '#4BA3D9', glow: false },
           ].map((stat) => (
             <div key={stat.label} style={{
               backgroundColor:'#0E0E0E',
-              border:`1px solid ${stat.glow ? 'rgba(99,102,241,0.25)' : 'rgba(255,255,255,0.06)'}`,
+              border:`1px solid ${stat.glow ? 'rgba(75,163,217,0.25)' : 'rgba(255,255,255,0.06)'}`,
               borderRadius:'14px', padding:'20px', position:'relative', overflow:'hidden',
             }}>
-              {stat.glow && <div style={{position:'absolute',top:0,left:0,right:0,height:'1px',background:'linear-gradient(90deg,transparent,rgba(99,102,241,0.5),transparent)'}}/>}
+              {stat.glow && <div style={{position:'absolute',top:0,left:0,right:0,height:'1px',background:'linear-gradient(90deg,transparent,rgba(75,163,217,0.5),transparent)'}}/>}
               <div style={{color:'#444',fontSize:'11px',fontWeight:'600',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'12px'}}>
                 {stat.label}
               </div>
@@ -87,7 +87,7 @@ export default async function Dashboard() {
         <div style={{backgroundColor:'#0E0E0E',border:'1px solid rgba(255,255,255,0.06)',borderRadius:'14px',overflow:'hidden'}}>
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'16px 20px',borderBottom:'1px solid rgba(255,255,255,0.04)'}}>
             <div style={{color:'#888',fontSize:'13px',fontWeight:'500'}}>Deportistas del club</div>
-            <a href="/athletes" style={{color:'#6366F1',fontSize:'12px'}}>Ver todos →</a>
+            <a href="/athletes" style={{color:'#4BA3D9',fontSize:'12px'}}>Ver todos →</a>
           </div>
           {athletes?.map((athlete, index) => (
             <a href={`/athletes/${athlete.id}`} key={athlete.id}
@@ -95,9 +95,9 @@ export default async function Dashboard() {
               style={{borderBottom: index < (athletes.length-1) ? '1px solid rgba(255,255,255,0.03)' : 'none'}}>
               <div style={{
                 width:'32px',height:'32px',borderRadius:'50%',
-                background:'linear-gradient(135deg,rgba(99,102,241,0.25),rgba(139,92,246,0.25))',
+                background:'linear-gradient(135deg,rgba(30,42,94,0.5),rgba(75,163,217,0.25))',
                 display:'flex',alignItems:'center',justifyContent:'center',
-                fontSize:'12px',fontWeight:'600',color:'#A5B4FC',flexShrink:0,
+                fontSize:'12px',fontWeight:'600',color:'#4BA3D9',flexShrink:0,
               }}>
                 {athlete.first_name[0]}{athlete.last_name[0]}
               </div>

@@ -39,14 +39,19 @@ export default function SearchModal() {
     if (!q.trim()) { setResults([]); return }
     setLoading(true)
 
-    const [athletes, competitions, sessions] = await Promise.all([
+    const [athletesFirst, athletesLast, competitions, convocatorias, groups] = await Promise.all([
       supabase.from('athletes').select('id, first_name, last_name, sport, category').ilike('first_name', `%${q}%`).limit(4),
+      supabase.from('athletes').select('id, first_name, last_name, sport, category').ilike('last_name', `%${q}%`).limit(4),
       supabase.from('competitions').select('id, name, location, date').ilike('name', `%${q}%`).limit(3),
-      supabase.from('training_sessions').select('id, title, date, type').ilike('title', `%${q}%`).limit(3),
+      supabase.from('convocatorias').select('id, competition_name, date, location').ilike('competition_name', `%${q}%`).limit(3),
+      supabase.from('groups').select('id, name, category').ilike('name', `%${q}%`).limit(3),
     ])
 
+    const athleteMap = new Map()
+    ;[...(athletesFirst.data || []), ...(athletesLast.data || [])].forEach(a => athleteMap.set(a.id, a))
+
     const all: Result[] = [
-      ...(athletes.data || []).map(a => ({
+      ...Array.from(athleteMap.values()).map(a => ({
         id: a.id,
         title: `${a.first_name} ${a.last_name}`,
         subtitle: `${a.sport} · ${a.category}`,
@@ -56,16 +61,23 @@ export default function SearchModal() {
       ...(competitions.data || []).map(c => ({
         id: c.id,
         title: c.name,
-        subtitle: `${c.location} · ${c.date ? new Date(c.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}`,
+        subtitle: `${c.location || ''} · ${c.date ? new Date(c.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}`,
         type: 'Competición',
         href: `/competitions/${c.id}`,
       })),
-      ...(sessions.data || []).map(s => ({
-        id: s.id,
-        title: s.title,
-        subtitle: `${s.type} · ${s.date ? new Date(s.date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : ''}`,
-        type: 'Entrenamiento',
-        href: `/training`,
+      ...(convocatorias.data || []).map(c => ({
+        id: c.id,
+        title: c.competition_name,
+        subtitle: `Convocatoria · ${c.date ? new Date(c.date+'T00:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : ''}`,
+        type: 'Convocatoria',
+        href: `/convocatorias`,
+      })),
+      ...(groups.data || []).map(g => ({
+        id: g.id,
+        title: g.name,
+        subtitle: g.category || 'Grupo',
+        type: 'Grupo',
+        href: `/groups`,
       })),
     ]
 
@@ -89,9 +101,10 @@ export default function SearchModal() {
   }
 
   const typeColors: Record<string, string> = {
-    'Deportista': '#60A5FA',
-    'Competición': '#FBBF24',
-    'Entrenamiento': '#A78BFA',
+    'Deportista': '#4BA3D9',
+    'Competición': '#F59E0B',
+    'Convocatoria': '#10B981',
+    'Grupo': '#A78BFA',
   }
 
   if (!open) return null
@@ -106,31 +119,31 @@ export default function SearchModal() {
     }} onClick={() => setOpen(false)}>
       <div style={{
         width: '100%', maxWidth: '560px', margin: '0 16px',
-        backgroundColor: '#111',
-        border: '1px solid #2A2A2A',
+        backgroundColor: '#0A0E1A',
+        border: '1px solid rgba(75,163,217,0.15)',
         borderRadius: '16px',
         overflow: 'hidden',
         boxShadow: '0 25px 60px rgba(0,0,0,0.6)',
       }} onClick={e => e.stopPropagation()}>
 
-        <div style={{display: 'flex', alignItems: 'center', gap: '12px', padding: '16px 20px', borderBottom: '1px solid #1A1A1A'}}>
-          <span style={{fontSize: '18px', color: '#444'}}>🔍</span>
+        <div style={{display: 'flex', alignItems: 'center', gap: '12px', padding: '16px 20px', borderBottom: '1px solid rgba(75,163,217,0.08)'}}>
+          <span style={{fontSize: '18px', color: '#3A4A70'}}>🔍</span>
           <input
             autoFocus
             value={query}
             onChange={e => setQuery(e.target.value)}
             onKeyDown={handleKeyNav}
-            placeholder="Buscar deportistas, competiciones, entrenamientos..."
+            placeholder="Buscar deportistas, competiciones, convocatorias..."
             style={{
               flex: 1, background: 'transparent', border: 'none', outline: 'none',
-              color: 'white', fontSize: '15px',
+              color: '#E8EAF0', fontSize: '15px',
             }}
           />
-          {loading && <span style={{color: '#444', fontSize: '12px'}}>...</span>}
+          {loading && <span style={{color: '#4BA3D9', fontSize: '12px'}}>...</span>}
           <kbd style={{
-            background: '#1A1A1A', border: '1px solid #2A2A2A',
+            background: 'rgba(75,163,217,0.08)', border: '1px solid rgba(75,163,217,0.15)',
             borderRadius: '6px', padding: '2px 8px',
-            color: '#555', fontSize: '11px',
+            color: '#4A5580', fontSize: '11px',
           }}>ESC</kbd>
         </div>
 
@@ -141,18 +154,18 @@ export default function SearchModal() {
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
                   padding: '12px 20px',
-                  backgroundColor: index === selected ? '#1A1A1A' : 'transparent',
-                  borderBottom: '1px solid #161616',
+                  backgroundColor: index === selected ? 'rgba(75,163,217,0.08)' : 'transparent',
+                  borderBottom: '1px solid rgba(255,255,255,0.03)',
                   textDecoration: 'none',
                   transition: 'background 100ms',
                 }}
                 onMouseEnter={() => setSelected(index)}>
                 <div style={{flex: 1}}>
-                  <div style={{color: 'white', fontSize: '14px', fontWeight: '500'}}>{result.title}</div>
-                  <div style={{color: '#555', fontSize: '12px', marginTop: '2px'}}>{result.subtitle}</div>
+                  <div style={{color: '#E8EAF0', fontSize: '14px', fontWeight: '500'}}>{result.title}</div>
+                  <div style={{color: '#3A4A70', fontSize: '12px', marginTop: '2px'}}>{result.subtitle}</div>
                 </div>
                 <span style={{
-                  fontSize: '11px', padding: '2px 8px', borderRadius: '4px', fontWeight: '500',
+                  fontSize: '11px', padding: '2px 8px', borderRadius: '4px', fontWeight: '600',
                   backgroundColor: `${typeColors[result.type]}15`,
                   color: typeColors[result.type],
                 }}>
@@ -162,27 +175,28 @@ export default function SearchModal() {
             ))}
           </div>
         ) : query ? (
-          <div style={{padding: '32px 20px', textAlign: 'center', color: '#444', fontSize: '14px'}}>
-            Sin resultados para "{query}"
+          <div style={{padding: '32px 20px', textAlign: 'center', color: '#2A3550', fontSize: '14px'}}>
+            Sin resultados para &quot;{query}&quot;
           </div>
         ) : (
           <div style={{padding: '20px'}}>
-            <div style={{color: '#333', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px'}}>Accesos rápidos</div>
+            <div style={{color: '#2A3550', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px'}}>Accesos rápidos</div>
             {[
               { label: 'Ver todos los deportistas', href: '/athletes', icon: '👥' },
               { label: 'Competiciones', href: '/competitions', icon: '🏆' },
               { label: 'Calendario', href: '/calendar', icon: '📅' },
+              { label: 'Convocatorias', href: '/convocatorias', icon: '📣' },
               { label: 'Asistente IA', href: '/ai', icon: '🧠' },
             ].map(item => (
               <a key={item.href} href={item.href} onClick={() => setOpen(false)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '10px',
                   padding: '9px 12px', borderRadius: '8px',
-                  textDecoration: 'none', color: '#666', fontSize: '13px',
+                  textDecoration: 'none', color: '#4A5580', fontSize: '13px',
                   transition: 'all 150ms',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#1A1A1A'; e.currentTarget.style.color = 'white' }}
-                onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#666' }}>
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(75,163,217,0.08)'; e.currentTarget.style.color = '#CDD0E0' }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#4A5580' }}>
                 <span>{item.icon}</span>
                 {item.label}
               </a>
@@ -190,11 +204,11 @@ export default function SearchModal() {
           </div>
         )}
 
-        <div style={{padding: '10px 20px', borderTop: '1px solid #1A1A1A', display: 'flex', gap: '16px'}}>
-          <span style={{color: '#333', fontSize: '11px'}}>↑↓ navegar</span>
-          <span style={{color: '#333', fontSize: '11px'}}>↵ abrir</span>
-          <span style={{color: '#333', fontSize: '11px'}}>ESC cerrar</span>
-          <span style={{color: '#333', fontSize: '11px', marginLeft: 'auto'}}>⌘K para abrir</span>
+        <div style={{padding: '10px 20px', borderTop: '1px solid rgba(75,163,217,0.08)', display: 'flex', gap: '16px'}}>
+          <span style={{color: '#2A3550', fontSize: '11px'}}>↑↓ navegar</span>
+          <span style={{color: '#2A3550', fontSize: '11px'}}>↵ abrir</span>
+          <span style={{color: '#2A3550', fontSize: '11px'}}>ESC cerrar</span>
+          <span style={{color: '#2A3550', fontSize: '11px', marginLeft: 'auto'}}>⌘K para abrir</span>
         </div>
       </div>
     </div>

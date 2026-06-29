@@ -98,7 +98,7 @@ export default async function AthleteReport({ params }: Props) {
                 {records.map((r, i) => (
                   <tr key={r.id} style={{backgroundColor: i % 2 === 0 ? 'white' : '#fafafa'}}>
                     <td style={{padding:'10px 12px', fontSize:'13px', fontWeight:'500', color:'#333'}}>{r.discipline}</td>
-                    <td style={{padding:'10px 12px', fontSize:'14px', fontWeight:'700', color:'#6366F1', fontFamily:'monospace'}}>{r.mark}</td>
+                    <td style={{padding:'10px 12px', fontSize:'14px', fontWeight:'700', color:'#4BA3D9', fontFamily:'monospace'}}>{r.mark}</td>
                     <td style={{padding:'10px 12px', fontSize:'12px', color:'#666'}}>{r.competition}</td>
                     <td style={{padding:'10px 12px', fontSize:'12px', color:'#666'}}>{r.date ? new Date(r.date).toLocaleDateString('es-ES', {day:'numeric', month:'short', year:'numeric'}) : '—'}</td>
                   </tr>
@@ -172,7 +172,7 @@ export default async function AthleteReport({ params }: Props) {
                   <tr key={s.id} style={{backgroundColor: i % 2 === 0 ? 'white' : '#fafafa'}}>
                     <td style={{padding:'8px 12px', fontSize:'12px', color:'#666', whiteSpace:'nowrap'}}>{new Date(s.date+'T00:00:00').toLocaleDateString('es-ES', {day:'numeric', month:'short'})}</td>
                     <td style={{padding:'8px 12px', fontSize:'12px', color:'#333', maxWidth:'280px', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{s.exercise}</td>
-                    <td style={{padding:'8px 12px', fontSize:'12px', fontWeight:'600', color:'#6366F1', fontFamily:'monospace'}}>{s.average || '—'}</td>
+                    <td style={{padding:'8px 12px', fontSize:'12px', fontWeight:'600', color:'#4BA3D9', fontFamily:'monospace'}}>{s.average || '—'}</td>
                     <td style={{padding:'8px 12px'}}>
                       <span style={{padding:'2px 8px', borderRadius:'4px', fontSize:'11px', fontWeight:'600', backgroundColor: s.effort >= 8 ? '#fee2e2' : s.effort >= 6 ? '#fef3c7' : '#f0fdf4', color: s.effort >= 8 ? '#dc2626' : s.effort >= 6 ? '#d97706' : '#16a34a'}}>
                         {s.effort}/10
@@ -201,7 +201,7 @@ export default async function AthleteReport({ params }: Props) {
                   <tr key={r.id} style={{backgroundColor: i % 2 === 0 ? 'white' : '#fafafa'}}>
                     <td style={{padding:'8px 12px', fontSize:'12px', color:'#333'}}>{r.competitions?.name}</td>
                     <td style={{padding:'8px 12px', fontSize:'12px', color:'#666'}}>{r.discipline}</td>
-                    <td style={{padding:'8px 12px', fontSize:'13px', fontWeight:'700', color:'#6366F1', fontFamily:'monospace'}}>{r.mark}</td>
+                    <td style={{padding:'8px 12px', fontSize:'13px', fontWeight:'700', color:'#4BA3D9', fontFamily:'monospace'}}>{r.mark}</td>
                     <td style={{padding:'8px 12px', fontSize:'13px', fontWeight:'700', color: r.position === 1 ? '#d97706' : '#666'}}>{r.position}º</td>
                     <td style={{padding:'8px 12px', fontSize:'12px', color:'#666'}}>{r.competitions?.date ? new Date(r.competitions.date).toLocaleDateString('es-ES', {day:'numeric', month:'short', year:'numeric'}) : '—'}</td>
                   </tr>

@@ -54,7 +54,7 @@ export default async function CoachView() {
 
         <div style={{display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:'12px', marginBottom:'24px'}}>
           {[
-            { label:'Atletas activos', value: athletes?.length || 0, color:'#6366F1' },
+            { label:'Atletas activos', value: athletes?.length || 0, color:'#4BA3D9' },
             { label:'Sesiones totales', value: allSessions?.length || 0, color:'#F59E0B' },
             { label:'Registros pesas', value: allWeights?.length || 0, color:'#EF4444' },
             { label:'Tests realizados', value: allTests?.length || 0, color:'#10B981' },
@@ -98,10 +98,10 @@ export default async function CoachView() {
                 <div style={{display:'flex', alignItems:'center', gap:'14px'}}>
                   <div style={{
                     width:'44px', height:'44px', borderRadius:'50%', flexShrink:0,
-                    background:'linear-gradient(135deg,rgba(99,102,241,0.3),rgba(139,92,246,0.3))',
-                    border:'1px solid rgba(99,102,241,0.3)',
+                    background:'linear-gradient(135deg,rgba(75,163,217,0.3),rgba(75,163,217,0.3))',
+                    border:'1px solid rgba(75,163,217,0.3)',
                     display:'flex', alignItems:'center', justifyContent:'center',
-                    fontSize:'15px', fontWeight:'700', color:'#A5B4FC',
+                    fontSize:'15px', fontWeight:'700', color:'#4BA3D9',
                   }}>{initials}</div>
                   <div style={{flex:1}}>
                     <div style={{color:'#E0E0E0', fontSize:'15px', fontWeight:'600'}}>{athlete.first_name} {athlete.last_name}</div>
@@ -123,7 +123,7 @@ export default async function CoachView() {
                         ● Al dia
                       </span>
                     )}
-                    <span style={{padding:'4px 10px', borderRadius:'20px', fontSize:'11px', fontWeight:'600', backgroundColor:'rgba(99,102,241,0.1)', color:'#A5B4FC', border:'1px solid rgba(99,102,241,0.2)'}}>
+                    <span style={{padding:'4px 10px', borderRadius:'20px', fontSize:'11px', fontWeight:'600', backgroundColor:'rgba(75,163,217,0.1)', color:'#4BA3D9', border:'1px solid rgba(75,163,217,0.2)'}}>
                       {recordCount} marcas
                     </span>
                   </div>
@@ -138,7 +138,7 @@ export default async function CoachView() {
                           Hace {daysSinceSession} días
                         </div>
                         <div style={{color:'#444', fontSize:'12px', marginTop:'4px', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{lastSession.exercise}</div>
-                        {lastSession.average && <div style={{color:'#6366F1', fontSize:'12px', fontFamily:'monospace', marginTop:'2px'}}>Media: {lastSession.average}</div>}
+                        {lastSession.average && <div style={{color:'#4BA3D9', fontSize:'12px', fontFamily:'monospace', marginTop:'2px'}}>Media: {lastSession.average}</div>}
                         {lastSession.effort && <div style={{color:'#555', fontSize:'11px', marginTop:'2px'}}>Esfuerzo: {lastSession.effort}/10</div>}
                       </>
                     ) : (
@@ -187,7 +187,7 @@ export default async function CoachView() {
                         {lastTest.cmj_arms && (
                           <div style={{display:'flex', justifyContent:'space-between'}}>
                             <span style={{color:'#555', fontSize:'11px'}}>CMJ</span>
-                            <span style={{color:'#6366F1', fontSize:'13px', fontWeight:'700', fontFamily:'monospace'}}>{lastTest.cmj_arms}cm</span>
+                            <span style={{color:'#4BA3D9', fontSize:'13px', fontWeight:'700', fontFamily:'monospace'}}>{lastTest.cmj_arms}cm</span>
                           </div>
                         )}
                         {!lastTest.weight_kg && !lastTest.sprint_60m && !lastTest.sprint_100m && !lastTest.cmj_arms && (

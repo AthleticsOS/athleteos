@@ -32,7 +32,7 @@ export default function AIAssistant() {
       <div className="max-w-3xl mx-auto">
         <a href="/dashboard" className="text-[#555] text-sm hover:text-white transition-colors">← Dashboard</a>
         <div className="flex items-center gap-3 mt-4 mb-8">
-          <div className="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-lg">🧠</div>
+          <div className="w-10 h-10 rounded-xl bg-[#1E2A5E]/20 border border-[#4BA3D9]/30 flex items-center justify-center text-lg">🧠</div>
           <div>
             <h1 className="text-2xl font-medium text-white">Asistente IA</h1>
             <p className="text-[#555] text-sm">Conoce todos los datos de WeAthletics</p>
@@ -59,7 +59,7 @@ export default function AIAssistant() {
             )}
             {messages.map((msg, i) => (
               <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 ${msg.role === 'user' ? 'bg-blue-600/20 text-blue-400' : 'bg-purple-600/20 text-purple-400'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0 ${msg.role === 'user' ? 'bg-blue-600/20 text-blue-400' : 'bg-[#1E2A5E]/20 text-[#4BA3D9]'}`}>
                   {msg.role === 'user' ? 'AC' : '🧠'}
                 </div>
                 <div className={`rounded-xl px-4 py-3 text-sm leading-relaxed max-w-lg whitespace-pre-wrap ${msg.role === 'user' ? 'bg-blue-600/10 text-white border border-blue-500/20' : 'bg-[#1A1A1A] text-white border border-[#333]'}`}>
@@ -69,7 +69,7 @@ export default function AIAssistant() {
             ))}
             {loading && (
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-purple-600/20 text-purple-400 flex items-center justify-center text-xs">🧠</div>
+                <div className="w-8 h-8 rounded-full bg-[#1E2A5E]/20 text-[#4BA3D9] flex items-center justify-center text-xs">🧠</div>
                 <div className="bg-[#1A1A1A] border border-[#222] rounded-xl px-4 py-3 text-[#555] text-sm">
                   Pensando...
                 </div>
@@ -83,10 +83,10 @@ export default function AIAssistant() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
               placeholder="Escribe tu pregunta..."
-              className="flex-1 bg-[#0A0A0A] border border-[#222] rounded-lg px-4 py-3 text-white text-sm outline-none focus:border-purple-500 transition-colors"
+              className="flex-1 bg-[#0A0A0A] border border-[#222] rounded-lg px-4 py-3 text-white text-sm outline-none focus:border-[#4BA3D9] transition-colors"
             />
             <button onClick={sendMessage} disabled={loading}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-3 rounded-lg text-sm font-medium transition-colors disabled:opacity-50">
+              className="bg-[#1E2A5E] hover:bg-[#1E2A5E] text-white px-5 py-3 rounded-lg text-sm font-medium transition-colors disabled:opacity-50">
               Enviar
             </button>
           </div>

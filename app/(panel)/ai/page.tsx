@@ -42,9 +42,9 @@ export default function AIAssistant() {
           <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
             <div style={{
               width:'40px', height:'40px', borderRadius:'12px',
-              background:'linear-gradient(135deg, #6366F1, #8B5CF6)',
+              background:'linear-gradient(135deg, #4BA3D9, #4BA3D9)',
               display:'flex', alignItems:'center', justifyContent:'center',
-              fontSize:'18px', boxShadow:'0 0 20px rgba(99,102,241,0.3)',
+              fontSize:'18px', boxShadow:'0 0 20px rgba(75,163,217,0.3)',
             }}>🧠</div>
             <div>
               <h1 style={{fontSize:'22px', fontWeight:'700', color:'#F0F0F0', letterSpacing:'-0.02em', margin:0}}>Asistente IA</h1>
@@ -73,7 +73,7 @@ export default function AIAssistant() {
                       color:'#555', fontSize:'13px', cursor:'pointer',
                       transition:'all 150ms',
                     }}
-                      onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(99,102,241,0.08)'; e.currentTarget.style.color = '#818CF8'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.2)' }}
+                      onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(75,163,217,0.08)'; e.currentTarget.style.color = '#4BA3D9'; e.currentTarget.style.borderColor = 'rgba(75,163,217,0.2)' }}
                       onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.03)'; e.currentTarget.style.color = '#555'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)' }}>
                       {s}
                     </button>
@@ -88,17 +88,17 @@ export default function AIAssistant() {
                   display:'flex', alignItems:'center', justifyContent:'center',
                   fontSize:'13px', fontWeight:'700',
                   background: msg.role === 'user'
-                    ? 'linear-gradient(135deg, rgba(99,102,241,0.3), rgba(139,92,246,0.3))'
-                    : 'linear-gradient(135deg, #6366F1, #8B5CF6)',
-                  color: msg.role === 'user' ? '#A5B4FC' : 'white',
+                    ? 'linear-gradient(135deg, rgba(75,163,217,0.3), rgba(75,163,217,0.3))'
+                    : 'linear-gradient(135deg, #4BA3D9, #4BA3D9)',
+                  color: msg.role === 'user' ? '#4BA3D9' : 'white',
                 }}>
                   {msg.role === 'user' ? 'AC' : '🧠'}
                 </div>
                 <div style={{
                   maxWidth:'75%', padding:'12px 16px', borderRadius:'14px',
                   fontSize:'13px', lineHeight:'1.6', whiteSpace:'pre-wrap',
-                  backgroundColor: msg.role === 'user' ? 'rgba(99,102,241,0.12)' : 'rgba(255,255,255,0.04)',
-                  border: msg.role === 'user' ? '1px solid rgba(99,102,241,0.2)' : '1px solid rgba(255,255,255,0.06)',
+                  backgroundColor: msg.role === 'user' ? 'rgba(75,163,217,0.12)' : 'rgba(255,255,255,0.04)',
+                  border: msg.role === 'user' ? '1px solid rgba(75,163,217,0.2)' : '1px solid rgba(255,255,255,0.06)',
                   color: msg.role === 'user' ? '#C7D2FE' : '#CCC',
                 }}>
                   {msg.content}
@@ -109,7 +109,7 @@ export default function AIAssistant() {
               <div style={{display:'flex', gap:'12px'}}>
                 <div style={{
                   width:'32px', height:'32px', borderRadius:'50%',
-                  background:'linear-gradient(135deg, #6366F1, #8B5CF6)',
+                  background:'linear-gradient(135deg, #4BA3D9, #4BA3D9)',
                   display:'flex', alignItems:'center', justifyContent:'center', fontSize:'13px',
                 }}>🧠</div>
                 <div style={{
@@ -138,9 +138,9 @@ export default function AIAssistant() {
             />
             <button onClick={sendMessage} disabled={loading} style={{
               padding:'11px 20px', borderRadius:'10px', fontSize:'13px', fontWeight:'600',
-              background: loading ? 'rgba(99,102,241,0.3)' : 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+              background: loading ? 'rgba(75,163,217,0.3)' : 'linear-gradient(135deg, #4BA3D9, #4BA3D9)',
               color:'white', border:'none', cursor: loading ? 'not-allowed' : 'pointer',
-              boxShadow: loading ? 'none' : '0 0 16px rgba(99,102,241,0.3)',
+              boxShadow: loading ? 'none' : '0 0 16px rgba(75,163,217,0.3)',
             }}>
               Enviar
             </button>
