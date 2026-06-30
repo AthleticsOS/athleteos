@@ -161,9 +161,7 @@ export default async function Dashboard() {
                   { href:'/training/plantillas', label:'📋 Plantillas' },
                   { href:'/athletes/comparar', label:'⚡ Comparar atletas' },
                 ].map(item => (
-                  <a key={item.href} href={item.href} style={{ display: 'flex', alignItems: 'center', padding: '8px 10px', borderRadius: '8px', color: '#3A4A70', fontSize: '13px', textDecoration: 'none' }}
-                    onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(75,163,217,0.06)'; e.currentTarget.style.color = '#CDD0E0' }}
-                    onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#3A4A70' }}>
+                  <a key={item.href} href={item.href} style={{ display: 'flex', alignItems: 'center', padding: '8px 10px', borderRadius: '8px', color: '#3A4A70', fontSize: '13px', textDecoration: 'none' }}>
                     {item.label}
                   </a>
                 ))}
