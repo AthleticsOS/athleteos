@@ -7,6 +7,7 @@ import LogoutButton from '@/app/components/LogoutButton'
 import PaceCalculator from '@/app/components/PaceCalculator'
 import RegistrarEntrenamiento from '@/app/components/RegistrarEntrenamiento'
 import ConfirmarConvocatoria from '@/app/components/ConfirmarConvocatoria'
+import EditarDatosAtleta from '@/app/components/EditarDatosAtleta'
 
 export default async function AthletePortal() {
   const cookieStore = await cookies()
@@ -29,6 +30,7 @@ export default async function AthletePortal() {
   const today = new Date().toISOString().split('T')[0]
   const { data: convocatorias } = await supabase.from('convocatorias').select('*').gte('date', today).order('date', { ascending: true })
   const { data: myConfirmations } = await supabase.from('convocatoria_confirmations').select('*').eq('athlete_id', athlete.id)
+  const { data: myMessages } = await supabase.from('direct_messages').select('*').eq('athlete_id', athlete.id).order('created_at', { ascending: false }).limit(5)
   const { data: announcements } = await supabase.from('announcements').select('*').order('pinned', { ascending: false }).order('created_at', { ascending: false }).limit(5)
 
   const misConvocatorias = convocatorias?.filter(c => (c.athlete_ids || []).includes(athlete.id)) || []
@@ -242,6 +244,27 @@ export default async function AthletePortal() {
             </div>
           )}
         </div>
+
+        {/* MENSAJES */}
+        {myMessages && myMessages.length > 0 && (
+          <div style={{ backgroundColor: '#0A0E1A', border: '1px solid rgba(75,163,217,0.1)', borderRadius: '16px', overflow: 'hidden', marginBottom: '12px' }}>
+            <div style={{ padding: '14px 18px', borderBottom: '1px solid rgba(75,163,217,0.06)' }}>
+              <p style={{ color: '#CDD0E0', fontSize: '13px', fontWeight: '600', margin: 0 }}>💬 Mensajes del club</p>
+            </div>
+            {myMessages.map((m, i) => (
+              <div key={m.id} style={{ padding: '12px 18px', borderBottom: i < myMessages.length-1 ? '1px solid rgba(255,255,255,0.03)' : 'none' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3px' }}>
+                  <span style={{ color: m.from_director ? '#4BA3D9' : '#10B981', fontSize: '11px', fontWeight: '600' }}>{m.from_director ? 'Club' : 'Tú'}</span>
+                  <span style={{ color: '#2A3550', fontSize: '10px' }}>{new Date(m.created_at).toLocaleDateString('es-ES',{day:'numeric',month:'short'})}</span>
+                </div>
+                <div style={{ color: '#CDD0E0', fontSize: '13px', lineHeight: '1.4' }}>{m.content}</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* EDITAR DATOS */}
+        <EditarDatosAtleta athlete={athlete} />
 
         {/* COMPETICIONES */}
         {results && results.length > 0 && (

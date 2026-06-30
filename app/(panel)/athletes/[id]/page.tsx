@@ -74,7 +74,8 @@ export default async function AthleteProfile({ params }: Props) {
               </div>
             </div>
             <div style={{display:"flex",gap:"8px",flexShrink:0}}>
-              <a href={`/athletes/${id}/report`} style={{padding:"8px 14px",borderRadius:"9px",backgroundColor:"rgba(16,185,129,0.1)",border:"1px solid rgba(16,185,129,0.2)",color:"#10B981",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>Exportar PDF</a>
+              <a href={`/athletes/${id}/pagos`} style={{padding:"8px 14px",borderRadius:"9px",backgroundColor:"rgba(245,158,11,0.08)",border:"1px solid rgba(245,158,11,0.2)",color:"#F59E0B",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>Pagos</a>
+              <a href={`/athletes/${id}/report`} style={{padding:"8px 14px",borderRadius:"9px",backgroundColor:"rgba(16,185,129,0.1)",border:"1px solid rgba(16,185,129,0.2)",color:"#10B981",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>PDF</a>
               <a href={`/athletes/${id}/edit`} style={{padding:"8px 14px",borderRadius:"9px",backgroundColor:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.08)",color:"#888",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>Editar</a>
             </div>
           </div>

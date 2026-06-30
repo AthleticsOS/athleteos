@@ -1,5 +1,6 @@
 import { supabase } from '@/app/lib/supabase'
 import ExportCSV from '@/app/components/ExportCSV'
+import EditarResultadoCompeticion from '@/app/components/EditarResultadoCompeticion'
 
 type Props = { params: Promise<{ id: string }> }
 
@@ -7,6 +8,7 @@ export default async function CompetitionDetail({ params }: Props) {
   const { id } = await params
   const { data: competition } = await supabase.from('competitions').select('*').eq('id', id).single()
   const { data: results } = await supabase.from('competition_results').select('*, athletes(first_name, last_name)').eq('competition_id', id).order('position', { ascending: true })
+  const { data: allAthletes } = await supabase.from('athletes').select('id, first_name, last_name').eq('status', 'active').order('first_name')
 
   if (!competition) return (
     <main style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '32px' }}>
@@ -43,7 +45,8 @@ export default async function CompetitionDetail({ params }: Props) {
                 {competition.sport && <span style={{ color: '#3A4A70', fontSize: '13px' }}>🏃 {competition.sport}</span>}
               </div>
             </div>
-            <div style={{ display: 'flex', gap: '6px' }}>
+            <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+              <EditarResultadoCompeticion competitionId={id} athletes={allAthletes || []} existingResults={results || []} />
               <span style={{ padding: '4px 12px', borderRadius: '20px', fontSize: '11px', fontWeight: '700', backgroundColor: competition.status === 'upcoming' ? 'rgba(16,185,129,0.1)' : 'rgba(255,255,255,0.04)', color: competition.status === 'upcoming' ? '#10B981' : '#3A4A70', border: `1px solid ${competition.status === 'upcoming' ? 'rgba(16,185,129,0.2)' : 'rgba(255,255,255,0.06)'}` }}>
                 {competition.status === 'upcoming' ? '● Próxima' : 'Finalizada'}
               </span>

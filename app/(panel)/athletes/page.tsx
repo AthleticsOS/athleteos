@@ -25,6 +25,7 @@ export default async function Athletes() {
             <p style={{ color: "#3A4A70", fontSize: "13px", marginTop: "6px" }}>{athletes?.length || 0} deportistas en WeAthletics</p>
           </div>
           <div style={{ display: "flex", gap: "8px" }}>
+            <a href="/athletes/comparar" style={{ padding: "9px 18px", borderRadius: "9px", backgroundColor: "rgba(75,163,217,0.08)", border: "1px solid rgba(75,163,217,0.2)", color: "#4BA3D9", fontSize: "13px", fontWeight: "600", textDecoration: "none" }}>Comparar</a>
             <ExportCSV data={exportData} filename="atleteos_atletas" label="Exportar CSV" />
             <a href="/athletes/nuevo" style={{ padding: "9px 18px", borderRadius: "9px", background: "linear-gradient(135deg,#1E2A5E,#4BA3D9)", color: "white", fontSize: "13px", fontWeight: "600", textDecoration: "none", boxShadow: "0 4px 16px rgba(75,163,217,0.2)" }}>+ Añadir deportista</a>
           </div>
