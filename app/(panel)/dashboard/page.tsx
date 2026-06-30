@@ -91,15 +91,22 @@ export default async function Dashboard() {
               <div style={{ color: '#CDD0E0', fontSize: '13px', fontWeight: '600' }}>Actividad esta semana</div>
               <span style={{ color: '#3A4A70', fontSize: '11px' }}>{weekSessions?.length || 0} sesiones registradas</span>
             </div>
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-end', height: '80px' }}>
+            <div style={{ display: 'flex', gap: '6px', alignItems: 'flex-end', height: '100px', padding: '0 4px' }}>
               {dayLabels.map((label, i) => {
                 const val = sessionsByDay[i]
-                const h = Math.max((val / maxDay) * 80, val > 0 ? 8 : 3)
+                const pct = val > 0 ? Math.max((val / maxDay) * 100, 15) : 0
                 return (
-                  <div key={label} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-                    <div style={{ width: '100%', backgroundColor: val > 0 ? '#4BA3D9' : 'rgba(75,163,217,0.08)', borderRadius: '4px 4px 0 0', height: `${h}px`, transition: 'height 300ms' }} />
-                    <div style={{ color: '#2A3550', fontSize: '10px', fontWeight: '600' }}>{label}</div>
-                    {val > 0 && <div style={{ color: '#4BA3D9', fontSize: '9px', fontWeight: '700' }}>{val}</div>}
+                  <div key={label} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', height: '100%', justifyContent: 'flex-end' }}>
+                    {val > 0 && <span style={{ color: '#4BA3D9', fontSize: '10px', fontWeight: '700' }}>{val}</span>}
+                    <div style={{ width: '100%', position: 'relative', height: `${pct}%`, minHeight: val > 0 ? '16px' : '3px' }}>
+                      <div style={{
+                        position: 'absolute', bottom: 0, left: 0, right: 0, top: 0,
+                        backgroundColor: val > 0 ? '#4BA3D9' : 'rgba(75,163,217,0.07)',
+                        borderRadius: '4px',
+                        boxShadow: val > 0 ? '0 0 8px rgba(75,163,217,0.3)' : 'none',
+                      }} />
+                    </div>
+                    <div style={{ color: val > 0 ? '#4A5580' : '#2A3550', fontSize: '11px', fontWeight: '600' }}>{label}</div>
                   </div>
                 )
               })}
