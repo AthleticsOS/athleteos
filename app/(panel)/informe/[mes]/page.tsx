@@ -1,4 +1,5 @@
 import { supabase } from '@/app/lib/supabase'
+import ImprimirButton from '@/app/components/ImprimirButton'
 
 type Props = { params: Promise<{ mes: string }> } // formato: 2025-06
 
@@ -63,6 +64,7 @@ export default async function InformeMensualPage({ params }: Props) {
           <div style={{ display: 'flex', gap: '8px' }}>
             <a href={`/informe/${prevMes}`} style={{ padding: '8px 14px', borderRadius: '9px', backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#3A4A70', fontSize: '12px', textDecoration: 'none' }}>← {prevMes}</a>
             <a href={`/informe/${nextMes}`} style={{ padding: '8px 14px', borderRadius: '9px', backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#3A4A70', fontSize: '12px', textDecoration: 'none' }}>{nextMes} →</a>
+            <ImprimirButton label="🖨️ PDF" />
           </div>
         </div>
 

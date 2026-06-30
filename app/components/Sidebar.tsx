@@ -24,6 +24,7 @@ const navSections = [
       { href: '/coach', icon: '👁', label: 'Vista entrenador' },
       { href: '/groups', icon: '👥', label: 'Grupos' },
       { href: '/training', icon: '🏃', label: 'Entrenamientos' },
+      { href: '/training/asistencia', icon: '✅', label: 'Asistencia club' },
       { href: '/training/sesion-grupal', icon: '👥', label: 'Sesión grupal' },
       { href: '/training/plantillas', icon: '📋', label: 'Plantillas' },
       { href: '/asistencia', icon: '✅', label: 'Asistencia' },
