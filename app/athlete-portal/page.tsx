@@ -9,6 +9,7 @@ import RegistrarEntrenamiento from '@/app/components/RegistrarEntrenamiento'
 import ConfirmarConvocatoria from '@/app/components/ConfirmarConvocatoria'
 import EditarDatosAtleta from '@/app/components/EditarDatosAtleta'
 import EncuestaBienestar from '@/app/components/EncuestaBienestar'
+import PushSubscribeButton from '@/app/components/PushSubscribeButton'
 
 export default async function AthletePortal() {
   const cookieStore = await cookies()
@@ -86,6 +87,7 @@ export default async function AthletePortal() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'linear-gradient(135deg,#1E2A5E,#4BA3D9)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: 'white' }}>{initials}</div>
           <span style={{ color: '#4A5580', fontSize: '13px' }}>{athlete.first_name}</span>
+          <PushSubscribeButton userId={user.id} />
           <LogoutButton />
         </div>
       </nav>
