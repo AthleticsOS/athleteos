@@ -129,8 +129,8 @@ export default async function InformeMensualPage({ params }: Props) {
           <div style={{ backgroundColor: '#0A0E1A', border: '1px solid rgba(239,68,68,0.15)', borderRadius: '14px', padding: '16px 18px' }}>
             <p style={{ color: '#CDD0E0', fontSize: '13px', fontWeight: '700', margin: '0 0 10px' }}>🩹 Lesiones registradas este mes</p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-              {injuries.map(inj => (
-                <div key={inj.id} style={{ padding: '6px 12px', borderRadius: '20px', backgroundColor: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#EF4444', fontSize: '12px', fontWeight: '600' }}>
+              {injuries.map((inj, i) => (
+                <div key={i} style={{ padding: '6px 12px', borderRadius: '20px', backgroundColor: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#EF4444', fontSize: '12px', fontWeight: '600' }}>
                   {(inj as any).athletes?.first_name} {(inj as any).athletes?.last_name} · {inj.type} ({inj.body_part})
                 </div>
               ))}
