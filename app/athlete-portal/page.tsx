@@ -8,6 +8,7 @@ import PaceCalculator from '@/app/components/PaceCalculator'
 import RegistrarEntrenamiento from '@/app/components/RegistrarEntrenamiento'
 import ConfirmarConvocatoria from '@/app/components/ConfirmarConvocatoria'
 import EditarDatosAtleta from '@/app/components/EditarDatosAtleta'
+import EncuestaBienestar from '@/app/components/EncuestaBienestar'
 
 export default async function AthletePortal() {
   const cookieStore = await cookies()
@@ -31,6 +32,8 @@ export default async function AthletePortal() {
   const { data: convocatorias } = await supabase.from('convocatorias').select('*').gte('date', today).order('date', { ascending: true })
   const { data: myConfirmations } = await supabase.from('convocatoria_confirmations').select('*').eq('athlete_id', athlete.id)
   const { data: myMessages } = await supabase.from('direct_messages').select('*').eq('athlete_id', athlete.id).order('created_at', { ascending: false }).limit(5)
+  const todayStr = new Date().toISOString().split('T')[0]
+  const { data: todayWellness } = await supabase.from('wellness_surveys').select('id').eq('athlete_id', athlete.id).eq('date', todayStr).maybeSingle()
   const { data: announcements } = await supabase.from('announcements').select('*').order('pinned', { ascending: false }).order('created_at', { ascending: false }).limit(5)
 
   const misConvocatorias = convocatorias?.filter(c => (c.athlete_ids || []).includes(athlete.id)) || []
@@ -61,6 +64,15 @@ export default async function AthletePortal() {
 
   return (
     <main style={{ minHeight: '100vh', backgroundColor: '#06080F', fontFamily: "-apple-system,'Inter',sans-serif" }}>
+      <style>{`
+        @media (max-width: 600px) {
+          .portal-grid-3 { grid-template-columns: 1fr !important; }
+          .portal-grid-2 { grid-template-columns: 1fr !important; }
+          .portal-stats { grid-template-columns: repeat(3,1fr) !important; }
+          .portal-content { padding: 16px !important; }
+          .portal-nav { padding: 0 16px !important; }
+        }
+      `}</style>
 
       {/* NAV */}
       <nav style={{ backgroundColor: '#070B18', borderBottom: '1px solid rgba(75,163,217,0.1)', padding: '0 24px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50 }}>
@@ -156,13 +168,16 @@ export default async function AthletePortal() {
           </div>
         )}
 
+        {/* BIENESTAR */}
+        <EncuestaBienestar athleteId={athlete.id} todayDone={!!todayWellness} />
+
         {/* REGISTRAR ENTRENAMIENTO */}
         <div style={{ marginBottom: '16px' }}>
           <RegistrarEntrenamiento athleteId={athlete.id} />
         </div>
 
         {/* ACCESOS RÁPIDOS */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px', marginBottom: '20px' }}>
+        <div className="portal-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '8px', marginBottom: '20px' }}>
           {[
             { href: `/athletes/${athlete.id}/sesion`, label: '+ Nueva sesión', color: '#4BA3D9', bg: 'rgba(75,163,217,0.08)', bdr: 'rgba(75,163,217,0.2)' },
             { href: `/athletes/${athlete.id}/marca`, label: '+ Añadir marca', color: '#10B981', bg: 'rgba(16,185,129,0.08)', bdr: 'rgba(16,185,129,0.2)' },

@@ -22,6 +22,7 @@ const navSections = [
       { href: '/coach', icon: '👁', label: 'Vista entrenador' },
       { href: '/groups', icon: '👥', label: 'Grupos' },
       { href: '/training', icon: '🏃', label: 'Entrenamientos' },
+      { href: '/training/plantillas', icon: '📋', label: 'Plantillas' },
       { href: '/asistencia', icon: '✅', label: 'Asistencia' },
       { href: '/competitions', icon: '🏆', label: 'Competiciones' },
       { href: '/convocatorias', icon: '📣', label: 'Convocatorias' },
