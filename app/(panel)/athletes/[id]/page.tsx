@@ -3,6 +3,7 @@ import ProgressChart from "@/app/components/ProgressChart"
 import StrengthChart from "@/app/components/StrengthChart"
 import ObjetivoTemporada from "@/app/components/ObjetivoTemporada"
 import SubirFotoAtleta from "@/app/components/SubirFotoAtleta"
+import ObjetivosAtleta from "@/app/components/ObjetivosAtleta"
 
 type Props = { params: Promise<{ id: string }> }
 
@@ -12,6 +13,7 @@ export default async function AthleteProfile({ params }: Props) {
   const { data: records } = await supabase.from("personal_records").select("*").eq("athlete_id", id).order("date", { ascending: false })
   const { data: results } = await supabase.from("competition_results").select("*, competitions(name, date, location)").eq("athlete_id", id).order("created_at", { ascending: false })
   const { data: sessions } = await supabase.from("athlete_sessions").select("*").eq("athlete_id", id).order("date", { ascending: false })
+  const { data: athleteGoals } = await supabase.from("athlete_goals").select("*").eq("athlete_id", id)
   const { data: weights } = await supabase.from("athlete_weights").select("*").eq("athlete_id", id).order("date", { ascending: true })
   const { data: tests } = await supabase.from("athlete_tests").select("*").eq("athlete_id", id).order("date", { ascending: true })
 
@@ -76,8 +78,11 @@ export default async function AthleteProfile({ params }: Props) {
             <div style={{display:"flex",gap:"8px",flexShrink:0}}>
               <a href={`/athletes/${id}/lesiones`} style={{padding:"8px 14px",borderRadius:"9px",backgroundColor:"rgba(239,68,68,0.07)",border:"1px solid rgba(239,68,68,0.18)",color:"#EF4444",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>Lesiones</a>
               <a href={`/athletes/${id}/pagos`} style={{padding:"8px 14px",borderRadius:"9px",backgroundColor:"rgba(245,158,11,0.08)",border:"1px solid rgba(245,158,11,0.2)",color:"#F59E0B",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>Pagos</a>
-              <a href={`/athletes/${id}/report`} style={{padding:"8px 14px",borderRadius:"9px",backgroundColor:"rgba(16,185,129,0.1)",border:"1px solid rgba(16,185,129,0.2)",color:"#10B981",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>PDF</a>
-              <a href={`/athletes/${id}/edit`} style={{padding:"8px 14px",borderRadius:"9px",backgroundColor:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.08)",color:"#888",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>Editar</a>
+              <a href={`/athletes/${id}/medica`} style={{padding:"8px 14px",borderRadius:"9px",backgroundColor:"rgba(167,139,250,0.08)",border:"1px solid rgba(167,139,250,0.2)",color:"#A78BFA",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>Médica</a>
+              <a href={`/athletes/${id}/morfologia`} style={{padding:"8px 14px",borderRadius:"9px",backgroundColor:"rgba(16,185,129,0.07)",border:"1px solid rgba(16,185,129,0.18)",color:"#10B981",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>Peso</a>
+              <a href={`/athletes/${id}/carga`} style={{padding:"8px 14px",borderRadius:"9px",backgroundColor:"rgba(75,163,217,0.07)",border:"1px solid rgba(75,163,217,0.18)",color:"#4BA3D9",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>Carga</a>
+              <a href={`/athletes/${id}/report`} style={{padding:"8px 14px",borderRadius:"9px",backgroundColor:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.08)",color:"#888",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>PDF</a>
+              <a href={`/athletes/${id}/edit`} style={{padding:"8px 14px",borderRadius:"9px",backgroundColor:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.08)",color:"#888",fontSize:"12px",fontWeight:"600",textDecoration:"none"}}>Editar</a>
             </div>
           </div>
 
@@ -169,6 +174,11 @@ export default async function AthleteProfile({ params }: Props) {
         {/* OBJETIVOS DE TEMPORADA */}
         <div style={{marginBottom:"12px"}}>
           <ObjetivoTemporada athleteId={id} records={records?.map(r=>({discipline:r.discipline,mark:r.mark})) || []} />
+        </div>
+
+        {/* OBJETIVOS PERSONALES */}
+        <div style={{marginBottom:"12px"}}>
+          <ObjetivosAtleta athleteId={id} initial={athleteGoals || []} />
         </div>
 
         {/* GRÁFICAS */}

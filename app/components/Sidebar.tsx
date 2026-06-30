@@ -12,6 +12,8 @@ const navSections = [
       { href: '/dashboard', icon: '⊞', label: 'Dashboard' },
       { href: '/calendar', icon: '📅', label: 'Calendario' },
       { href: '/stats', icon: '📈', label: 'Estadísticas' },
+      { href: '/stats/ranking', icon: '🥇', label: 'Ranking' },
+      { href: '/stats/bienestar', icon: '💙', label: 'Bienestar equipo' },
       { href: '/notifications', icon: '🔔', label: 'Notificaciones', badge: true },
     ]
   },
@@ -22,6 +24,7 @@ const navSections = [
       { href: '/coach', icon: '👁', label: 'Vista entrenador' },
       { href: '/groups', icon: '👥', label: 'Grupos' },
       { href: '/training', icon: '🏃', label: 'Entrenamientos' },
+      { href: '/training/sesion-grupal', icon: '👥', label: 'Sesión grupal' },
       { href: '/training/plantillas', icon: '📋', label: 'Plantillas' },
       { href: '/asistencia', icon: '✅', label: 'Asistencia' },
       { href: '/competitions', icon: '🏆', label: 'Competiciones' },
@@ -35,6 +38,7 @@ const navSections = [
       { href: '/finances', icon: '💶', label: 'Finanzas' },
       { href: '/communication', icon: '📢', label: 'Comunicación' },
       { href: '/extraescolares', icon: '🏫', label: 'Extraescolares' },
+      { href: '/extraescolares/panel', icon: '📊', label: 'Panel global ext.' },
     ]
   },
   {

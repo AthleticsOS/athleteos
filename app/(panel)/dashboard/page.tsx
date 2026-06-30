@@ -170,7 +170,10 @@ export default async function Dashboard() {
                   { href:'/convocatorias/nueva', label:'+ Nueva convocatoria' },
                   { href:'/finances/cuotas', label:'€ Cuotas del club' },
                   { href:'/training/plantillas', label:'📋 Plantillas' },
+                  { href:'/training/sesion-grupal', label:'👥 Sesión grupal' },
                   { href:'/athletes/comparar', label:'⚡ Comparar atletas' },
+                  { href:`/informe/${new Date().toISOString().slice(0,7)}`, label:'📊 Informe del mes' },
+                  { href:'/stats/ranking', label:'🥇 Ranking interno' },
                 ].map(item => (
                   <a key={item.href} href={item.href} style={{ display: 'flex', alignItems: 'center', padding: '8px 10px', borderRadius: '8px', color: '#3A4A70', fontSize: '13px', textDecoration: 'none' }}>
                     {item.label}
