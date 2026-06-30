@@ -5,7 +5,7 @@ type Props = { params: Promise<{ athleteId: string }> }
 
 export default async function ConversacionPage({ params }: Props) {
   const { athleteId } = await params
-  const { data: athlete } = await supabase.from('athletes').select('id, first_name, last_name').eq('id', athleteId).single()
+  const { data: athlete } = await supabase.from('athletes').select('id, first_name, last_name, user_id').eq('id', athleteId).single()
   const { data: messages } = await supabase
     .from('direct_messages')
     .select('*')
@@ -49,7 +49,7 @@ export default async function ConversacionPage({ params }: Props) {
           ))}
         </div>
 
-        <EnviarMensajeForm athleteId={athleteId} />
+        <EnviarMensajeForm athleteId={athleteId} athleteUserId={athlete?.user_id} athleteName={athlete?.first_name} />
       </div>
     </main>
   )

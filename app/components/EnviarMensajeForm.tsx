@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 import { createBrowserClient } from '@supabase/ssr'
+import { sendPushToUser } from '@/app/actions/push'
 
-export default function EnviarMensajeForm({ athleteId }: { athleteId: string }) {
+export default function EnviarMensajeForm({ athleteId, athleteUserId, athleteName }: { athleteId: string; athleteUserId?: string; athleteName?: string }) {
   const [content, setContent] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -13,6 +14,13 @@ export default function EnviarMensajeForm({ athleteId }: { athleteId: string }) 
     if (!content.trim()) return
     setLoading(true)
     await supabase.from('direct_messages').insert({ athlete_id: athleteId, content: content.trim(), from_director: true, read: false })
+    if (athleteUserId) {
+      await sendPushToUser(
+        athleteUserId,
+        '💬 Nuevo mensaje del club',
+        content.trim().slice(0, 80)
+      )
+    }
     setContent('')
     setLoading(false)
     window.location.reload()

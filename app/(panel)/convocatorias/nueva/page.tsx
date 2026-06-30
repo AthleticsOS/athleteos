@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { createBrowserClient } from '@supabase/ssr'
+import { sendPushToUser } from '@/app/actions/push'
 
 export default function NuevaConvocatoria() {
   const [competitionName, setCompetitionName] = useState('')
@@ -39,7 +40,27 @@ export default function NuevaConvocatoria() {
       description: description || null,
       athlete_ids: selectedAthletes,
     })
-    if (!error) window.location.href = '/convocatorias'
+    if (!error) {
+      // Notificar a cada atleta convocado
+      const { data: athleteUsers } = await supabase
+        .from('athletes')
+        .select('user_id')
+        .in('id', selectedAthletes)
+        .not('user_id', 'is', null)
+
+      if (athleteUsers) {
+        await Promise.all(
+          athleteUsers.map(a =>
+            sendPushToUser(
+              a.user_id,
+              '📣 Nueva convocatoria',
+              `Has sido convocado/a para ${competitionName} el ${new Date(date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}`
+            )
+          )
+        )
+      }
+      window.location.href = '/convocatorias'
+    }
     setLoading(false)
   }
 
