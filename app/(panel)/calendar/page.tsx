@@ -13,6 +13,12 @@ export default async function Calendar() {
   const { data: sessions } = await supabase.from('training_sessions').select('*').gte('date', firstStr).lte('date', lastStr)
   const { data: competitions } = await supabase.from('competitions').select('*').gte('date', firstStr).lte('date', lastStr)
   const { data: convocatorias } = await supabase.from('convocatorias').select('*').gte('date', firstStr).lte('date', lastStr)
+  // Lesiones activas (sin end_date o end_date futura)
+  const { data: injuries } = await supabase
+    .from('injury_records')
+    .select('*, athletes(first_name, last_name)')
+    .or(`end_date.is.null,end_date.gte.${firstStr}`)
+    .lte('start_date', lastStr)
 
   const eventsByDay: Record<number, { type: string, title: string, color: string, bg: string }[]> = {}
 
@@ -42,6 +48,13 @@ export default async function Calendar() {
     return dayNum >= 1 && dayNum <= daysInMonth ? dayNum : null
   })
 
+  // Atletas de baja este mes
+  const bajasActivas = injuries?.filter(inj => {
+    const start = inj.start_date
+    const end = inj.end_date
+    return start <= lastStr && (end === null || end >= firstStr)
+  }) || []
+
   const monthName = firstDay.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
   const today = now.getDate()
   const weekDays = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
@@ -70,6 +83,7 @@ export default async function Calendar() {
               { color: '#4BA3D9', label: 'Entrenamiento' },
               { color: '#F59E0B', label: 'Competición' },
               { color: '#10B981', label: 'Convocatoria' },
+              { color: '#EF4444', label: 'Baja' },
             ].map(l => (
               <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: l.color }} />
@@ -150,6 +164,30 @@ export default async function Calendar() {
                 <div style={{ color: '#2A3550', fontSize: '11px', marginTop: '8px' }}>Sin eventos hoy</div>
               )}
             </div>
+
+            {/* Bajas por lesión */}
+            {bajasActivas.length > 0 && (
+              <div style={{ backgroundColor: '#0A0E1A', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '14px', overflow: 'hidden' }}>
+                <div style={{ padding: '12px 16px', borderBottom: '1px solid rgba(239,68,68,0.1)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ fontSize: '13px' }}>🩹</span>
+                  <p style={{ color: '#EF4444', fontSize: '12px', fontWeight: '700', margin: 0 }}>Bajas este mes ({bajasActivas.length})</p>
+                </div>
+                {bajasActivas.map((inj, i) => {
+                  const days = inj.end_date
+                    ? Math.ceil((new Date(inj.end_date+'T00:00:00').getTime() - new Date(inj.start_date+'T00:00:00').getTime()) / (1000*60*60*24))
+                    : Math.floor((Date.now() - new Date(inj.start_date+'T00:00:00').getTime()) / (1000*60*60*24))
+                  return (
+                    <div key={inj.id} style={{ padding: '10px 16px', borderBottom: i < bajasActivas.length-1 ? '1px solid rgba(255,255,255,0.03)' : 'none' }}>
+                      <div style={{ color: '#CDD0E0', fontSize: '12px', fontWeight: '600' }}>{inj.athletes?.first_name} {inj.athletes?.last_name}</div>
+                      <div style={{ color: '#EF4444', fontSize: '10px', marginTop: '2px' }}>{inj.type} · {inj.body_part}</div>
+                      <div style={{ color: '#3A4A70', fontSize: '10px' }}>
+                        {inj.end_date ? `Alta: ${new Date(inj.end_date+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short'})}` : `${days}d de baja`}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
 
             {/* Próximos eventos */}
             <div style={{ backgroundColor: '#0A0E1A', border: '1px solid rgba(75,163,217,0.1)', borderRadius: '14px', overflow: 'hidden' }}>

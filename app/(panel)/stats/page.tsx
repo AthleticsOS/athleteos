@@ -35,8 +35,15 @@ export default async function Stats() {
       <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
 
         <div style={{ marginBottom: '24px' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#F0F4FF', letterSpacing: '-0.03em', margin: 0 }}>Estadísticas</h1>
-          <p style={{ color: '#3A4A70', fontSize: '13px', marginTop: '6px' }}>WeAthletics · Temporada 2024–2025</p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#F0F4FF', letterSpacing: '-0.03em', margin: 0 }}>Estadísticas</h1>
+              <p style={{ color: '#3A4A70', fontSize: '13px', marginTop: '6px' }}>WeAthletics · Temporada 2024–2025</p>
+            </div>
+            <a href="/stats/bienestar" style={{ padding: '8px 16px', borderRadius: '9px', backgroundColor: 'rgba(75,163,217,0.08)', border: '1px solid rgba(75,163,217,0.2)', color: '#4BA3D9', fontSize: '13px', fontWeight: '600', textDecoration: 'none' }}>
+              💙 Bienestar del equipo
+            </a>
+          </div>
         </div>
 
         {/* KPIs principales */}

@@ -1,4 +1,5 @@
 import { supabase } from '@/app/lib/supabase'
+import AlertasInactividad from '@/app/components/AlertasInactividad'
 
 export default async function Dashboard() {
   const today = new Date().toISOString().split('T')[0]
@@ -66,6 +67,9 @@ export default async function Dashboard() {
             )}
           </div>
         )}
+
+        {/* ALERTAS INACTIVIDAD */}
+        <AlertasInactividad />
 
         {/* STATS */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '12px', marginBottom: '16px' }}>

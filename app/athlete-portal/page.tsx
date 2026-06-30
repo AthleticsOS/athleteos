@@ -32,6 +32,8 @@ export default async function AthletePortal() {
   const { data: convocatorias } = await supabase.from('convocatorias').select('*').gte('date', today).order('date', { ascending: true })
   const { data: myConfirmations } = await supabase.from('convocatoria_confirmations').select('*').eq('athlete_id', athlete.id)
   const { data: myMessages } = await supabase.from('direct_messages').select('*').eq('athlete_id', athlete.id).order('created_at', { ascending: false }).limit(5)
+  const { data: myWellness } = await supabase.from('wellness_surveys').select('*').eq('athlete_id', athlete.id).order('date', { ascending: false }).limit(7)
+  const { data: myInjuries } = await supabase.from('injury_records').select('*').eq('athlete_id', athlete.id).is('end_date', null)
   const todayStr = new Date().toISOString().split('T')[0]
   const { data: todayWellness } = await supabase.from('wellness_surveys').select('id').eq('athlete_id', athlete.id).eq('date', todayStr).maybeSingle()
   const { data: announcements } = await supabase.from('announcements').select('*').order('pinned', { ascending: false }).order('created_at', { ascending: false }).limit(5)
@@ -259,6 +261,44 @@ export default async function AthletePortal() {
             </div>
           )}
         </div>
+
+        {/* LESIONES ACTIVAS */}
+        {myInjuries && myInjuries.length > 0 && (
+          <div style={{ backgroundColor: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '14px', padding: '14px 18px', marginBottom: '12px' }}>
+            <div style={{ color: '#EF4444', fontSize: '12px', fontWeight: '700', marginBottom: '8px' }}>🩹 Lesión activa</div>
+            {myInjuries.map(inj => {
+              const days = Math.floor((new Date().getTime() - new Date(inj.start_date+'T00:00:00').getTime()) / (1000*60*60*24))
+              return (
+                <div key={inj.id} style={{ color: '#CDD0E0', fontSize: '13px' }}>
+                  {inj.type} · {inj.body_part} <span style={{ color: '#EF4444', fontSize: '11px' }}>({days}d de baja)</span>
+                </div>
+              )
+            })}
+          </div>
+        )}
+
+        {/* HISTORIAL BIENESTAR */}
+        {myWellness && myWellness.length > 0 && (
+          <div style={{ backgroundColor: '#0A0E1A', border: '1px solid rgba(75,163,217,0.1)', borderRadius: '16px', padding: '16px 18px', marginBottom: '12px' }}>
+            <div style={{ color: '#CDD0E0', fontSize: '13px', fontWeight: '600', marginBottom: '12px' }}>💙 Mi bienestar esta semana</div>
+            <div style={{ display: 'flex', gap: '6px' }}>
+              {[...myWellness].reverse().map(s => {
+                const score = Math.round((s.sleep + s.energy + (10 - s.stress) + (10 - s.pain)) / 4)
+                const color = score >= 7 ? '#10B981' : score >= 5 ? '#F59E0B' : '#EF4444'
+                return (
+                  <div key={s.id} style={{ flex: 1, textAlign: 'center' }}>
+                    <div style={{ width: '100%', height: '32px', borderRadius: '6px', backgroundColor: `${color}25`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ color, fontSize: '12px', fontWeight: '800' }}>{score}</span>
+                    </div>
+                    <div style={{ color: '#2A3550', fontSize: '9px', marginTop: '3px' }}>
+                      {new Date(s.date+'T00:00:00').toLocaleDateString('es-ES',{weekday:'narrow'})}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
 
         {/* MENSAJES */}
         {myMessages && myMessages.length > 0 && (

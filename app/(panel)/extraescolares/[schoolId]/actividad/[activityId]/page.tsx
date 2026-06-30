@@ -3,6 +3,7 @@ import ExportCSV from '@/app/components/ExportCSV'
 import MarcarAsistenciaButton from '@/app/components/MarcarAsistenciaButton'
 import MarcarPagadoActivityButton from '@/app/components/MarcarPagadoActivityButton'
 import GenerarCobrosMes from '@/app/components/GenerarCobrosMes'
+import MensajePadresButton from '@/app/components/MensajePadresButton'
 
 type Props = { params: Promise<{ schoolId: string, activityId: string }> }
 
@@ -78,11 +79,14 @@ export default async function ActivityDetail({ params }: Props) {
               <ExportCSV data={exportData} filename={`alumnos_${activity.name.replace(/\s/g,'_')}`} label="CSV" />
             </div>
             {active.length > 0 ? active.map((e, i) => (
-              <div key={e.id} style={{ padding: '11px 18px', borderBottom: i < active.length-1 ? '1px solid rgba(255,255,255,0.03)' : 'none' }}>
-                <div style={{ color: '#CDD0E0', fontSize: '13px', fontWeight: '500' }}>{e.student_name}</div>
-                <div style={{ color: '#2A3550', fontSize: '11px', marginTop: '1px' }}>
-                  {e.parent_name && `${e.parent_name}`}{e.parent_phone && ` · ${e.parent_phone}`}
+              <div key={e.id} style={{ padding: '11px 18px', borderBottom: i < active.length-1 ? '1px solid rgba(255,255,255,0.03)' : 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <div style={{ color: '#CDD0E0', fontSize: '13px', fontWeight: '500' }}>{e.student_name}</div>
+                  <div style={{ color: '#2A3550', fontSize: '11px', marginTop: '1px' }}>
+                    {e.parent_name && `${e.parent_name}`}{e.parent_phone && ` · ${e.parent_phone}`}
+                  </div>
                 </div>
+                <MensajePadresButton enrollmentId={e.id} studentName={e.student_name} activityName={activity.name} />
               </div>
             )) : (
               <div style={{ padding: '24px', textAlign: 'center', color: '#2A3550', fontSize: '12px' }}>Sin alumnos inscritos</div>
