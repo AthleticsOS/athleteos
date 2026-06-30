@@ -6,6 +6,7 @@ import StrengthChart from '@/app/components/StrengthChart'
 import LogoutButton from '@/app/components/LogoutButton'
 import PaceCalculator from '@/app/components/PaceCalculator'
 import RegistrarEntrenamiento from '@/app/components/RegistrarEntrenamiento'
+import ConfirmarConvocatoria from '@/app/components/ConfirmarConvocatoria'
 
 export default async function AthletePortal() {
   const cookieStore = await cookies()
@@ -27,6 +28,7 @@ export default async function AthletePortal() {
   const { data: results } = await supabase.from('competition_results').select('*, competitions(name, date, location)').eq('athlete_id', athlete.id).order('created_at', { ascending: false })
   const today = new Date().toISOString().split('T')[0]
   const { data: convocatorias } = await supabase.from('convocatorias').select('*').gte('date', today).order('date', { ascending: true })
+  const { data: myConfirmations } = await supabase.from('convocatoria_confirmations').select('*').eq('athlete_id', athlete.id)
   const { data: announcements } = await supabase.from('announcements').select('*').order('pinned', { ascending: false }).order('created_at', { ascending: false }).limit(5)
 
   const misConvocatorias = convocatorias?.filter(c => (c.athlete_ids || []).includes(athlete.id)) || []
@@ -124,7 +126,7 @@ export default async function AthletePortal() {
                     {c.location && <div style={{ color: '#3A4A70', fontSize: '12px', marginTop: '2px' }}>📍 {c.location}</div>}
                     {c.description && <div style={{ color: '#4A5580', fontSize: '12px', marginTop: '4px' }}>{c.description}</div>}
                   </div>
-                  <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: '700', backgroundColor: 'rgba(75,163,217,0.1)', color: '#4BA3D9', border: '1px solid rgba(75,163,217,0.2)', flexShrink: 0 }}>Convocado</span>
+                  <ConfirmarConvocatoria convocatoriaId={c.id} athleteId={athlete.id} initial={myConfirmations?.find(cf => cf.convocatoria_id === c.id)?.status ?? null} />
                 </div>
               </div>
             ))}

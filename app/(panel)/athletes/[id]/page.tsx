@@ -2,6 +2,7 @@ import { supabase } from "@/app/lib/supabase"
 import ProgressChart from "@/app/components/ProgressChart"
 import StrengthChart from "@/app/components/StrengthChart"
 import ObjetivoTemporada from "@/app/components/ObjetivoTemporada"
+import SubirFotoAtleta from "@/app/components/SubirFotoAtleta"
 
 type Props = { params: Promise<{ id: string }> }
 
@@ -59,9 +60,7 @@ export default async function AthleteProfile({ params }: Props) {
           <div style={{position:"absolute",top:"-80px",right:"-80px",width:"300px",height:"300px",borderRadius:"50%",background:"radial-gradient(circle,rgba(75,163,217,0.06) 0%,transparent 70%)",pointerEvents:"none"}} />
 
           <div style={{display:"flex",alignItems:"flex-start",gap:"20px"}}>
-            <div style={{width:"72px",height:"72px",borderRadius:"50%",flexShrink:0,background:"linear-gradient(135deg,#1E2A5E,#4BA3D9)",border:"2px solid rgba(75,163,217,0.4)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"24px",fontWeight:"800",color:"white",letterSpacing:"-0.02em"}}>
-              {initials}
-            </div>
+            <SubirFotoAtleta athleteId={id} currentUrl={athlete.photo_url || null} />
             <div style={{flex:1}}>
               <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"6px"}}>
                 <h1 style={{fontSize:"24px",fontWeight:"800",color:"#F0F4FF",letterSpacing:"-0.03em",margin:0}}>{athlete.first_name} {athlete.last_name}</h1>

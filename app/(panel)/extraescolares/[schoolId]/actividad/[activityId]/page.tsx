@@ -1,6 +1,8 @@
 import { supabase } from '@/app/lib/supabase'
 import ExportCSV from '@/app/components/ExportCSV'
 import MarcarAsistenciaButton from '@/app/components/MarcarAsistenciaButton'
+import MarcarPagadoActivityButton from '@/app/components/MarcarPagadoActivityButton'
+import GenerarCobrosMes from '@/app/components/GenerarCobrosMes'
 
 type Props = { params: Promise<{ schoolId: string, activityId: string }> }
 
@@ -47,6 +49,7 @@ export default async function ActivityDetail({ params }: Props) {
               </div>
             </div>
             <div style={{ display: 'flex', gap: '8px' }}>
+              {activity.price_cents > 0 && <GenerarCobrosMes activityId={activityId} activityName={activity.name} priceCents={activity.price_cents} enrollments={active.map(e=>({id:e.id,student_name:e.student_name}))} />}
               <a href={`/extraescolares/${schoolId}/actividad/${activityId}/sesion`} style={{ padding: '8px 14px', borderRadius: '9px', backgroundColor: 'rgba(75,163,217,0.1)', border: '1px solid rgba(75,163,217,0.2)', color: '#4BA3D9', fontSize: '12px', fontWeight: '600', textDecoration: 'none' }}>+ Sesión</a>
               <a href={`/extraescolares/${schoolId}/actividad/${activityId}/inscripcion`} style={{ padding: '8px 14px', borderRadius: '9px', background: 'linear-gradient(135deg,#1E2A5E,#4BA3D9)', color: 'white', fontSize: '12px', fontWeight: '600', textDecoration: 'none' }}>+ Inscripción</a>
             </div>
@@ -98,9 +101,7 @@ export default async function ActivityDetail({ params }: Props) {
                   <div style={{ color: '#2A3550', fontSize: '11px' }}>{p.concept}</div>
                 </div>
                 <div style={{ color: '#F0F4FF', fontSize: '13px', fontWeight: '700', fontFamily: 'monospace' }}>€{(p.amount_cents/100).toFixed(0)}</div>
-                <span style={{ padding: '2px 8px', borderRadius: '20px', fontSize: '10px', fontWeight: '700', backgroundColor: p.status==='paid'?'rgba(16,185,129,0.1)':'rgba(245,158,11,0.1)', color: p.status==='paid'?'#10B981':'#F59E0B', border: `1px solid ${p.status==='paid'?'rgba(16,185,129,0.2)':'rgba(245,158,11,0.2)'}` }}>
-                  {p.status==='paid'?'Pagado':'Pendiente'}
-                </span>
+                <MarcarPagadoActivityButton paymentId={p.id} current={p.status} />
               </div>
             )) : (
               <div style={{ padding: '24px', textAlign: 'center', color: '#2A3550', fontSize: '12px' }}>Sin pagos registrados</div>

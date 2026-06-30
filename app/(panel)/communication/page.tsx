@@ -23,9 +23,14 @@ export default async function Communication() {
             <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#F0F4FF', letterSpacing: '-0.03em', margin: 0 }}>Comunicación</h1>
             <p style={{ color: '#3A4A70', fontSize: '13px', marginTop: '6px' }}>Avisos y anuncios para los atletas del club</p>
           </div>
-          <a href="/communication/nuevo" style={{ padding: '9px 18px', borderRadius: '9px', background: 'linear-gradient(135deg,#1E2A5E,#4BA3D9)', color: 'white', fontSize: '13px', fontWeight: '600', textDecoration: 'none', boxShadow: '0 4px 16px rgba(75,163,217,0.2)' }}>
-            + Nuevo aviso
-          </a>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <a href="/communication/mensajes" style={{ padding: '9px 18px', borderRadius: '9px', backgroundColor: 'rgba(75,163,217,0.08)', border: '1px solid rgba(75,163,217,0.2)', color: '#4BA3D9', fontSize: '13px', fontWeight: '600', textDecoration: 'none' }}>
+              💬 Mensajes directos
+            </a>
+            <a href="/communication/nuevo" style={{ padding: '9px 18px', borderRadius: '9px', background: 'linear-gradient(135deg,#1E2A5E,#4BA3D9)', color: 'white', fontSize: '13px', fontWeight: '600', textDecoration: 'none', boxShadow: '0 4px 16px rgba(75,163,217,0.2)' }}>
+              + Nuevo aviso
+            </a>
+          </div>
         </div>
 
         {/* Stats */}
