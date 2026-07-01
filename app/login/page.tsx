@@ -37,8 +37,15 @@ export default function Login() {
       backgroundColor: '#06080F',
       display: 'flex',
       fontFamily: "-apple-system,'Inter',sans-serif",
+      overflow: 'hidden',
     }}>
-      <div style={{
+      <style>{`
+        @media (max-width: 768px) {
+          .login-side { display: none !important; }
+          .login-form { padding: 32px 24px !important; }
+        }
+      `}</style>
+      <div className="login-form" style={{
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
@@ -122,7 +129,7 @@ export default function Login() {
         </div>
       </div>
 
-      <div style={{
+      <div className="login-side" style={{
         width: '420px',
         background: 'linear-gradient(160deg, #0D1428 0%, #1E2A5E 50%, #0A1530 100%)',
         display: 'flex',
