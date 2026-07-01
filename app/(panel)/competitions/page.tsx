@@ -11,10 +11,17 @@ export default async function Competitions() {
   const getResults = (compId: string) => results?.filter(r => r.competition_id === compId) || []
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+    <main className="comp-main" style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .comp-main { padding: 16px !important; }
+          .comp-grid { grid-template-columns: repeat(2,1fr) !important; }
+          .comp-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+        }
+      `}</style>
       <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+        <div className="comp-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
           <div>
             <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#F0F4FF', letterSpacing: '-0.03em', margin: 0 }}>Competiciones</h1>
             <p style={{ color: '#3A4A70', fontSize: '13px', marginTop: '6px' }}>Temporada 2024–2025 · {competitions?.length || 0} competiciones</p>
@@ -25,7 +32,7 @@ export default async function Competitions() {
         </div>
 
         {/* Stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', marginBottom: '20px' }}>
+        <div className="comp-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', marginBottom: '20px' }}>
           {[
             { label: 'Total', value: String(competitions?.length || 0), color: '#4BA3D9' },
             { label: 'Próximas', value: String(proximas.length), color: '#10B981' },

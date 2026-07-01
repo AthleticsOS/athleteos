@@ -35,3 +35,53 @@ a { text-decoration: none; }
 }
 
 .animate-in { animation: fadeInUp 0.2s ease-out forwards; }
+
+/* ── RESPONSIVE PANEL ─────────────────────────────── */
+@media (max-width: 768px) {
+  /* Sidebar desaparece, main ocupa todo */
+  .panel-main {
+    margin-left: 0 !important;
+    padding-top: 52px !important;
+  }
+
+  /* Todas las páginas del panel: padding compacto */
+  .panel-main main {
+    padding: 16px !important;
+  }
+
+  /* Tablas: scroll horizontal */
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+
+  /* Inputs y selects full width */
+  input, select, textarea {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Ocultar columnas secundarias */
+  .hide-mobile { display: none !important; }
+
+  /* Grids helpers */
+  .mob-col-1 { grid-template-columns: 1fr !important; }
+  .mob-col-2 { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* Padding fijo en páginas del panel */
+.panel-main main { min-height: 100vh; }
+
+/* Sin highlight táctil en móvil */
+* { -webkit-tap-highlight-color: transparent; }
+
+/* Padding fijo en páginas del panel */
+.panel-main > main {
+  min-height: 100vh;
+}
+
+/* Transición suave al abrir/cerrar drawer */
+* { -webkit-tap-highlight-color: transparent; }

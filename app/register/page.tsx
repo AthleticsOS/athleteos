@@ -62,9 +62,16 @@ export default function Register() {
 
   return (
     <main style={{ minHeight: '100vh', backgroundColor: '#06080F', display: 'flex', fontFamily: "-apple-system,'Inter',sans-serif" }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .reg-panel { padding: clamp(20px,5vw,40px) !important; }
+          .reg-side { display: none !important; }
+          .reg-grid-2 { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
 
       {/* Panel izquierdo - formulario */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
+      <div className="reg-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
         <div style={{ width: '100%', maxWidth: '400px' }}>
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -153,7 +160,7 @@ export default function Register() {
       </div>
 
       {/* Panel derecho */}
-      <div style={{ width: '420px', background: 'linear-gradient(160deg,#0D1428 0%,#1E2A5E 50%,#0A1530 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 40px' }}>
+      <div className="reg-side" style={{ width: '420px', background: 'linear-gradient(160deg,#0D1428 0%,#1E2A5E 50%,#0A1530 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 40px' }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ color: '#4BA3D9', fontSize: '13px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '20px' }}>Únete al club</div>
           {[

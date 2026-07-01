@@ -25,7 +25,16 @@ export default async function Finances() {
   })
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+    <main className="fin-main" style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .fin-main { padding: 16px !important; }
+          .fin-grid { grid-template-columns: 1fr 1fr !important; }
+          .fin-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+          .fin-header .fin-btns { flex-direction: column !important; width: 100%; }
+          .fin-header .fin-btns a { width: 100%; box-sizing: border-box; text-align: center; }
+        }
+      `}</style>
       <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
@@ -44,7 +53,7 @@ export default async function Finances() {
         </div>
 
         {/* Stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '12px', marginBottom: '20px' }}>
+        <div className="fin-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '12px', marginBottom: '20px' }}>
           {[
             { label: 'Total facturado', value: `€${(total / 100).toFixed(0)}`, color: '#4BA3D9' },
             { label: 'Cobrado', value: `€${(paid / 100).toFixed(0)}`, color: '#10B981' },

@@ -15,7 +15,13 @@ export default async function Ranking() {
   const disciplines = Object.keys(byDiscipline).sort()
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+    <main className="rank-main" style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .rank-main { padding: 16px !important; }
+          .rank-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
 
         <div style={{ marginBottom: '24px' }}>
@@ -24,7 +30,7 @@ export default async function Ranking() {
         </div>
 
         {/* Resumen */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px', marginBottom: '20px' }}>
+        <div className="rank-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px', marginBottom: '20px' }}>
           {[
             { label: 'Pruebas', value: String(disciplines.length), color: '#4BA3D9' },
             { label: 'Marcas totales', value: String(records?.length || 0), color: '#10B981' },

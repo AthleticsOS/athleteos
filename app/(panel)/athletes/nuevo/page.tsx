@@ -37,13 +37,19 @@ export default function NuevoDeportista() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0A0A0A] p-8">
+    <main className="anue-main min-h-screen bg-[#0A0A0A] p-8">
+      <style>{`
+        @media (max-width: 768px) {
+          .anue-main { padding: 16px !important; }
+          .anue-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
       <div className="max-w-lg mx-auto">
         <a href="/athletes" className="text-[#555] text-sm hover:text-white transition-colors">← Deportistas</a>
         <h1 className="text-3xl font-medium text-white mt-2 mb-8">Nuevo deportista</h1>
 
         <div className="bg-[#111] border border-[#1A1A1A] rounded-xl p-6 flex flex-col gap-5">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="anue-grid grid grid-cols-2 gap-4">
             <div>
               <label className="text-[#555] text-xs uppercase tracking-widest block mb-2">Nombre</label>
               <input name="first_name" value={form.first_name} onChange={handleChange}
@@ -69,7 +75,7 @@ export default function NuevoDeportista() {
               placeholder="600 000 000"
               className="w-full bg-[#0A0A0A] border border-[#222] rounded-lg px-4 py-3 text-white text-sm outline-none focus:border-blue-600 transition-colors" />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="anue-grid grid grid-cols-2 gap-4">
             <div>
               <label className="text-[#555] text-xs uppercase tracking-widest block mb-2">Fecha de nacimiento</label>
               <input name="birth_date" type="date" value={form.birth_date} onChange={handleChange}
@@ -84,7 +90,7 @@ export default function NuevoDeportista() {
               </select>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="anue-grid grid grid-cols-2 gap-4">
             <div>
               <label className="text-[#555] text-xs uppercase tracking-widest block mb-2">Deporte</label>
               <select name="sport" value={form.sport} onChange={handleChange}

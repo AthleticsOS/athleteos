@@ -15,10 +15,16 @@ export default async function Training() {
   }
 
   return (
-    <main style={{minHeight:'100vh', backgroundColor:'#080808', padding:'32px 36px'}}>
+    <main className="train-main" style={{minHeight:'100vh', backgroundColor:'#080808', padding:'32px 36px'}}>
+      <style>{`
+        @media (max-width: 768px) {
+          .train-main { padding: 16px !important; }
+          .train-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+        }
+      `}</style>
       <div style={{maxWidth:'1000px', margin:'0 auto'}}>
 
-        <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'32px'}}>
+        <div className="train-header" style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'32px'}}>
           <div>
             <h1 style={{fontSize:'24px', fontWeight:'700', color:'#F0F0F0', letterSpacing:'-0.02em', margin:0}}>Entrenamientos</h1>
             <p style={{color:'#333', fontSize:'13px', marginTop:'6px'}}>{sessions?.length || 0} sesiones esta temporada</p>

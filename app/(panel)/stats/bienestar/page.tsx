@@ -25,7 +25,14 @@ export default async function BienestarEquipoPage() {
   }
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+    <main className="bien-main" style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .bien-main { padding: 16px !important; }
+          .bien-grid { grid-template-columns: 1fr 1fr !important; }
+          .bien-heatmap { grid-template-columns: 1fr repeat(4,28px) !important; }
+        }
+      `}</style>
       <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
         <div style={{ marginBottom: '24px' }}>
           <a href="/stats" style={{ color: '#3A4A70', fontSize: '13px', textDecoration: 'none' }}>← Estadísticas</a>
@@ -34,7 +41,7 @@ export default async function BienestarEquipoPage() {
         </div>
 
         {/* Promedios globales */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '12px', marginBottom: '20px' }}>
+        <div className="bien-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '12px', marginBottom: '20px' }}>
           {[
             { label: 'Sueño', value: avg('sleep'), max: 10, color: '#4BA3D9', icon: '😴' },
             { label: 'Energía', value: avg('energy'), max: 10, color: '#10B981', icon: '⚡' },

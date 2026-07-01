@@ -44,7 +44,7 @@ export default function Login() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '40px',
+        padding: 'clamp(20px, 5vw, 40px)',
       }}>
         <div style={{width: '100%', maxWidth: '380px'}}>
           <div style={{textAlign: 'center', marginBottom: '40px'}}>

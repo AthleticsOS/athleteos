@@ -9,7 +9,12 @@ export default async function SesionGrupalPage() {
     .order('first_name')
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+    <main className="sg-main" style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .sg-main { padding: 16px !important; }
+        }
+      `}</style>
       <div style={{ maxWidth: '760px', margin: '0 auto' }}>
         <div style={{ marginBottom: '20px' }}>
           <a href="/training" style={{ color: '#3A4A70', fontSize: '13px', textDecoration: 'none' }}>← Entrenamientos</a>

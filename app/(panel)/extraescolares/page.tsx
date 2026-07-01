@@ -13,10 +13,18 @@ export default async function Extraescolares() {
   }
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+    <main className="ext-main" style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .ext-main { padding: 16px !important; }
+          .ext-grid { grid-template-columns: 1fr !important; }
+          .ext-stats { grid-template-columns: 1fr 1fr !important; }
+          .ext-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+        }
+      `}</style>
       <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+        <div className="ext-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
           <div>
             <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#F0F4FF', letterSpacing: '-0.03em', margin: 0 }}>Extraescolares</h1>
             <p style={{ color: '#3A4A70', fontSize: '13px', marginTop: '6px' }}>{schools?.length || 0} colegios · Gestión de actividades extraescolares</p>
@@ -27,7 +35,7 @@ export default async function Extraescolares() {
         </div>
 
         {/* Stats globales */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', marginBottom: '20px' }}>
+        <div className="ext-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', marginBottom: '20px' }}>
           {[
             { label: 'Colegios', value: String(schools?.length || 0), color: '#4BA3D9' },
             { label: 'Actividades', value: String(activities?.length || 0), color: '#F59E0B' },
@@ -43,7 +51,7 @@ export default async function Extraescolares() {
 
         {/* Lista de colegios */}
         {schools && schools.length > 0 ? (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '12px' }}>
+          <div className="ext-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '12px' }}>
             {schools.map(school => {
               const stats = getSchoolStats(school.id)
               return (

@@ -33,7 +33,7 @@ export default async function PanelLayout({
     <div style={{display:'flex'}}>
       <Sidebar />
       <SearchModal />
-      <main style={{marginLeft:'224px', flex:1, minHeight:'100vh'}}>
+      <main className="panel-main" style={{marginLeft:'220px', flex:1, minHeight:'100vh'}}>
         {children}
       </main>
     </div>

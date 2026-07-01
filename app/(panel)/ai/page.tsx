@@ -222,6 +222,15 @@ export default function AIPage() {
         @keyframes blink { 0%,100% { opacity: 1 } 50% { opacity: 0 } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px) } to { opacity: 1; transform: none } }
         .msg-in { animation: fadeIn 200ms ease forwards; }
+        @media (max-width: 768px) {
+          .ai-header { padding: 10px 14px !important; flex-wrap: wrap !important; gap: 8px !important; }
+          .ai-roles { gap: 6px !important; }
+          .ai-roles button { padding: 6px 10px !important; font-size: 11px !important; }
+          .ai-role-label { display: none !important; }
+          .ai-msgs { padding: 14px !important; }
+          .ai-input-area { padding: 10px 14px !important; }
+          .ai-suggestions { grid-template-columns: 1fr !important; }
+        }
       `}</style>
 
       <div style={{ maxWidth: '860px', margin: '0 auto', width: '100%', padding: '24px 32px', flex: 1, display: 'flex', flexDirection: 'column', height: '100vh' }}>
@@ -266,7 +275,7 @@ export default function AIPage() {
                     Modo <strong style={{ color: currentRole.color }}>{currentRole.label}</strong> — pregúntame lo que necesites
                   </p>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                <div className="ai-suggestions" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                   {SUGGESTIONS[role].map(s => (
                     <button key={s} onClick={() => sendMessage(s)} style={{ padding: '12px 14px', borderRadius: '12px', textAlign: 'left', backgroundColor: 'rgba(255,255,255,0.02)', border: `1px solid rgba(${role === 'director' ? '75,163,217' : role === 'coach' ? '16,185,129' : '245,158,11'},0.12)`, color: '#3A4A70', fontSize: '12px', cursor: 'pointer', lineHeight: '1.4', transition: 'all 150ms' }}
                       onMouseEnter={e => { e.currentTarget.style.backgroundColor = currentRole.bg; e.currentTarget.style.color = currentRole.color }}

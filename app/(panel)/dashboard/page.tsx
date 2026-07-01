@@ -41,7 +41,14 @@ export default async function Dashboard() {
   const maxDay = Math.max(...sessionsByDay, 1)
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px', fontFamily: "-apple-system,'Inter',sans-serif" }}>
+    <main className="dash-main" style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px', fontFamily: "-apple-system,'Inter',sans-serif" }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .dash-main { padding: 16px !important; }
+          .dash-kpis { grid-template-columns: repeat(2,1fr) !important; gap: 8px !important; }
+          .dash-body { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
         {/* CABECERA */}
@@ -72,7 +79,7 @@ export default async function Dashboard() {
         <AlertasInactividad />
 
         {/* STATS */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '12px', marginBottom: '16px' }}>
+        <div className="dash-kpis" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '12px', marginBottom: '16px' }}>
           {[
             { label: 'Deportistas', value: String(athletes?.length || 0), sub: 'Activos en el club', color: '#4BA3D9', href: '/athletes' },
             { label: 'Competiciones', value: String(competitions?.length || 0), sub: `${upcoming} próximas`, color: '#F59E0B', href: '/competitions' },
@@ -87,7 +94,7 @@ export default async function Dashboard() {
           ))}
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '12px', marginBottom: '12px' }}>
+        <div className="dash-body" style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '12px', marginBottom: '12px' }}>
 
           {/* Actividad de la semana */}
           <div style={{ backgroundColor: '#0A0E1A', border: '1px solid rgba(75,163,217,0.1)', borderRadius: '16px', padding: '20px' }}>

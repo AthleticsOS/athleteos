@@ -18,10 +18,16 @@ export default async function Convocatorias() {
   const pasadas = convocatorias?.filter(c => c.date < today) || []
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+    <main className="conv-main" style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .conv-main { padding: 16px !important; }
+          .conv-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+        }
+      `}</style>
       <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+        <div className="conv-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
           <div>
             <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#F0F4FF', letterSpacing: '-0.03em', margin: 0 }}>Convocatorias</h1>
             <p style={{ color: '#3A4A70', fontSize: '13px', marginTop: '6px' }}>Gestión de convocatorias para competiciones</p>

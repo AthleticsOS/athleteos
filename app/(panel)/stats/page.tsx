@@ -31,11 +31,21 @@ export default async function Stats() {
   const disciplinas = Object.entries(disciplineCount).sort((a, b) => b[1] - a[1]).slice(0, 5)
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+    <main className="stats-main" style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .stats-main { padding: 16px !important; }
+          .stats-grid4 { grid-template-columns: repeat(2,1fr) !important; }
+          .stats-grid2 { grid-template-columns: 1fr !important; }
+          .stats-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+          .stats-compare { grid-template-columns: 140px 1fr 60px !important; }
+          .stats-compare .stats-col-hide { display: none !important; }
+        }
+      `}</style>
       <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
 
         <div style={{ marginBottom: '24px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div className="stats-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
               <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#F0F4FF', letterSpacing: '-0.03em', margin: 0 }}>Estadísticas</h1>
               <p style={{ color: '#3A4A70', fontSize: '13px', marginTop: '6px' }}>WeAthletics · Temporada 2024–2025</p>
@@ -47,7 +57,7 @@ export default async function Stats() {
         </div>
 
         {/* KPIs principales */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', marginBottom: '14px' }}>
+        <div className="stats-grid4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', marginBottom: '14px' }}>
           {[
             { label: 'Deportistas', value: String(totalDeportistas), color: '#4BA3D9', sub: 'En el club' },
             { label: 'Competiciones', value: String(competitions?.length || 0), color: '#F59E0B', sub: `${competitions?.filter(c=>c.status==='upcoming').length||0} próximas` },
@@ -63,7 +73,7 @@ export default async function Stats() {
         </div>
 
         {/* Segunda fila stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', marginBottom: '20px' }}>
+        <div className="stats-grid4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', marginBottom: '20px' }}>
           {[
             { label: 'Sesiones entrenamiento', value: String(sessions?.length || 0), color: '#CDD0E0' },
             { label: 'Sesiones atletas', value: String(athleteSessions?.length || 0), color: '#CDD0E0' },

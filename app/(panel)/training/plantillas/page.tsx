@@ -4,7 +4,13 @@ export default async function PlantillasPage() {
   const { data: templates } = await supabase.from('training_templates').select('*').order('created_at', { ascending: false })
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+    <main className="plant-main" style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .plant-main { padding: 16px !important; }
+          .plant-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
       <div style={{ maxWidth: '860px', margin: '0 auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
           <div>
@@ -22,7 +28,7 @@ export default async function PlantillasPage() {
             <div style={{ color: '#3A4A70', fontSize: '12px', marginTop: '4px' }}>Crea tu primera plantilla de entrenamiento</div>
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '12px' }}>
+          <div className="plant-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '12px' }}>
             {templates.map(t => {
               const exercises = Array.isArray(t.exercises) ? t.exercises : []
               return (

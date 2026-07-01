@@ -15,15 +15,24 @@ export default async function Communication() {
   }
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+    <main className="comm-main" style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .comm-main { padding: 16px !important; }
+          .comm-grid { grid-template-columns: repeat(2,1fr) !important; }
+          .comm-header { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+          .comm-btns { flex-direction: column !important; width: 100%; }
+          .comm-btns a { width: 100%; box-sizing: border-box; text-align: center; }
+        }
+      `}</style>
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+        <div className="comm-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
           <div>
             <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#F0F4FF', letterSpacing: '-0.03em', margin: 0 }}>Comunicación</h1>
             <p style={{ color: '#3A4A70', fontSize: '13px', marginTop: '6px' }}>Avisos y anuncios para los atletas del club</p>
           </div>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div className="comm-btns" style={{ display: 'flex', gap: '8px' }}>
             <a href="/communication/mensajes" style={{ padding: '9px 18px', borderRadius: '9px', backgroundColor: 'rgba(75,163,217,0.08)', border: '1px solid rgba(75,163,217,0.2)', color: '#4BA3D9', fontSize: '13px', fontWeight: '600', textDecoration: 'none' }}>
               💬 Mensajes directos
             </a>
@@ -34,7 +43,7 @@ export default async function Communication() {
         </div>
 
         {/* Stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', marginBottom: '20px' }}>
+        <div className="comm-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '10px', marginBottom: '20px' }}>
           {[
             { label: 'Total avisos', value: String(announcements?.length || 0), color: '#4BA3D9' },
             { label: 'Fijados', value: String(announcements?.filter(a => a.pinned).length || 0), color: '#F59E0B' },

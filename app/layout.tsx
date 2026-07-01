@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import ServiceWorkerRegister from './components/ServiceWorkerRegister'
+import MobileGridFix from './components/MobileGridFix'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,6 +20,7 @@ export default function RootLayout({
     <html lang="es">
       <body className={`${inter.className} bg-[#0A0A0A]`}>
         <ServiceWorkerRegister />
+        <MobileGridFix />
         {children}
       </body>
     </html>

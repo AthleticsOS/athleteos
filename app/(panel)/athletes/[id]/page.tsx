@@ -54,7 +54,15 @@ export default async function AthleteProfile({ params }: Props) {
 
   return (
     <main style={{minHeight:"100vh",backgroundColor:"#06080F",padding:"28px 32px"}}>
-      <div style={{maxWidth:"1060px",margin:"0 auto"}}>
+      <style>{`
+        @media (max-width: 768px) {
+          .ap-main { padding: 16px !important; }
+          .ap-stats { grid-template-columns: repeat(2,1fr) !important; }
+          .ap-nav { grid-template-columns: repeat(3,1fr) !important; flex-wrap: wrap !important; }
+          .ap-grid-2 { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+      <div className="ap-main" style={{maxWidth:"1060px",margin:"0 auto"}}>
 
         {/* CABECERA */}
         <div style={{background:"linear-gradient(135deg, #0A0F1E 0%, #0D1428 60%, #091020 100%)",border:"1px solid rgba(75,163,217,0.15)",borderRadius:"20px",padding:"28px",marginBottom:"16px",position:"relative",overflow:"hidden"}}>
@@ -88,7 +96,7 @@ export default async function AthleteProfile({ params }: Props) {
           </div>
 
           {/* STATS RESUMEN */}
-          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"12px",marginTop:"24px"}}>
+          <div className="ap-stats" style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"12px",marginTop:"24px"}}>
             {[
               {label:"Sesiones",value:String(sessions?.length || 0),sub:lastSessionDate ? `Última: ${lastSessionDate}` : "Sin sesiones",color:"#4BA3D9"},
               {label:"Competiciones",value:String(results?.length || 0),sub:"Total historial",color:"#F59E0B"},
@@ -105,7 +113,7 @@ export default async function AthleteProfile({ params }: Props) {
         </div>
 
         {/* ACCESOS RAPIDOS */}
-        <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:"8px",marginBottom:"16px"}}>
+        <div className="ap-nav" style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:"8px",marginBottom:"16px"}}>
           {[
             {href:`/athletes/${id}/tiempos`,label:"Tiempos",color:"#CDD0E0",bg:"rgba(255,255,255,0.04)",bdr:"rgba(255,255,255,0.08)"},
             {href:`/athletes/${id}/competiciones`,label:"Competiciones",color:"#F59E0B",bg:"rgba(245,158,11,0.08)",bdr:"rgba(245,158,11,0.2)"},
@@ -121,7 +129,7 @@ export default async function AthleteProfile({ params }: Props) {
         </div>
 
         {/* ACTIVIDAD RECIENTE + MARCAS */}
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px",marginBottom:"16px"}}>
+        <div className="ap-grid-2" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"12px",marginBottom:"16px"}}>
 
           {/* Últimas sesiones */}
           <div style={{backgroundColor:"#0A0E1A",border:"1px solid rgba(75,163,217,0.1)",borderRadius:"16px",overflow:"hidden"}}>

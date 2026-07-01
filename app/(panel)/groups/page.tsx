@@ -7,7 +7,13 @@ export default async function Groups() {
   const sinGrupo = athletes?.filter(a => !a.group_id) || []
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+    <main className="grp-main" style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .grp-main { padding: 16px !important; }
+          .grp-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
       <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
@@ -21,7 +27,7 @@ export default async function Groups() {
         </div>
 
         {groups && groups.length > 0 ? (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '12px', marginBottom: '16px' }}>
+          <div className="grp-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '12px', marginBottom: '16px' }}>
             {groups.map(group => {
               const miembros = athletes?.filter(a => a.group_id === group.id) || []
               const color = group.color || '#4BA3D9'

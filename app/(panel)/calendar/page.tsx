@@ -68,7 +68,14 @@ export default async function Calendar() {
   const upcoming = allEvents.filter(e => e.day >= today)
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+    <main className="cal-main" style={{ minHeight: '100vh', backgroundColor: '#06080F', padding: '28px 32px' }}>
+      <style>{`
+        @media (max-width: 768px) {
+          .cal-main { padding: 16px !important; }
+          .cal-layout { grid-template-columns: 1fr !important; }
+          .cal-legend { flex-wrap: wrap !important; gap: 8px !important; }
+        }
+      `}</style>
       <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
@@ -93,7 +100,7 @@ export default async function Calendar() {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 260px', gap: '16px' }}>
+        <div className="cal-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 260px', gap: '16px' }}>
 
           {/* Calendario */}
           <div style={{ backgroundColor: '#0A0E1A', border: '1px solid rgba(75,163,217,0.1)', borderRadius: '16px', overflow: 'hidden' }}>
